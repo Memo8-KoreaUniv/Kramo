@@ -1,6 +1,9 @@
+import path from 'path'
+
 import Koa from 'koa'
 import qs from 'koa-qs'
 import bodyparser from 'koa-body'
+import serve from 'koa-static'
 import morgan from 'koa-morgan'
 import mount from 'koa-mount'
 import Router from 'koa-router'
@@ -10,6 +13,7 @@ import api from './routes/api'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
+const staticDirPath = path.join(__dirname, 'public')
 
 async function main() {
   const nextApp = next({ dev })
@@ -30,11 +34,13 @@ async function main() {
   }
 
   router.get('/', renderNext('/'))
+  router.get('/image', renderNext('/public'))
 
   router.get('/hello', renderNext('/hello/world'))
 
   app
     .use(morgan('combined'))
+    .use(serve(staticDirPath))
     .use(
       mount('/health', (ctx: Koa.Context) => {
         ctx.status = 200
