@@ -1,6 +1,8 @@
-# KUM(임시 이름)
+# Kramo(임시 이름)
 
-메모 어플리케이션입니다.
+Kramo : mark(kram) + memo 
+
+markdown 기반 작성이 가능한 메모! 
 
 # koa + nextjs + react + typescript
 
