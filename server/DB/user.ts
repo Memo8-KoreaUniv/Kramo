@@ -37,7 +37,9 @@ export interface User {
 interface UserBaseDocument extends User, Document {
   categories: Types.Array<CategoryDocument['_id']>
 }
-export interface UserDocument extends UserBaseDocument {}
+export interface UserDocument extends UserBaseDocument {
+  checkPassword: (password: string) => Promise<boolean>
+}
 export interface UserModel extends Model<UserDocument> {}
 export interface UserPopulatedDocument extends UserBaseDocument {
   categories: Types.Array<CategoryDocument>
@@ -53,7 +55,7 @@ UserSchema.pre<UserDocument>('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt)
 })
 
-UserSchema.methods.matchPassword = async function (enteredPassword) {
+UserSchema.methods.checkPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password)
 }
 

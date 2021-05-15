@@ -15,6 +15,7 @@ const connectDB = async () => {
       uri = process.env['MONGODB_URI_PRO']
       break
     default:
+      uri = process.env['MONGODB_URI_DEV']
       break
   }
   if (!uri) {
