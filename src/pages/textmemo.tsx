@@ -1,29 +1,36 @@
-import React, { FC } from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
-const { Header, Content, Footer } = Layout;
+import React, { useState} from 'react';
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
+import { Editor } from "@toast-ui/react-editor";
 
-export default function Index() {
+function WritePage() {
+
+  const editorRef:any = React.createRef();
+  
+  const [text, setText] = useState("");
+//useref -> 보통 많이 쓰는 방법 
+//editor ref
+  const handleClick = () => {
+    console.log(text);
+    setText(editorRef.current.getInstance().getHtml());
+    //useEffect?
+    console.log(text, typeof text);
+  };
+
   return (
-    <Layout className="layout">
-        <Header>
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-        </Menu>
-        </Header>
-        <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
-        <div className="site-layout-content">Content</div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-    </Layout>
-  )
+    <>
+      <Editor
+        previewStyle="vertical"
+        height="400px"
+        initialEditType="wysiwyg"
+        // TODO: 수정할 때 initial에 기존 메모 값 가져오기
+        initialValue="메모를 입력하세요"
+        ref={editorRef}
+      />
+      <button onClick={handleClick}>submit</button>
+    </>
+  );
 }
 
+export default WritePage;
