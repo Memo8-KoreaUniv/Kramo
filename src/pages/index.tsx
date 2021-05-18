@@ -13,6 +13,8 @@ export default function Index() {
       <Link href={{ pathname: '/hello', query: { name: 'test' } }}>테스트</Link>
       <br />
       <Link href={{ pathname: '/imagetest' }}>정적 이미지 테스트</Link>
+      <br />
+      <Link href={{ pathname: '/textmemo' }}>텍스트 작성</Link>
     </>
   )
 }
