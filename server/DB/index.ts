@@ -8,14 +8,17 @@ const connectDB = async () => {
   switch (process.env['NODE_ENV']?.trim()) {
     case 'dev':
       uri = process.env['MONGODB_URI_DEV']
-      console.log(process.env)
-      console.log(process.env['MONGODB_URI_DEV'])
+      console.log('[.env] dev environment variable loaded!')
       break
-    case 'pro':
+    case 'prod':
       uri = process.env['MONGODB_URI_PRO']
+      console.log('[.env] prod environment variable loaded!')
       break
+    case 'test':
+      uri = process.env['MONGODB_URI_TEST']
     default:
-      uri = process.env['MONGODB_URI_DEV']
+      console.log('[.env] test environment variable loaded!')
+      uri = process.env['MONGODB_URI_TEST']
       break
   }
   if (!uri) {
