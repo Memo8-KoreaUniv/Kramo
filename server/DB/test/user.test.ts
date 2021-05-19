@@ -8,7 +8,7 @@ describe('Create and find user', () => {
     email: DUMMY_EMAIL,
     nickname: 'root',
     password: DUMMY_PASSWORD,
-    created_at: new Date(),
+    createdAt: new Date(),
   }
   beforeAll(async () => {
     // dotenv.config()

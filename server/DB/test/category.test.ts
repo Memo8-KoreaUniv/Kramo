@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+
 import connectDB from '..'
 import { CategoryModel } from '../model'
 import { PopulatedUser } from '../model/user'
@@ -9,7 +10,7 @@ describe('Create and find CATEGORY', () => {
   const DUMMY_CATEGORY = {
     name: DUMMY_NAME,
     user: DUMMY_USER_ID as any,
-    created_at: new Date(),
+    createdAt: new Date(),
   }
   const query = { name: DUMMY_NAME }
 
@@ -31,10 +32,10 @@ describe('Create and find CATEGORY', () => {
     expect(user._id).toStrictEqual(DUMMY_USER_ID)
   })
 
-  test('Check category created_at', async () => {
+  test('Check category createdAt', async () => {
     const category = await CategoryModel.findOne(query)
     expect(category).not.toBeUndefined()
-    expect(new Date().getTime() > category!.created_at.getTime()).toBe(true)
+    expect(new Date().getTime() > category!.createdAt.getTime()).toBe(true)
   })
 
   afterAll(async (done) => {
