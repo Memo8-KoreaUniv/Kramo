@@ -8,7 +8,7 @@ export class Category {
   public name!: string
 
   @prop({ type: () => Date })
-  public created_at!: Date
+  public createdAt!: Date
 
   @prop({ autopopulate: true, ref: () => User })
   public user?: PopulatedUser
@@ -17,6 +17,6 @@ export class Category {
 export interface PopulatedCategory {
   _id?: string
   name: string
-  created_at: Date
+  createdAt: Date
   user: PopulatedUser
 }
