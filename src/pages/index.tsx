@@ -15,6 +15,8 @@ export default function Index() {
       <Link href={{ pathname: '/imagetest' }}>정적 이미지 테스트</Link>
       <br />
       <Link href={{ pathname: '/textmemo' }}>텍스트 작성</Link>
+      <br />
+      <Link href={{ pathname: '/main' }}>메인 화면 (레이아웃)</Link>
     </>
   )
 }
