@@ -14,13 +14,13 @@ import { MemoCards } from './main/memoCards';
 
 // 타입 정의
 
-type info = {
+export type info = {
   time: string,
   place: string,
   weather: string
 }
 
-type memo = {
+export type memo = {
   id: string,
   title: string,
   content: string,
