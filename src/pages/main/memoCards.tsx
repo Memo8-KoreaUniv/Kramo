@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Avatar, Row, Col, Divider, Steps, Modal } from 'antd';
-import { EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
+import { Card, Avatar, Row, Col, Divider, Timeline, Modal, Button } from 'antd';
+import { EditOutlined, DeleteOutlined, UserOutlined, EnvironmentOutlined, PushpinOutlined } from '@ant-design/icons';
 import { memo, info } from '../main';
 
 export function MemoCards({ memos }) {
     return (
         <div className="site-card-wrapper">
-            <Row gutter={16}>
+            <Row>
                 {memos.map(
                      (memo: memo, index: number) => {
                         const divider = index % 3 == 2 ? <Divider /> : "";
@@ -26,9 +26,32 @@ export function MemoCards({ memos }) {
     );
 }
 
+function MemoInfo({ info }) {
+    return (
+        <span>
+            <Row>
+                <Col span={4} style={{textAlign: 'center'}}>
+                    {info.weather}
+                </Col>
+                <Col span={20}>
+                    {info.time}
+                </Col>
+            </Row>
+            <Row>
+                <Col span={4} style={{textAlign: 'center'}}>
+                    <EnvironmentOutlined />
+                </Col>
+                <Col span={20}>
+                    {info.place}
+                </Col>
+            </Row>
+        </span>
+    );
+}
+
 function MemoCardItem({ memo }) {
     const { Meta } = Card;
-    const { Step } = Steps;
+    // const { Step } = Steps;
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -46,20 +69,6 @@ function MemoCardItem({ memo }) {
     return (
         <Card
             style={{ width: 300 }}
-            cover={
-                <Steps direction="vertical" current={0}>
-                    {memo.info.map(
-                            (info: info, index: number) => {
-                                if (memo.info.length - index > 2) return null;
-                                
-                                return (
-                                <Step title={info.place} description={info.time + ", " + info.weather} />
-                                )
-                            }
-                        )
-                    }
-                </Steps>
-            }
             actions={[
             <EditOutlined key="edit" onClick={showModal}/>,
             <DeleteOutlined key="delete" />,
@@ -67,21 +76,43 @@ function MemoCardItem({ memo }) {
         >
             <Meta
                 avatar={<Avatar icon={<UserOutlined />} />}
-                title={memo.title}
-                description={memo.content.split('\n')[0] + "\n..."}
+                title={
+                    <>
+                        <Row>
+                            <Col span={20}>
+                                {memo.title}
+                            </Col>
+                            <Col span={4}>
+                                <Button shape="circle" icon={<PushpinOutlined />} />
+                            </Col>
+                        </Row>
+                    </>
+                }
+                description={
+                    <>
+                        {memo.content.split('\n')[0]}
+                        <br />
+                        ...
+                        <Divider />
+                        <MemoInfo info={memo.infos[memo.infos.length-1]} />
+                    </>
+                }
             />
             <Modal title={memo.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                {memo.info.map(
+                <Timeline>
+                {memo.infos.map(
                     (info: info) => {
                         return (
-                            <span>
-                                {info.time + ", " + info.place+ ", " + info.weather}
-                                <br />
-                            </span>
+                            <>
+                                <Timeline.Item color="blue">
+                                <MemoInfo info={info} />
+                                </Timeline.Item>
+                            </>
                             )    
                         }
                     )
                 }
+                </Timeline>
                 <Divider />
                 {memo.content.split('\n').map( 
                     (line: string) => {
