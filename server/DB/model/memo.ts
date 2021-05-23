@@ -1,8 +1,10 @@
-import { prop, plugin } from '@typegoose/typegoose'
+import { prop, plugin, DocumentType } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
 import { PopulatedUser, User } from './user'
 import { Category, PopulatedCategory } from './category'
+import { History } from './history'
+import { HistoryModel } from '.'
 
 @plugin(mongooseAutoPopulate)
 export class Memo {
@@ -14,6 +16,13 @@ export class Memo {
 
   @prop({ type: () => Date })
   public createdAt!: Date
+
+  public async getHistories(
+    this: DocumentType<Memo>,
+  ): Promise<DocumentType<History>[]> {
+    const result = await HistoryModel.find({ memo: this._id })
+    return result
+  }
 }
 
 export interface PopulatedMemo {

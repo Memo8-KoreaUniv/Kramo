@@ -1,11 +1,10 @@
 import connectDB from '..'
 import { MemoModel } from '../model'
 import { PopulatedUser } from '../model/user'
-import { MEMO1, USER1_ID } from './dummy'
+import { HISTORY1_ID_STRING, MEMO1, USER1_ID } from './dummy'
 
 describe('Create and find Memo', () => {
   beforeAll(async () => {
-    // dotenv.config()
     connectDB()
     await MemoModel.deleteOne(MEMO1 as any)
   })
@@ -22,6 +21,17 @@ describe('Create and find Memo', () => {
     }
     const user: PopulatedUser = memo.user!
     expect(user?._id).toStrictEqual(USER1_ID)
+  })
+
+  test('Get Histories', async () => {
+    const memo = await MemoModel.findOne(MEMO1 as any)
+    const histories = await memo?.getHistories()
+    console.log(histories?.map((history) => history._id.toString()))
+    expect(
+      histories
+        ?.map((history) => history._id.toString())
+        .includes(HISTORY1_ID_STRING),
+    ).toBe(true)
   })
 
   test('Check Memo createdAt', async () => {
