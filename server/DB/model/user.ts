@@ -14,7 +14,7 @@ import { Category, PopulatedCategory } from './category'
   this.password = await bcrypt.hash(this.password, salt)
 })
 export class User {
-  @prop({ type: () => String })
+  @prop({ type: () => String, required: true, unique: true })
   public email!: string
 
   @prop({ type: () => String, trim: true })

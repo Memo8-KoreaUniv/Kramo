@@ -7,10 +7,10 @@ import { Category, PopulatedCategory } from './category'
 @plugin(mongooseAutoPopulate)
 export class Memo {
   @prop({ autopopulate: true, ref: () => User })
-  public user?: PopulatedUser
+  public user!: PopulatedUser
 
   @prop({ autopopulate: true, ref: () => Category })
-  public category?: PopulatedCategory
+  public category!: PopulatedCategory
 
   @prop({ type: () => Date })
   public createdAt!: Date

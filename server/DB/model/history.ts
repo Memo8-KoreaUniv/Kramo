@@ -1,22 +1,22 @@
 import { prop, plugin, Ref } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
-import { PopulatedUser } from './user'
-import { PopulatedCategory } from './category'
+import { PopulatedUser, User } from './user'
+import { Category, PopulatedCategory } from './category'
 import { Memo, PopulatedMemo } from './memo'
 
 @plugin(mongooseAutoPopulate)
 export class History {
+  @prop({ autopopulate: true, ref: () => User })
+  public user?: PopulatedUser
+
+  @prop({ autopopulate: true, ref: () => Category })
+  public category?: PopulatedCategory
+
   @prop({ ref: () => Memo })
   public memo?: Ref<Memo>
 
-  @prop({ autopopulate: true, ref: () => Memo })
-  public user?: PopulatedUser
-
-  @prop({ autopopulate: true, ref: () => Memo })
-  public category?: PopulatedCategory
-
-  @prop({ autopopulate: true, ref: () => String })
+  @prop({ type: () => String })
   public text?: string
 
   @prop({ type: () => Date })
