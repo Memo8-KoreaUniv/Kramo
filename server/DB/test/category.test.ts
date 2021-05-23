@@ -5,7 +5,6 @@ import { CATEGORY1, USER1_ID } from './dummy'
 
 describe('Create and find CATEGORY', () => {
   beforeAll(async () => {
-    // dotenv.config()
     connectDB()
     await CategoryModel.deleteOne(CATEGORY1 as any)
   })

@@ -5,7 +5,6 @@ import { HISTORY1, USER1_ID } from './dummy'
 
 describe('Create and find History', () => {
   beforeAll(async () => {
-    // dotenv.config()
     connectDB()
     await HistoryModel.deleteOne(HISTORY1 as any)
   })
