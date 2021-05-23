@@ -3,6 +3,7 @@ import mongooseAutoPopulate from 'mongoose-autopopulate'
 import { prop, pre, DocumentType, plugin } from '@typegoose/typegoose'
 
 import { Category, PopulatedCategory } from './category'
+import { CategoryModel } from '.'
 
 @plugin(mongooseAutoPopulate)
 @pre<User>('save', async function (next) {
@@ -34,6 +35,13 @@ export class User {
     enteredPassword: string,
   ) {
     const result = await bcrypt.compare(enteredPassword, this.password)
+    return result
+  }
+
+  public async getCategories(
+    this: DocumentType<User>,
+  ): Promise<DocumentType<Category>[]> {
+    const result = await CategoryModel.find({ user: this._id })
     return result
   }
 }

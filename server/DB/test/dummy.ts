@@ -24,7 +24,8 @@ export const USER1 = {
 
 export const CATEGORY1_NAME = 'category1'
 export const CATEGORY1_CREATEDAT = new Date('2021-05-23T13:01:45+09:00')
-export const CATEGORY1_ID = new Types.ObjectId('60a9e0b11c2d48401e4461a8')
+export const CATEGORY1_ID_STRING = '60a9e0b11c2d48401e4461a8'
+export const CATEGORY1_ID = new Types.ObjectId(CATEGORY1_ID_STRING)
 export const CATEGORY1 = {
   _id: CATEGORY1_ID,
   name: CATEGORY1_NAME,
@@ -55,7 +56,9 @@ export const MEMO1 = {
  * @_id {memo}:{createdAt}
  */
 export const HISTORY1_CREATEDAT = new Date('Sun May 23 2021 13:19:43 GMT+0900')
-export const HISTORY1_ID = new Types.ObjectId('60a9e0db2183479d02922eda')
+export const HISTORY1_ID_STRING = '60a9e0db2183479d02922eda'
+export const HISTORY1_ID = new Types.ObjectId(HISTORY1_ID_STRING)
+
 export const HISTORY1 = {
   _id: HISTORY1_ID,
   user: USER1_ID,

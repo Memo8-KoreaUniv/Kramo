@@ -1,10 +1,17 @@
+import _ from 'lodash'
+
 import connectDB from '..'
 import { UserModel } from '../model'
-import { USER1, USER1_EMAIL, USER1_ID, USER1_PASSWORD } from './dummy'
+import {
+  CATEGORY1_ID_STRING,
+  USER1,
+  USER1_EMAIL,
+  USER1_ID,
+  USER1_PASSWORD,
+} from './dummy'
 
 describe('Create and find user', () => {
   beforeAll(async () => {
-    // dotenv.config()
     connectDB()
     await UserModel.deleteOne({ email: USER1_EMAIL })
   })
@@ -31,6 +38,16 @@ describe('Create and find user', () => {
     )
     expect(await user?.checkPassword(USER1_PASSWORD)).toBe(true)
     expect(await user?.checkPassword('wrong')).toBe(false)
+  })
+
+  test('Get Categories', async () => {
+    const user = await UserModel.findOne({ email: USER1_EMAIL })
+    const categories = await user?.getCategories()
+    expect(
+      categories
+        ?.map((category) => category._id.toString())
+        .includes(CATEGORY1_ID_STRING),
+    ).toBe(true)
   })
 
   afterAll(async (done) => {
