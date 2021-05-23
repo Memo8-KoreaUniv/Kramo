@@ -26,9 +26,17 @@ describe('Create and find user', () => {
     expect(user?.email).toBe(DUMMY_EMAIL)
   })
 
-  test('Check User password', async () => {
+  test('Check password excluded', async () => {
     const user = await UserModel.findOne({ email: DUMMY_EMAIL })
+    expect(user).toHaveProperty('password')
+  })
+
+  test('Check User password', async () => {
+    const user = await UserModel.findOne({ email: DUMMY_EMAIL }).select(
+      '+password',
+    )
     expect(await user?.checkPassword(DUMMY_PASSWORD)).toBe(true)
+    expect(await user?.checkPassword('wrong')).toBe(false)
   })
 
   afterAll(async (done) => {

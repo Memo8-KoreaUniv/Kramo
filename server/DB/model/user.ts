@@ -20,7 +20,7 @@ export class User {
   @prop({ type: () => String, trim: true })
   public nickname!: string
 
-  @prop({ type: () => String })
+  @prop({ type: () => String, select: false })
   public password!: string
 
   @prop({ type: () => Date, required: true, default: Date.now() })
