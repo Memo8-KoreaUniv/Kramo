@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@toast-ui/react-editor": "^2.5.3",
-    "antd": "^4.15.5",
+    "antd": "^4.15.6",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "core-js": "^3.9.1",
     "crypto": "^1.0.1",
