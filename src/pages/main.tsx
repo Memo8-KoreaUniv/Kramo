@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Card, Avatar, Row, Col, Divider, Timeline, Modal, Button } from 'antd';
 import { EditOutlined, DeleteOutlined, UserOutlined, EnvironmentOutlined, PushpinOutlined, PushpinFilled, FolderOpenOutlined } from '@ant-design/icons';
 import { memo, info } from './index';
+import { MemoEditor } from './editor';
 import Link from 'next/link';
 
 export function Main({ memos }) {
+    const [isEdit, setIsEdit] = useState(false);
+
     return (
         <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
             <Row>
@@ -15,20 +18,37 @@ export function Main({ memos }) {
     );
 }
 
-function MemoView ({ memos }) {
+
+function MemoView({ memos }) {
+    // const [memos, setMemos] = useState(memos);
+
+    // const deleteMemo = (id: string) => {
+    //     const newMemos = (
+    //         memos.filter(
+    //             (memo: memo) => {
+    //                 memo.id !== id
+    //             }
+    //         )
+    //     )
+    //     setMemos(newMemos);
+    // }
+
+    const deleteMemo = (id) => {
+        
+    }
+
     return (
         <Col span={18}>
             <div className="site-card-wrapper">
                 <Row>
                     {memos.map(
                         (memo: memo, index: number) => {
-                            const divider = index % 3 == 2 ? <Divider /> : "";
                                 return (
                                     <>
                                         <Col className="gutter-row" span={8}>
-                                            <MemoCardItem memo={memo} />
+                                            <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
                                         </Col>
-                                        {divider}
+                                        {index % 3 == 2 ? <Divider /> : ""}
                                     </>
                                 );
                             }
@@ -87,7 +107,7 @@ function MemoInfo({ info }) {
     );
 }
 
-function MemoCardItem({ memo }) {
+function MemoCardItem({ memo, deleteMemo }) {
     const { Meta } = Card;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isMemoPinned, setIsMemoPinned] = useState(false);
@@ -112,9 +132,9 @@ function MemoCardItem({ memo }) {
         <Card
             style={{ width: 300 }}
             actions={[
-            <FolderOpenOutlined key="open" onClick={showModal}/>,
+            <FolderOpenOutlined key="open" onClick={showModal} />,
             <Link href={{ pathname: '/editor' }}><EditOutlined key="edit" /></Link>,
-            <DeleteOutlined key="delete" />,
+            <DeleteOutlined key="delete" onClick={deleteMemo(memo.id)} />,
             ]}
         >
             <Meta
