@@ -1,4 +1,4 @@
-import { prop, plugin } from '@typegoose/typegoose'
+import { pre, prop, plugin } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
 import { PopulatedUser, User } from './user'
@@ -10,9 +10,6 @@ export class Category {
 
   @prop({ type: () => String })
   public name!: string
-
-  @prop({ type: () => Date })
-  public createdAt!: Date
 }
 
 export interface PopulatedCategory {

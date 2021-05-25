@@ -1,4 +1,4 @@
-import { prop, plugin, Ref } from '@typegoose/typegoose'
+import { pre, prop, plugin, Ref } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
 import { PopulatedUser, User } from './user'
