@@ -6,7 +6,7 @@
     "build": "set NODE_ENV=prod && next build && tsc --project tsconfig.server.json",
     "start": "set NODE_ENV=dev && next start",
     "test": "set NODE_ENV=test && jest",
-    "lint": "eslint '**/*.{js,ts,tsx}'",
+    "lint": "eslint **/*.{js,ts,tsx}",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier '**/*.{json,yaml,md}' --check",
     "prettier:fix": "prettier '**/*.{json,yaml,md}' --write"
