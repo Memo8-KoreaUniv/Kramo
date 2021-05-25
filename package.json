@@ -22,7 +22,6 @@
       "prettier"
     ]
   },
-  "type": "module",
   "dependencies": {
     "@toast-ui/editor": "^2.5.2",
     "@toast-ui/react-editor": "^2.5.3",
