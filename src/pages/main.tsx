@@ -1,42 +1,38 @@
 import React, { useState } from 'react';
-import { Card, Avatar, Row, Col, Divider, Timeline, Modal, Button } from 'antd';
+import { Card, Avatar, Row, Col, Divider, Timeline, Modal, Button, Drawer } from 'antd';
 import { EditOutlined, DeleteOutlined, UserOutlined, EnvironmentOutlined, PushpinOutlined, PushpinFilled, FolderOpenOutlined } from '@ant-design/icons';
-import { memo, info } from './index';
-import { MemoEditor } from './editor';
+import { memo, info, MOCK_DATA } from './index';
 import Link from 'next/link';
 
-export function Main({ memos }) {
-    const [isEdit, setIsEdit] = useState(false);
+function useMemos() {
+    const [memos, setMemos] = useState<memo[]>(MOCK_DATA);
+
+    const deleteMemo = (id: string) => {
+        const newMemos = memos.filter(memo => memo.id !== id);
+        setMemos(newMemos);
+    }
+
+    return {
+        memos,
+        deleteMemo
+    };
+}
+
+export function Main() {
+    const { memos, deleteMemo } = useMemos();
 
     return (
         <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
             <Row>
-                <MemoView memos={memos} />
+                <MemoView memos={memos} deleteMemo={deleteMemo} />
                 <MemoTimeline />
             </Row>
-            <MemoEditor />
         </div>
     );
 }
 
-
-function MemoView({ memos }) {
-    // const [memos, setMemos] = useState(memos);
-
-    // const deleteMemo = (id: string) => {
-    //     const newMemos = (
-    //         memos.filter(
-    //             (memo: memo) => {
-    //                 memo.id !== id
-    //             }
-    //         )
-    //     )
-    //     setMemos(newMemos);
-    // }
-
-    const deleteMemo = (id) => {
-
-    }
+function MemoView({ memos, deleteMemo }) {
+    
 
     return (
         <Col span={18}>
@@ -112,6 +108,7 @@ function MemoCardItem({ memo, deleteMemo }) {
     const { Meta } = Card;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isMemoPinned, setIsMemoPinned] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -125,6 +122,14 @@ function MemoCardItem({ memo, deleteMemo }) {
         setIsModalVisible(false);
     };
 
+    const showDrawer = () => {
+        setVisible(true);
+    };
+
+    const onClose = () => {
+        setVisible(false);
+    };
+
     const togglePinned = () => {
         setIsMemoPinned(!isMemoPinned);
     }
@@ -133,9 +138,9 @@ function MemoCardItem({ memo, deleteMemo }) {
         <Card
             style={{ width: 300 }}
             actions={[
-            <FolderOpenOutlined key="open" onClick={showModal} />,
+            <FolderOpenOutlined key="open" onClick={showDrawer} />,
             <Link href={{ pathname: '/editor' }}><EditOutlined key="edit" /></Link>,
-            <DeleteOutlined key="delete" onClick={deleteMemo(memo.id)} />,
+            <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.id)} />,
             ]}
         >
             <Meta
@@ -168,6 +173,39 @@ function MemoCardItem({ memo, deleteMemo }) {
                     </>
                 }
             />
+            <Drawer
+                title={memo.title}
+                placement="right"
+                closable={true}
+                onClose={onClose}
+                visible={visible}
+            >
+                <Timeline>
+                {memo.infos.map(
+                    (info: info) => {
+                        return (
+                            <>
+                                <Timeline.Item color="blue">
+                                    <MemoInfo info={info} />
+                                </Timeline.Item>
+                            </>
+                            )    
+                        }
+                    )
+                }
+                </Timeline>
+                <Divider />
+                {memo.content.split('\n').map( 
+                    (line: string) => {
+                        return (
+                            <span>
+                                {line}
+                                <br/>
+                            </span>
+                        )
+                    })    
+                }
+            </Drawer>
             <Modal title={memo.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Timeline>
                 {memo.infos.map(
