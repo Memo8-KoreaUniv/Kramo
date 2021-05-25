@@ -14,6 +14,7 @@ export function Main({ memos }) {
                 <MemoView memos={memos} />
                 <MemoTimeline />
             </Row>
+            <MemoEditor />
         </div>
     );
 }
@@ -34,7 +35,7 @@ function MemoView({ memos }) {
     // }
 
     const deleteMemo = (id) => {
-        
+
     }
 
     return (
