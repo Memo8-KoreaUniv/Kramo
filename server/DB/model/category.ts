@@ -1,22 +1,23 @@
 import { prop, plugin } from '@typegoose/typegoose'
-import { PopulatedUser, User } from './user'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
+
+import { PopulatedUser, User } from './user'
 
 @plugin(mongooseAutoPopulate)
 export class Category {
+  @prop({ autopopulate: true, ref: () => User })
+  public user?: PopulatedUser
+
   @prop({ type: () => String })
   public name!: string
 
   @prop({ type: () => Date })
-  public created_at!: Date
-
-  @prop({ autopopulate: true, ref: () => User })
-  public user?: PopulatedUser
+  public createdAt!: Date
 }
 
 export interface PopulatedCategory {
   _id?: string
   name: string
-  created_at: Date
+  createdAt: Date
   user: PopulatedUser
 }
