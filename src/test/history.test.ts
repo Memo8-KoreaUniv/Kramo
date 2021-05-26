@@ -1,11 +1,15 @@
-import connectDB from '..'
+import path from 'path'
+import dotenv from 'dotenv'
+import { connectToDatabase } from '../utils'
+
 import { HistoryModel } from '../model'
 import { PopulatedUser } from '../model/user'
 import { HISTORY1, USER1_ID } from './dummy'
 
 describe('Create and find History', () => {
   beforeAll(async () => {
-    connectDB()
+    dotenv.config({ path: path.resolve(__dirname, '../../.env.test') })
+    await connectToDatabase(process.env.MONGODB_URI)
     await HistoryModel.deleteOne(HISTORY1 as any)
   })
 

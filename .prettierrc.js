@@ -6,4 +6,3 @@ module.exports = {
   endOfLine: "auto",
   semi: false,
 }
-// "eslint-config-yceffort/typescript"

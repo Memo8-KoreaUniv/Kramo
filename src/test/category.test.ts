@@ -1,11 +1,15 @@
-import connectDB from '..'
+import path from 'path'
+import dotenv from 'dotenv'
+
+import { connectToDatabase } from '../utils'
 import { CategoryModel } from '../model'
 import { PopulatedUser } from '../model/user'
 import { CATEGORY1, USER1_ID } from './dummy'
 
 describe('Create and find CATEGORY', () => {
   beforeAll(async () => {
-    connectDB()
+    dotenv.config({ path: path.resolve(__dirname, '../../.env.test') })
+    await connectToDatabase(process.env.MONGODB_URI)
     await CategoryModel.deleteOne(CATEGORY1 as any)
   })
 
@@ -16,7 +20,7 @@ describe('Create and find CATEGORY', () => {
   test('Find category', async () => {
     const category = await CategoryModel.findOne(CATEGORY1 as any)
     // console.log(category?.populate())
-    console.log(category?.user)
+    console.log(category)
     const user: PopulatedUser = category?.user!
     expect(user._id).toStrictEqual(USER1_ID)
   })

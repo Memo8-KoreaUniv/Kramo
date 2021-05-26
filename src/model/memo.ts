@@ -14,9 +14,6 @@ export class Memo {
   @prop({ autopopulate: true, ref: () => Category })
   public category!: PopulatedCategory
 
-  @prop({ type: () => Date })
-  public createdAt!: Date
-
   public async getHistories(
     this: DocumentType<Memo>,
   ): Promise<DocumentType<History>[]> {

@@ -11,7 +11,10 @@ import { CategoryModel } from '.'
     next()
   }
 
-  const salt = await bcrypt.genSalt(10)
+  if (!process.env.SALT_NUMBER) {
+    throw 'process.env.SALT_NUMBER not exist!'
+  }
+  const salt = await bcrypt.genSalt(parseInt(process.env.SALT_NUMBER))
   this.password = await bcrypt.hash(this.password, salt)
 })
 export class User {
@@ -23,9 +26,6 @@ export class User {
 
   @prop({ type: () => String, select: false })
   public password!: string
-
-  @prop({ type: () => Date, required: true, default: Date.now() })
-  public createdAt!: Date
 
   @prop({ autopopulate: true, ref: () => Category })
   public categories?: PopulatedCategory[]
@@ -52,5 +52,6 @@ export interface PopulatedUser {
   nickname: string
   password: string
   createdAt: Date
+  updatedAt?: Date
   categories?: PopulatedCategory[]
 }

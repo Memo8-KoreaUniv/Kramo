@@ -10,9 +10,6 @@ export class Category {
 
   @prop({ type: () => String })
   public name!: string
-
-  @prop({ type: () => Date })
-  public createdAt!: Date
 }
 
 export interface PopulatedCategory {
