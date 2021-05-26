@@ -35,6 +35,9 @@ module.exports = {
         // This rule is not compatible with Next.js's <Link /> components
         'jsx-a11y/anchor-is-valid': 'off',
 
+        // fuction return
+        '@typescript-eslint/explicit-function-return-type': 'off',
+
         // Why would you want unused vars?
         '@typescript-eslint/no-unused-vars': ['error'],
 

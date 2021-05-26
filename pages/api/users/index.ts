@@ -9,8 +9,7 @@ export default async function users(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
       case 'GET':
         result = await UserModel.find()
-        res.json(result)
-        res.status(500).send('error')
+        res.status(200).json(result)
         break
       case 'POST':
         result = await UserModel.create(req.body)
