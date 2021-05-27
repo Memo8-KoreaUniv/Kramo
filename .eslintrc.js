@@ -13,7 +13,6 @@ module.exports = {
   ],
   plugins: [
     'react',
-    'react-native',
     'import', // eslint-plugin-import for custom configure
   ],
   settings: {
