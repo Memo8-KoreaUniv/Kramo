@@ -4,9 +4,28 @@ module.exports = {
     node: true,
     es6: true,
   },
-  parserOptions: { ecmaVersion: 8 }, // to enable features such as async/await
+  parserOptions: { ecmaVersion: 2020 }, // to enable features such as async/await
   ignorePatterns: ['node_modules/*', '.next/*', '.out/*', '!.prettierrc.js'], // We don't want to lint generated files nor node_modules, but we want to lint .prettierrc.js (ignored by default by eslint)
-  extends: ['eslint:recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+  ],
+  plugins: [
+    'react',
+    'react-native',
+    'import', // eslint-plugin-import for custom configure
+  ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
+  },
   overrides: [
     // This configuration will apply only to TypeScript files
     {
@@ -37,18 +56,32 @@ module.exports = {
 
         // fuction return
         '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+
+        // no-non-null-assertion
+        '@typescript-eslint/no-non-null-assertion': 'off',
 
         // Why would you want unused vars?
         '@typescript-eslint/no-unused-vars': ['error'],
 
         '@typescript-eslint/no-explicit-any': 'off',
-
-        // I suggest this setting for requiring return types on functions only where useful
-        '@typescript-eslint/explicit-function-return-type': [
-          'warn',
+        'import/order': [
+          'error',
           {
-            allowExpressions: true,
-            allowConciseArrowFunctionExpressionsStartingWithVoid: true,
+            groups: ['builtin', 'external', 'internal'],
+            pathGroups: [
+              {
+                pattern: 'react',
+                group: 'external',
+                position: 'before',
+              },
+            ],
+            pathGroupsExcludedImportTypes: ['react'],
+            'newlines-between': 'always',
+            alphabetize: {
+              order: 'asc',
+              caseInsensitive: true,
+            },
           },
         ],
       },
