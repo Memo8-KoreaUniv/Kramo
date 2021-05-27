@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+
 import { UserModel } from 'src/model'
-import { connectToDatabase } from 'src/utils'
+import { connectToDatabase } from 'src/utils/mongo'
 
 export default async function users(req: NextApiRequest, res: NextApiResponse) {
   try {

@@ -1,9 +1,9 @@
 import { getModelForClass } from '@typegoose/typegoose'
 
-import { User } from './user'
 import { Category } from './category'
-import { Memo } from './memo'
 import { History } from './history'
+import { Memo } from './memo'
+import { User } from './user'
 
 export const UserModel = getModelForClass(User, {
   schemaOptions: { timestamps: true },
