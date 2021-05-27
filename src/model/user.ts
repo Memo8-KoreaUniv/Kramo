@@ -1,31 +1,37 @@
+import { DocumentType, plugin, pre, prop } from '@typegoose/typegoose'
 import bcrypt from 'bcryptjs'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
-import { prop, pre, DocumentType, plugin } from '@typegoose/typegoose'
 
-import { Category, PopulatedCategory } from './category'
 import { CategoryModel } from '.'
+import { Category, PopulatedCategory } from './category'
 
 @plugin(mongooseAutoPopulate)
 @pre<User>('save', async function (next) {
-  if (!this.isModified('password')) {
-    next()
-  }
+  if (!this.isModified('password')) next()
+  if (!process.env.SALT_NUMBER) throw 'process.env.SALT_NUMBER not exist!'
+  if (!this.password) return
 
-  if (!process.env.SALT_NUMBER) {
-    throw 'process.env.SALT_NUMBER not exist!'
-  }
   const salt = await bcrypt.genSalt(parseInt(process.env.SALT_NUMBER))
   this.password = await bcrypt.hash(this.password, salt)
 })
 export class User {
+  @prop({ type: () => String, trim: true })
+  public naverId?: string
+
   @prop({ type: () => String, required: true, unique: true })
   public email!: string
 
   @prop({ type: () => String, trim: true })
+  public name!: string
+
+  @prop({ type: () => String, trim: true })
   public nickname!: string
 
+  @prop({ type: () => String })
+  public mobile?: string
+
   @prop({ type: () => String, select: false })
-  public password!: string
+  public password?: string
 
   @prop({ autopopulate: true, ref: () => Category })
   public categories?: PopulatedCategory[]
@@ -34,6 +40,9 @@ export class User {
     this: DocumentType<User>,
     enteredPassword: string,
   ) {
+    if (!this.password) {
+      return false
+    }
     const result = await bcrypt.compare(enteredPassword, this.password)
     return result
   }

@@ -17,7 +17,7 @@ export default async function users(req: NextApiRequest, res: NextApiResponse) {
         res.status(200).json(result)
         break
       default:
-        res.status(500).send('Unexpected req Method!')
+        res.status(500).json({ alertText: 'Unexpected req Method!' })
     }
   } catch (err) {
     console.log(err)
