@@ -7,10 +7,14 @@ import {
 } from '@ant-design/icons'
 import { Menu } from 'antd'
 import Link from 'next/link'
+import { useRecoilValue } from 'recoil'
+
+import { meState } from 'src/state/me'
 
 const { SubMenu } = Menu
 
 const MenuLayout = () => {
+  const me = useRecoilValue(meState)
   return (
     <>
       <Menu style={{ zIndex: 5 }} mode="vertical-left" theme="dark">
@@ -22,11 +26,19 @@ const MenuLayout = () => {
           </Menu.Item>
           <Menu.Item key="2">카테고리2</Menu.Item>
         </SubMenu>
-        <Menu.Item key="2" icon={<UserOutlined />}>
-          <Link href="/login">
-            <a>로그인</a>
-          </Link>
-        </Menu.Item>
+        {me ? (
+          <Menu.Item key="2" icon={<UserOutlined />}>
+            <Link href="/mypage">
+              <a>마이페이지</a>
+            </Link>
+          </Menu.Item>
+        ) : (
+          <Menu.Item key="2" icon={<UserOutlined />}>
+            <Link href="/login">
+              <a>로그인</a>
+            </Link>
+          </Menu.Item>
+        )}
         <Menu.Item key="3" icon={<UserAddOutlined />}>
           <Link href="/register">
             <a>회원가입</a>
