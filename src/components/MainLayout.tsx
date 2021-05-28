@@ -13,6 +13,39 @@ import {
 import 'normalize.css'
 import 'antd/dist/antd.css'
 
+const MainMenuItems = (
+  <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+    <Menu.Item key="1" icon={<UserOutlined />} />
+    <Menu.Item key="2" icon={<VideoCameraOutlined />} />
+    <Menu.Item key="3" icon={<UploadOutlined />} />
+    <Menu.Item key="4" icon={<BarChartOutlined />} />
+    <Menu.Item key="5" icon={<CloudOutlined />} />
+    <Menu.Item key="6" icon={<AppstoreOutlined />} />
+    <Menu.Item key="7" icon={<TeamOutlined />} />
+    <Menu.Item key="8" icon={<ShopOutlined />} />
+  </Menu>
+)
+
+const UserMenuItems = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="#">
+        마이페이지
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="#">
+        회원정보 수정
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="#">
+        로그아웃
+      </a>
+    </Menu.Item>
+  </Menu>
+)
+
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const { Header, Footer, Sider, Content } = Layout
   const { Search } = Input
@@ -28,16 +61,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
             left: 0,
           }}>
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1" icon={<UserOutlined />} />
-            <Menu.Item key="2" icon={<VideoCameraOutlined />} />
-            <Menu.Item key="3" icon={<UploadOutlined />} />
-            <Menu.Item key="4" icon={<BarChartOutlined />} />
-            <Menu.Item key="5" icon={<CloudOutlined />} />
-            <Menu.Item key="6" icon={<AppstoreOutlined />} />
-            <Menu.Item key="7" icon={<TeamOutlined />} />
-            <Menu.Item key="8" icon={<ShopOutlined />} />
-          </Menu>
+          {MainMenuItems}
         </Sider>
         <Layout className="site-layout" style={{ marginLeft: 60 }}>
           <Header
@@ -50,25 +74,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               <Col span={8} offset={8}>
                 <Search placeholder="Search" style={{ width: 200 }} />
                 <Dropdown
-                  overlay={
-                    <Menu>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          마이페이지
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          회원정보 수정
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          로그아웃
-                        </a>
-                      </Menu.Item>
-                    </Menu>
-                  }
+                  overlay={UserMenuItems}
                   placement="bottomRight"
                   arrow>
                   <Button>User</Button>
