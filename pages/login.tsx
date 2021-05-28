@@ -2,9 +2,11 @@ import React, { useEffect } from 'react'
 
 import { Divider, Image, Typography } from 'antd'
 import { useRouter } from 'next/dist/client/router'
+import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 
 import kaxios from 'src/interceptors'
+import { meState } from 'src/state/me'
 import { FlexDiv } from 'style/div'
 
 declare global {
@@ -23,6 +25,7 @@ const Container = styled(FlexDiv)`
 `
 
 const Login = () => {
+  const me = useRecoilValue(meState)
   const { Title, Text } = Typography
   const router = useRouter()
 
@@ -47,6 +50,13 @@ const Login = () => {
   }
 
   useEffect(() => {
+    /* 로그인 돼있었을시 기본 페이지로 */
+    if (me) {
+      alert(`이미 로그인이 되어있습니다!`)
+      router.push('/')
+      return
+    }
+
     const naverAccessToken = getNaverToken()
     if (naverAccessToken) {
       kaxios({

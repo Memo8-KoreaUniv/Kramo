@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { FileTextTwoTone } from '@ant-design/icons'
 import { Layout, Menu, Input, Row, Col, Dropdown, Button, Divider } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import Link from 'next/link'
+import { useRecoilState } from 'recoil'
 
+import kaxios from 'src/interceptors'
 import { FlexDiv } from 'style/div'
 
+import { meState } from '../state/me'
 import MenuLayout from './MenuLayout'
 
 const { Header, Footer, Sider, Content } = Layout
@@ -15,6 +18,19 @@ const { Search } = Input
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false)
+  const [me, setMe] = useRecoilState(meState)
+
+  useEffect(() => {
+    if (me) return
+    kaxios({ url: '/user', method: 'get' })
+      .then((res) => {
+        console.log('me loaded')
+        setMe(res.data.userInfo)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }, [me, setMe])
 
   const onCollapse = (collapsed: boolean) => {
     console.log(collapsed)
