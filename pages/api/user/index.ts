@@ -33,34 +33,37 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
       case 'POST':
         let alertText = '로그인 완료!'
         const naverAccessToken = req.body.naverAccessToken
-        console.log(`req.body.naverAccessToken = ${naverAccessToken}`)
 
         try {
           result = await axios.get(NAVER_API_URL, {
             headers: { Authorization: `Bearer ${naverAccessToken}` },
           })
         } catch (e) {
+          console.log(e)
           res.status(401).json({ alertText: 'Naver Authorization Failed' })
           return
         }
-
         if (!result?.data?.response) {
           res.status(500).json({ alertText: 'Naver Req Error' })
+          return
         }
+
         const naverUserInfo = result.data.response
         let mongoUser = await UserModel.findOne({
           naverId: naverUserInfo.id,
         })
+
+        const userDocument = { ...naverUserInfo, naverId: naverUserInfo.id }
+        delete userDocument.id
+
         if (!mongoUser) {
-          mongoUser = await UserModel.create(naverUserInfo)
+          mongoUser = await UserModel.create(userDocument)
           alertText = '회원가입 완료!'
         }
 
         if (!process.env.JWT_SECRET) {
           throw Error('No JWT_SECRET!')
         }
-        console.log(`mongoUser => ${mongoUser.toJSON()}`)
-
         jwt.sign(
           mongoUser.toJSON(),
           process.env.JWT_SECRET,
@@ -92,6 +95,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
         .json({ alertText: err?.response?.statusText })
       return
     }
+    console.log(err)
     res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }

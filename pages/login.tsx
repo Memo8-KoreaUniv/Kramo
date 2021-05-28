@@ -82,7 +82,7 @@ const Login = () => {
       return
     }
     naverLogin()
-  })
+  }, [])
 
   return (
     <>

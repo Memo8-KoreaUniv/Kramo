@@ -4,7 +4,9 @@ import { FileTextTwoTone } from '@ant-design/icons'
 import { Layout, Menu, Input, Row, Col, Dropdown, Button, Divider } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
+import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
+import cookie from 'react-cookies'
 import { useRecoilState } from 'recoil'
 
 import kaxios from 'src/interceptors'
@@ -19,6 +21,7 @@ const { Search } = Input
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [collapsed, setCollapsed] = useState(true)
   const [me, setMe] = useRecoilState(meState)
+  const router = useRouter()
 
   useEffect(() => {
     if (me) return
@@ -28,9 +31,21 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
         setMe(res.data.userInfo)
       })
       .catch((e) => {
-        console.log(e)
+        if (e.message === 'Request failed with status code 401') {
+          console.log('로그인 되지 않은 상태')
+          return
+        }
+        console.log(JSON.parse(JSON.stringify(e)))
       })
   }, [me, setMe])
+
+  const onClickLogout = () => {
+    cookie.remove(process.env.NEXT_PUBLIC_JWT_TOKEN_NAME!)
+    setMe(null)
+    alert('로그아웃 성공!')
+    router.push('/')
+    return
+  }
 
   const onCollapse = (collapsed: boolean) => {
     console.log(collapsed)
@@ -42,23 +57,27 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
       <Layout>
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <FlexDiv>
-            <FlexDiv justify={'center'} align={'center'}>
-              <FileTextTwoTone
-                twoToneColor="#005f99"
-                style={{ fontSize: '3rem', color: '#08c', margin: '1rem 0' }}
-              />
-              {!collapsed ? (
-                <Link href="/">
-                  <a>
+            <Link href="/">
+              <a>
+                <FlexDiv justify={'center'} align={'center'}>
+                  <FileTextTwoTone
+                    twoToneColor="#005f99"
+                    style={{
+                      fontSize: '3rem',
+                      color: '#08c',
+                      margin: '1rem 0',
+                    }}
+                  />
+                  {!collapsed ? (
                     <h1 style={{ color: '#C3D4D9', margin: '0 0.5rem' }}>
                       Kramo
                     </h1>
-                  </a>
-                </Link>
-              ) : (
-                ''
-              )}
-            </FlexDiv>
+                  ) : (
+                    ''
+                  )}
+                </FlexDiv>
+              </a>
+            </Link>
           </FlexDiv>
           <MenuLayout />
         </Sider>
@@ -87,10 +106,8 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
                           회원정보 수정
                         </a>
                       </Menu.Item>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          로그아웃
-                        </a>
+                      <Menu.Item onClick={onClickLogout}>
+                        <a>로그아웃</a>
                       </Menu.Item>
                     </Menu>
                   }
