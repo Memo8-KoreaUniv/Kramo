@@ -64,22 +64,17 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
           {MainMenuItems}
         </Sider>
         <Layout className="site-layout" style={{ marginLeft: 60 }}>
-          <Header
+        <Header
             className="site-layout-background"
             style={{ padding: 0, background: '#fff' }}>
-            <Row>
-              <Col span={8}>
-                <h1>Kramo</h1>
-              </Col>
-              <Col span={8} offset={8}>
-                <Search placeholder="Search" style={{ width: 200 }} />
-                <Dropdown
-                  overlay={UserMenuItems}
-                  placement="bottomRight"
-                  arrow>
-                  <Button>User</Button>
-                </Dropdown>
-              </Col>
+            <Row align="middle">
+              <h1>Kramo</h1>
+              <Col offset={16}></Col>
+              <Search placeholder="Search" style={{ width: 200 }}/>
+              <Col offset={1}></Col>
+              <Dropdown overlay={UserMenuItems} placement="bottomRight">
+                <Button>{<UserOutlined/>}Username</Button>
+              </Dropdown>
             </Row>
           </Header>
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
