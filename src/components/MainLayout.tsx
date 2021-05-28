@@ -17,7 +17,7 @@ const { Header, Footer, Sider, Content } = Layout
 const { Search } = Input
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const [me, setMe] = useRecoilState(meState)
 
   useEffect(() => {
