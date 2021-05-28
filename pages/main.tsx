@@ -55,15 +55,12 @@ function MemoView({ memos, deleteMemo }) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
-        <Row>
-          {memos.map((memo: memo, index: number) => {
+        <Row gutter={[30,30]}>
+          {memos.map((memo: memo) => {
             return (
-              <>
-                <Col className="gutter-row" span={8}>
-                  <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
-                </Col>
-                {index % 3 == 2 ? <Divider /> : ''}
-              </>
+              <Col>
+                <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
+              </Col>
             )
           })}
         </Row>

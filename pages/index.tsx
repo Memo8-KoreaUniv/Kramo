@@ -90,6 +90,20 @@ export const MOCK_DATA: memo[] = [
       },
     ],
   },
+
+  {
+    id: 'some-random-value-4',
+    title: '밖에 비온다',
+    content: '주룩주룩',
+    profile: 'default',
+    infos: [
+      {
+        time: '2021년 5월 28일 14:00',
+        place: '우리집',
+        weather: '💨',
+      },
+    ],
+  },  
 ]
 
 export default function Index() {
