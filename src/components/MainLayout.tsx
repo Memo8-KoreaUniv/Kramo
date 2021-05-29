@@ -11,7 +11,7 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons'
 import 'normalize.css'
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.css' 
 
 const MainMenuItems = (
   <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
@@ -49,6 +49,7 @@ const UserMenuItems = (
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const { Header, Footer, Sider, Content } = Layout
   const { Search } = Input
+
   return (
     <>
       <Layout>
@@ -67,13 +68,10 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
           <Header
             className="site-layout-background"
             style={{ padding: 0, background: '#fff' }}>
-            <Row align="bottom">
-              <Col span={8}>
-                <h1>Kramo</h1>
-              </Col>
-              <Col span={8} offset={8}>
+            <Row align="middle" justify="end">
+              <Col pull={2}>
                 <Space>
-                <Search placeholder="Search" style={{ width: 200 }} />
+                <Search placeholder="Search" style={{ width: 200 }}/>
                 <Dropdown
                   overlay={UserMenuItems}
                   placement="bottomRight"
@@ -97,3 +95,4 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
 }
 
 export default MainLayout
+
