@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Document, {
   Html,
   Head,
@@ -15,8 +16,8 @@ interface Props {
 export default class MyDocument extends Document<Props> {
   static async getInitialProps({ renderPage }: DocumentContext) {
     const sheet = new ServerStyleSheet()
-    const page = renderPage((App: any) => (props: any) =>
-      sheet.collectStyles(<App {...props} />),
+    const page = renderPage(
+      (App: any) => (props: any) => sheet.collectStyles(<App {...props} />),
     )
     const styleTags = sheet.getStyleElement()
 
@@ -46,6 +47,10 @@ export default class MyDocument extends Document<Props> {
                 'body { margin: 0 !important; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); -webkit-touch-callout: none; }',
             }}
           />
+          <script
+            type="text/javascript"
+            src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"
+            charSet="utf-8"></script>
         </Head>
         <body>
           <Main />

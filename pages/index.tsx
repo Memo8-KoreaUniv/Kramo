@@ -1,5 +1,5 @@
-// import styled from 'styled-components'
 import React from 'react'
+
 import { Main } from './main'
 
 // 타입 정의
