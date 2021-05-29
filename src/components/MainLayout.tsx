@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Input, Row, Col, Dropdown, Button } from 'antd'
+import { Layout, Menu, Input, Row, Col, Dropdown, Button, Space } from 'antd'
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -67,18 +67,20 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
           <Header
             className="site-layout-background"
             style={{ padding: 0, background: '#fff' }}>
-            <Row>
+            <Row align="bottom">
               <Col span={8}>
                 <h1>Kramo</h1>
               </Col>
               <Col span={8} offset={8}>
+                <Space>
                 <Search placeholder="Search" style={{ width: 200 }} />
                 <Dropdown
                   overlay={UserMenuItems}
                   placement="bottomRight"
                   arrow>
-                  <Button>User</Button>
+                  <Button>{<UserOutlined/>}User</Button>
                 </Dropdown>
+                </Space>
               </Col>
             </Row>
           </Header>
