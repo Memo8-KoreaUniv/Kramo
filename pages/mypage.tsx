@@ -1,11 +1,15 @@
-import React, { CSSProperties, useEffect } from 'react'
+import React, { CSSProperties, useEffect, useState } from 'react'
 
-import { Descriptions, Badge } from 'antd'
+import { Descriptions, Badge, Button, Input, message } from 'antd'
+import _ from 'lodash'
 import { useRouter } from 'next/dist/client/router'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
+import AskAgainButton from 'src/components/AskAgain'
+import kaxios from 'src/interceptors'
 import { meState } from 'src/state/me'
+import { FlexDiv } from 'style/div'
 
 const myLabelStyle: CSSProperties = {
   color: 'black',
@@ -25,41 +29,121 @@ DescriptionsItem.defaultProps = {
 }
 
 const Mypage = () => {
-  const me = useRecoilValue(meState)
+  const [me, setMe] = useRecoilState(meState)
   const router = useRouter()
+  const [onUpdateMode, setOnUpdateMode] = useState<boolean>(false)
+  const [updateValues, setUpdateValues] = useState<{
+    name?: string
+    nickname?: string
+    mobile?: string
+  }>({})
 
   useEffect(() => {
-    if (!me) {
+    if (!me && onUpdateMode) {
       alert('로그인이 필요합니다!')
       router.push('/')
       return
     }
-  }, [me, router])
+    setUpdateValues(_.pick(me, 'name', 'nickname', 'mobile'))
+  }, [me, router, onUpdateMode])
+  console.log(`me =>${JSON.stringify(me)}`)
+
+  const onClickUpdateButton = () => {
+    setOnUpdateMode(!onUpdateMode)
+  }
+
+  const onConfirmUpdate = async () => {
+    if (!me?._id) {
+      message.warning('유저정보 로드가 실패했습니다.')
+      return
+    }
+    if (_.isEqual(_.pick(me, 'name', 'nickname', 'mobile'), updateValues)) {
+      message.warning('변경사항이 없습니다!')
+      return
+    }
+    try {
+      const updatedUser = await kaxios({
+        url: `/user/${me?._id}`,
+        method: 'put',
+        data: updateValues,
+      })
+      setOnUpdateMode(false)
+      setMe(updatedUser.data.updatedUser)
+      message.success('유저정보 업데이트 성공!')
+    } catch (e) {
+      message.error('유저정보 업데이트가 실패했습니다.')
+    }
+  }
 
   return (
-    <Descriptions
-      bordered
-      title="내 정보"
-      layout="vertical"
-      column={{ xs: 1, sm: 2, md: 4 }}>
-      <DescriptionsItem label="이름">
-        {me?.name ? me?.name : '정보없음'}
-      </DescriptionsItem>
-      <DescriptionsItem label="닉네임">
-        {me?.nickname ? me?.nickname : '정보없음'}
-      </DescriptionsItem>
-      <DescriptionsItem label="이메일" span={4}>
-        {me?.email ? me?.email : '정보없음'}
-      </DescriptionsItem>
-      <DescriptionsItem label="전화번호">{me?.mobile}</DescriptionsItem>
-      <DescriptionsItem label="생성일자">
-        {me?.createdAt ? new Date(me?.createdAt).toString() : '정보없음'}
-      </DescriptionsItem>
-      <DescriptionsItem label="정상여부">
-        <Badge status={me ? 'success' : 'error'} text={me ? '정상' : '에러'} />
-      </DescriptionsItem>
-      <DescriptionsItem label="기타">내용없음</DescriptionsItem>
-    </Descriptions>
+    <>
+      <Descriptions
+        bordered
+        title="내 정보"
+        layout="vertical"
+        column={{ xs: 1, sm: 2, md: 4 }}>
+        <DescriptionsItem label="이름">
+          {onUpdateMode ? (
+            <Input
+              value={updateValues?.name}
+              onChange={(e) => {
+                setUpdateValues({ ...updateValues, name: e.target.value })
+              }}></Input>
+          ) : (
+            me?.name
+          )}
+        </DescriptionsItem>
+        <DescriptionsItem label="닉네임">
+          {onUpdateMode ? (
+            <Input
+              value={updateValues?.nickname}
+              onChange={(e) => {
+                setUpdateValues({ ...updateValues, nickname: e.target.value })
+              }}></Input>
+          ) : (
+            me?.nickname
+          )}
+        </DescriptionsItem>
+        <DescriptionsItem label="이메일" span={4}>
+          {me?.email ? me?.email : '정보없음'}
+        </DescriptionsItem>
+        <DescriptionsItem label="전화번호">
+          {onUpdateMode ? (
+            <Input
+              value={updateValues.mobile}
+              onChange={(e) => {
+                setUpdateValues({ ...updateValues, mobile: e.target.value })
+              }}></Input>
+          ) : (
+            me?.mobile
+          )}
+        </DescriptionsItem>
+        <DescriptionsItem label="생성일자">
+          {me?.createdAt ? new Date(me?.createdAt).toString() : '정보없음'}
+        </DescriptionsItem>
+        <DescriptionsItem label="정상여부">
+          <Badge
+            status={me ? 'success' : 'error'}
+            text={me ? '정상' : '에러'}
+          />
+        </DescriptionsItem>
+        <DescriptionsItem label="기타">내용없음</DescriptionsItem>
+      </Descriptions>
+      <FlexDiv>
+        <Button onClick={onClickUpdateButton}>
+          {onUpdateMode ? '돌아가기' : '수정모드'}
+        </Button>
+        {onUpdateMode ? (
+          <AskAgainButton
+            buttonText="수정하기"
+            confirmText="수정하시겠습니까?"
+            onConfirm={onConfirmUpdate}
+          />
+        ) : (
+          ''
+        )}
+      </FlexDiv>
+    </>
   )
 }
 
