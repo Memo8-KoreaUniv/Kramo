@@ -7,7 +7,7 @@ const AskAgainButton = ({
   onConfirm = () => {
     return
   },
-  onCancle = () => {
+  onCancel = () => {
     return
   },
   confirmText = '진행해도 괜찮으시겠습니까?',
@@ -18,7 +18,7 @@ const AskAgainButton = ({
       placement="top"
       title={confirmText}
       onConfirm={onConfirm}
-      onCancel={onCancle}
+      onCancel={onCancel}
       okText="예"
       icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
       cancelText="아니오">
