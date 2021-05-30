@@ -179,39 +179,51 @@ paths:
       responses:
         '405':
           description: 'Invalid input'
-  /pet/findByStatus:
+  /api/memo/{memoId}:
     get:
       tags:
-        - 'pet'
-      summary: 'Finds Pets by status'
-      description: 'Multiple status values can be provided with comma separated strings'
-      operationId: 'findPetsByStatus'
-      produces:
-        - 'application/xml'
-        - 'application/json'
+        - 'memo'
+      summary: '메모 히스토리 로드'
+      description: '메모 히스토리를 n개만큼 가져옵니다. (쿠키에 토큰값 필요)'
+      operationId: ''
       parameters:
-        - name: 'status'
-          in: 'query'
-          description: 'Status values that need to be considered for filter'
+        - name: 'memoId'
+          in: 'path'
+          description: 'ID of memo to return'
           required: true
-          type: 'array'
-          items:
-            type: 'string'
-            enum:
-              - 'available'
-              - 'pending'
-              - 'sold'
-            default: 'available'
-          collectionFormat: 'multi'
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'count'
+          in: 'query'
+          description: '불러올 최근 히스토리 개수'
+          required: true
+          type: 'integer'
+          format: 'int64'
       responses:
         '200':
-          description: 'successful operation'
-        '400':
-          description: 'Invalid status value'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+              histories:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/definitions/User"
+                description: '히스토리 n개!'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
   /pet/findByTags:
     get:
       tags:
@@ -455,6 +467,78 @@ paths:
           description: 'Invalid ID supplied'
         '404':
           description: 'Order not found'
+definitions:
+  User:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        format: "ObjectId"
+      naverId:
+        type: "string"
+        format: "naverId"
+        description: "네이버에서 제공한 id값"
+      mobile:
+        type: "string"
+        format: "phone-num"
+      email:
+        type: "string"
+        format: "email"
+      name:
+        type: "string"
+      nickname:
+        type: "string"
+      createdAt:
+        type: "string"
+        format: "date-time"
+  Category:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        format: "ObjectId"
+      name:
+        type: "string"
+      user:
+         $ref: "#/definitions/User"
+      createdAt:
+        type: "string"
+        format: "date-time"
+  Memo:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        format: "ObjectId"
+      category:
+         $ref: "#/definitions/Category"
+      createdAt:
+        type: "string"
+        format: "date-time"
+  History:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+        format: "ObjectId"
+      user:
+         $ref: "#/definitions/User"
+      memo:
+         $ref: "#/definitions/Memo"
+      category:
+         $ref: "#/definitions/Category"
+      text:
+        type: "string"
+        format: "HTML"
+      weather:
+        type: "string"
+        format: "미정"
+      gps:
+        type: "string"
+        format: "미정"
+      createdAt:
+        type: "string"
+        format: "date-time"
 externalDocs:
   description: 'Github'
   url: 'https://github.com/Memo8-KoreaUniv/kramo'
