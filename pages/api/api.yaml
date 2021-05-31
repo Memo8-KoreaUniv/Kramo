@@ -1,0 +1,460 @@
+swagger: '2.0'
+info:
+  description: 'Kramo 의 API 문서입니다. NextJS 를 기반으로 돌아가고, 아직 작성중입니다. 밑에 예시코드들은 작성할 때 참고하기 위해 아직 지우지 않았습니다.'
+  version: '0.0.1'
+  title: 'Kramo'
+  contact:
+    email: 'ddrrpg@naver.com'
+  license:
+    name: 'MIT'
+    url: 'https://opensource.org/licenses/MIT'
+# host: 'kramo'
+# basePath: '/v1'
+# tags:
+#   - name: 'pet'
+#     description: 'Everything about your Pets'
+#     externalDocs:
+#       description: 'Find out more'
+#       url: 'http://swagger.io'
+#   - name: 'store'
+#     description: 'Access to Petstore orders'
+#   - name: 'user'
+#     description: 'Operations about user'
+#     externalDocs:
+#       description: 'Github'
+#       url: 'https://github.com/Memo8-KoreaUniv/kramo'
+schemes:
+  - 'http'
+  # - 'https'
+securityDefinitions:
+  # petstore_auth:
+  #   type: 'oauth2'
+  #   authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+  #   flow: 'implicit'
+  #   scopes:
+  #     write:pets: 'modify pets in your account'
+  #     read:pets: 'read your pets'
+  ormakkc:
+    type: apiKey
+    name: Cookie
+    in: header
+paths:
+  /api/user:
+    get:
+      tags:
+        - 'user'
+      summary: '유저정보 로드'
+      description: '쿠키값을 바탕으로 유저정보를 로드합니다.'
+      operationId: ''
+      parameters:
+        - in: header
+          name: Cookie
+          type: string
+          required: true
+          description: '{secret_name} 을 key로 갖는 토큰이 쿠키에 포함되어 있어야 합니다.'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '유저정보 로드 성공!'
+              userInfo:
+                type: object
+                description: 'kramoUserInfo!'
+        '401':
+          description: '해당 토큰을 담은 쿠키가 없을때'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '로그인이 필요합니다!'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
+    post:
+      tags:
+        - 'user'
+      summary: '네이버 로그인 요청'
+      description: '화면 페이지에서 네아로(OAuth2) 버튼을 클릭하면, 리다이렉트 이후, naver access token 을 받아오게 됩니다. 자동적으로 그 토큰을 이용해서 위 api로 로그인 시도를 하고, 기존에 db에 등록되어있지 않은 멤버가 없었을 경우, 회원가입, 기존 유저였을 경우 우리 kramo 서비스 access token을 쿠키로 심어 반환합니다 (로그인처리)'
+      operationId: ''
+      parameters:
+        - in: body
+          name: 토큰정보
+          description: The user to create.
+          schema:
+            type: object
+            required:
+              - userName
+            properties:
+              naverAccessToken:
+                type: string
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '유저정보 로드 성공!'
+              userInfo:
+                type: object
+                description: 'kramoUserInfo!'
+              token:
+                type: string
+                description: 'kramo 토큰값'
+        '401':
+          description: '네이버 auth 에서 문제가 생겼을 때'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/users:
+    get:
+      tags:
+        - 'users'
+      summary: '모든 유저정보 로드'
+      description: 'DB에 존재하는 users 데이터들을 불러옵니다. (관리자용)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    post:
+      tags:
+        - 'users'
+      summary: '유저 추가'
+      description: '직접 유저 데이터를 mongoDB에 추가합니다.'
+      operationId: ''
+      consumes:
+        - 'application/json'
+        - 'application/xml'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              name:
+                type: string
+              nickname:
+                type: string
+              mobile:
+                type: string
+      responses:
+        '405':
+          description: 'Invalid input'
+  /pet/findByStatus:
+    get:
+      tags:
+        - 'pet'
+      summary: 'Finds Pets by status'
+      description: 'Multiple status values can be provided with comma separated strings'
+      operationId: 'findPetsByStatus'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'status'
+          in: 'query'
+          description: 'Status values that need to be considered for filter'
+          required: true
+          type: 'array'
+          items:
+            type: 'string'
+            enum:
+              - 'available'
+              - 'pending'
+              - 'sold'
+            default: 'available'
+          collectionFormat: 'multi'
+      responses:
+        '200':
+          description: 'successful operation'
+        '400':
+          description: 'Invalid status value'
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /pet/findByTags:
+    get:
+      tags:
+        - 'pet'
+      summary: 'Finds Pets by tags'
+      description: 'Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing.'
+      operationId: 'findPetsByTags'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'tags'
+          in: 'query'
+          description: 'Tags to filter by'
+          required: true
+          type: 'array'
+          items:
+            type: 'string'
+          collectionFormat: 'multi'
+      responses:
+        '200':
+          description: 'successful operation'
+        '400':
+          description: 'Invalid tag value'
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+      deprecated: true
+  /pet/{petId}:
+    get:
+      tags:
+        - 'pet'
+      summary: 'Find pet by ID'
+      description: 'Returns a single pet'
+      operationId: 'getPetById'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'petId'
+          in: 'path'
+          description: 'ID of pet to return'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: 'successful operation'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Pet not found'
+      security:
+        - api_key: []
+    post:
+      tags:
+        - 'pet'
+      summary: 'Updates a pet in the store with form data'
+      description: ''
+      operationId: 'updatePetWithForm'
+      consumes:
+        - 'application/x-www-form-urlencoded'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'petId'
+          in: 'path'
+          description: 'ID of pet that needs to be updated'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - name: 'name'
+          in: 'formData'
+          description: 'Updated name of the pet'
+          required: false
+          type: 'string'
+        - name: 'status'
+          in: 'formData'
+          description: 'Updated status of the pet'
+          required: false
+          type: 'string'
+      responses:
+        '405':
+          description: 'Invalid input'
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+    delete:
+      tags:
+        - 'pet'
+      summary: 'Deletes a pet'
+      description: ''
+      operationId: 'deletePet'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'api_key'
+          in: 'header'
+          required: false
+          type: 'string'
+        - name: 'petId'
+          in: 'path'
+          description: 'Pet id to delete'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Pet not found'
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /pet/{petId}/uploadImage:
+    post:
+      tags:
+        - 'pet'
+      summary: 'uploads an image'
+      description: ''
+      operationId: 'uploadFile'
+      consumes:
+        - 'multipart/form-data'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'petId'
+          in: 'path'
+          description: 'ID of pet to update'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - name: 'additionalMetadata'
+          in: 'formData'
+          description: 'Additional data to pass to server'
+          required: false
+          type: 'string'
+        - name: 'file'
+          in: 'formData'
+          description: 'file to upload'
+          required: false
+          type: 'file'
+      responses:
+        '200':
+          description: 'successful operation'
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /store/inventory:
+    get:
+      tags:
+        - 'store'
+      summary: 'Returns pet inventories by status'
+      description: 'Returns a map of status codes to quantities'
+      operationId: 'getInventory'
+      produces:
+        - 'application/json'
+      parameters: []
+      responses:
+        '200':
+          description: 'successful operation'
+          schema:
+            type: 'object'
+            additionalProperties:
+              type: 'integer'
+              format: 'int32'
+      security:
+        - api_key: []
+  /store/order:
+    post:
+      tags:
+        - 'store'
+      summary: 'Place an order for a pet'
+      description: ''
+      operationId: 'placeOrder'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - in: query
+          name: 'userId'
+          type: integer
+          description: 'Pet object that needs to be added to the store'
+          required: true
+      responses:
+        '200':
+          description: 'successful operation'
+        '400':
+          description: 'Invalid Order'
+  /store/order/{orderId}:
+    get:
+      tags:
+        - 'store'
+      summary: 'Find purchase order by ID'
+      description: 'For valid response try integer IDs with value >= 1 and <= 10.         Other values will generated exceptions'
+      operationId: 'getOrderById'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'orderId'
+          in: 'path'
+          description: 'ID of pet that needs to be fetched'
+          required: true
+          type: 'integer'
+          maximum: 10.0
+          minimum: 1.0
+          format: 'int64'
+      responses:
+        '200':
+          description: 'successful operation'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Order not found'
+    delete:
+      tags:
+        - 'store'
+      summary: 'Delete purchase order by ID'
+      description: 'For valid response try integer IDs with positive integer value.         Negative or non-integer values will generate API errors'
+      operationId: 'deleteOrder'
+      produces:
+        - 'application/xml'
+        - 'application/json'
+      parameters:
+        - name: 'orderId'
+          in: 'path'
+          description: 'ID of the order that needs to be deleted'
+          required: true
+          type: 'integer'
+          minimum: 1.0
+          format: 'int64'
+      responses:
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Order not found'
+externalDocs:
+  description: 'Github'
+  url: 'https://github.com/Memo8-KoreaUniv/kramo'

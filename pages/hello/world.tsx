@@ -1,5 +1,6 @@
-import { GetServerSideProps } from 'next'
 import React from 'react'
+
+import { GetServerSideProps } from 'next'
 
 export default function Index({ name }: { name: string }) {
   return <h1>Hello, {name}!</h1>

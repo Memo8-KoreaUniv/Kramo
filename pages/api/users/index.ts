@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+
 import { UserModel } from 'src/model'
-import { connectToDatabase } from 'src/utils'
+import { connectToDatabase } from 'src/utils/mongo'
 
 export default async function users(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -9,15 +10,14 @@ export default async function users(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
       case 'GET':
         result = await UserModel.find()
-        res.json(result)
-        res.status(500).send('error')
+        res.status(200).json(result)
         break
       case 'POST':
         result = await UserModel.create(req.body)
         res.status(200).json(result)
         break
       default:
-        res.status(500).send('Unexpected req Method!')
+        res.status(500).json({ alertText: 'Unexpected req Method!' })
     }
   } catch (err) {
     console.log(err)

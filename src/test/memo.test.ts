@@ -1,10 +1,10 @@
 import path from 'path'
 import dotenv from 'dotenv'
 
-import { connectToDatabase } from '../utils'
 import { MemoModel } from '../model'
 import { PopulatedUser } from '../model/user'
 import { HISTORY1_ID_STRING, MEMO1, USER1_ID } from './dummy'
+import { connectToDatabase } from '../../src/utils/mongo'
 
 describe('Create and find Memo', () => {
   beforeAll(async () => {

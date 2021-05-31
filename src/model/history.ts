@@ -1,9 +1,9 @@
 import { prop, plugin, Ref } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
-import { PopulatedUser, User } from './user'
 import { Category, PopulatedCategory } from './category'
 import { Memo, PopulatedMemo } from './memo'
+import { PopulatedUser, User } from './user'
 
 @plugin(mongooseAutoPopulate)
 export class History {

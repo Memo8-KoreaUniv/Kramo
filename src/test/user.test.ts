@@ -2,7 +2,6 @@ import path from 'path'
 import _ from 'lodash'
 import dotenv from 'dotenv'
 
-import { connectToDatabase } from '../utils'
 import { UserModel } from '../model'
 import {
   CATEGORY1_ID_STRING,
@@ -11,6 +10,7 @@ import {
   USER1_ID,
   USER1_PASSWORD,
 } from './dummy'
+import { connectToDatabase } from '../../src/utils/mongo'
 
 describe('Create and find user', () => {
   beforeAll(async () => {
