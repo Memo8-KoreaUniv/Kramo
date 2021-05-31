@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { FileTextTwoTone, UserOutlined } from '@ant-design/icons'
-import { Layout, Menu, Input, Row, Col, Dropdown, Button, Divider } from 'antd'
+import { FileTextTwoTone, UserOutlined, MenuOutlined, UserAddOutlined, FolderOpenOutlined } from '@ant-design/icons'
+import { Layout, Menu, Input, Row, Col, Dropdown, Button, Divider, Drawer, Space } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
@@ -13,10 +13,12 @@ import kaxios from 'src/interceptors'
 import { FlexDiv } from 'style/div'
 
 import { meState } from '../state/me'
+import { xs, sm, md, lg, xl, useWindowSize } from 'src/size'
 import MenuLayout from './MenuLayout'
 
 const { Header, Footer, Sider, Content } = Layout
 const { Search } = Input
+const { SubMenu } = Menu
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [collapsed, setCollapsed] = useState(true)
@@ -52,9 +54,9 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     setCollapsed(collapsed)
   }
 
-  return (
-    <>
-      <Layout>
+  const MenuSider = () => {
+    if (useWindowSize()[0] > xs)
+      return (
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <FlexDiv>
             <Link href="/">
@@ -81,6 +83,79 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
           </FlexDiv>
           <MenuLayout />
         </Sider>
+      ) 
+    
+    else return (<></>)
+  }
+
+  function MenuDrawer() {
+    const [visible, setVisible] = useState(false)
+
+    const showDrawer = () => {
+      setVisible(true)
+    }
+  
+    const onClose = () => {
+      setVisible(false)
+    }
+
+    if (useWindowSize()[0] <= xs)
+      return (
+        <>
+          <Button type="primary" onClick={showDrawer}>
+            <MenuOutlined />
+          </Button>
+          <Drawer
+            placement="left"
+            closable={false}
+            onClose={onClose}
+            visible={visible}
+          >
+            <Menu style={{ zIndex: 5 }} mode="inline">
+              <SubMenu key="sub1" icon={<FolderOpenOutlined />} title="내 메모">
+                <Menu.Item key="1" onClick={onClose}>
+                  <Link href="/test">
+                    <a>카테고리1</a>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="2" onClick={onClose}>카테고리2</Menu.Item>
+              </SubMenu>
+              {me ? (
+                <Menu.Item key="2" icon={<UserOutlined />} onClick={onClose}>
+                  <Link href="/mypage">
+                    <a>마이페이지</a>
+                  </Link>
+                </Menu.Item>
+              ) : (
+                <Menu.Item key="2" icon={<UserOutlined />} onClick={onClose}>
+                  <Link href="/login">
+                    <a>로그인</a>
+                  </Link>
+                </Menu.Item>
+              )}
+              <Menu.Item key="3" icon={<UserAddOutlined />} onClick={onClose}>
+                <Link href="/register">
+                  <a>회원가입</a>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="4" icon={<UserOutlined />} onClick={onClose}>
+                <Link href="/metest">
+                  <a>내정보 로드 테스트</a>
+                </Link>
+              </Menu.Item>
+            </Menu>
+          </Drawer>
+        </>
+
+      )
+    
+    else return (<></>)
+  }
+
+  return (
+    <>
+      <Layout>
+        {MenuSider()}
         <Layout className="site-layout">
           <Header
             className="site-layout-background"
@@ -90,12 +165,14 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               textAlign: 'center',
               minHeight: '5vh',
             }}>
-            <Row>
-              <Col span={8} offset={8}>
-                <Search placeholder="Search" style={{ width: 200 }} />
-                <Dropdown
-                  overlay={
-                    <Menu>
+            <Row justify="space-between" align="middle" gutter={10}>
+              <Col></Col>
+              <Col>{MenuDrawer()}</Col>
+              <Col>
+                <Space size="middle">
+                  <Search placeholder="Search" style={{ width: useWindowSize()[0] > xs ? 200 : 150 }} />
+                  <Dropdown
+                    overlay={<Menu>
                       <Menu.Item>
                         <a target="_blank" rel="noopener noreferrer" href="#">
                           마이페이지
@@ -109,13 +186,14 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
                       <Menu.Item onClick={onClickLogout}>
                         <a>로그아웃</a>
                       </Menu.Item>
-                    </Menu>
-                  }
-                  placement="bottomRight"
-                  arrow>
-                  <Button>{<UserOutlined/>}User</Button>
-                </Dropdown>
+                    </Menu>}
+                    placement="bottomRight"
+                    arrow>
+                    <Button>{<UserOutlined/>}User</Button>
+                  </Dropdown>
+                </Space>
               </Col>
+              <Col span={1}></Col>
             </Row>
           </Header>
           <Content
