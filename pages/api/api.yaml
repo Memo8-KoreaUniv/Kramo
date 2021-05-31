@@ -180,37 +180,33 @@ paths:
     post:
       tags:
         - 'memo'
-      summary: '메모 추가'
-      description: '해당 메모를 추가합니다. (로그인 필요)'
+      summary: '새 메모'
+      description: '해당 메모 히스토리를 추가합니다. (* 로그인 필요)'
       operationId: ''
       parameters:
-        - name: 'memoId'
-          in: 'path'
-          description: 'ID of memo to return'
+        - in: body
+          name: memo
+          description: '추가할 메모 데이터'
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                format: 'ObjectId'
+              categoryId:
+                type: string
+                format: 'ObjectId'
+              text:
+                type: string
+                format: 'HTML'
+              weather:
+                $ref: '#/definitions/weather'
+              gps:
+                $ref: '#/definitions/gps'
           required: true
-          type: 'string'
-          format: 'ObjectId'
-        - name: 'count'
-          in: 'query'
-          description: '불러올 최근 히스토리 개수'
-          required: true
-          type: 'integer'
-          format: 'int64'
       responses:
         '200':
           description: '성공'
-          schema:
-            type: 'object'
-            properties:
-              alertText:
-                type: string
-                description: '에러 내용'
-              histories:
-                type: array
-                items:
-                  type: object
-                  $ref: '#/definitions/User'
-                description: '히스토리 n개!'
         '401':
           description: '권한이 없음'
         '500':
@@ -256,6 +252,48 @@ paths:
                   type: object
                   $ref: '#/definitions/User'
                 description: '히스토리 n개!'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    post:
+      tags:
+        - 'memo'
+      summary: '메모 수정'
+      description: '메모를 수정합니다. 실질적으로 history 도큐먼트가 추가됩니다. (로그인 필요)'
+      operationId: ''
+      parameters:
+        - in: body
+          name: memo
+          description: '추가할 메모 데이터'
+          schema:
+            type: object
+            properties:
+              memoId:
+                type: string
+                format: 'ObjectId'
+              text:
+                type: string
+                format: 'HTML'
+              weather:
+                $ref: '#/definitions/weather'
+              gps:
+                $ref: '#/definitions/gps'
+          required: true
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              newMemo:
+                $ref: '#/definitions/History'
         '401':
           description: '권한이 없음'
         '500':
