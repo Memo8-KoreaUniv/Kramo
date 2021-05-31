@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: 'Kramo 의 API 문서입니다. NextJS 를 기반으로 돌아가고, 아직 작성중입니다. 밑에 예시코드들은 작성할 때 참고하기 위해 아직 지우지 않았습니다.'
+  description: 'Kramo 의 API 문서입니다. NextJS 를 기반으로 돌아가고, 작성 중에 있습니다.'
   version: '0.0.1'
   title: 'Kramo'
   contact:
@@ -8,21 +8,18 @@ info:
   license:
     name: 'MIT'
     url: 'https://opensource.org/licenses/MIT'
-# host: 'kramo'
-# basePath: '/v1'
-# tags:
-#   - name: 'pet'
-#     description: 'Everything about your Pets'
-#     externalDocs:
-#       description: 'Find out more'
-#       url: 'http://swagger.io'
-#   - name: 'store'
-#     description: 'Access to Petstore orders'
-#   - name: 'user'
-#     description: 'Operations about user'
-#     externalDocs:
-#       description: 'Github'
-#       url: 'https://github.com/Memo8-KoreaUniv/kramo'
+host: 'www.host미정'
+basePath: '/v0'
+tags:
+  - name: 'user'
+    description: '유저 도메인'
+  - name: 'users'
+    description: '유저 DB 관련 (주로 관리자용)'
+  - name: 'memo'
+    description: '메모 도메인'
+    # externalDocs:
+    #   description: 'Github'
+    #   url: 'https://github.com/Memo8-KoreaUniv/kramo'
 schemes:
   - 'http'
   # - 'https'
@@ -179,12 +176,12 @@ paths:
       responses:
         '405':
           description: 'Invalid input'
-  /api/memo/{memoId}:
-    get:
+  /api/memo:
+    post:
       tags:
         - 'memo'
-      summary: '메모 히스토리 로드'
-      description: '메모 히스토리를 n개만큼 가져옵니다. (쿠키에 토큰값 필요)'
+      summary: '메모 추가'
+      description: '해당 메모를 추가합니다. (로그인 필요)'
       operationId: ''
       parameters:
         - name: 'memoId'
@@ -212,7 +209,52 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: "#/definitions/User"
+                  $ref: '#/definitions/User'
+                description: '히스토리 n개!'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/memo/{memoId}:
+    get:
+      tags:
+        - 'memo'
+      summary: '메모 히스토리 로드'
+      description: '메모 히스토리를 n개만큼 가져옵니다. (로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'ID of memo to return'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'count'
+          in: 'query'
+          description: '불러올 최근 히스토리 개수'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+              histories:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/User'
                 description: '히스토리 n개!'
         '401':
           description: '권한이 없음'
@@ -226,76 +268,94 @@ paths:
                 description: '에러 내용'
 definitions:
   User:
-    type: "object"
+    type: 'object'
     properties:
       _id:
-        type: "string"
-        format: "ObjectId"
+        type: 'string'
+        format: 'ObjectId'
       naverId:
-        type: "string"
-        format: "naverId"
-        description: "네이버에서 제공한 id값"
+        type: 'string'
+        format: 'naverId'
+        description: '네이버에서 제공한 id값'
       mobile:
-        type: "string"
-        format: "phone-num"
+        type: 'string'
+        format: 'phone-num'
       email:
-        type: "string"
-        format: "email"
+        type: 'string'
+        format: 'email'
       name:
-        type: "string"
+        type: 'string'
       nickname:
-        type: "string"
+        type: 'string'
       createdAt:
-        type: "string"
-        format: "date-time"
+        type: 'string'
+        format: 'date-time'
   Category:
-    type: "object"
+    type: 'object'
     properties:
       _id:
-        type: "string"
-        format: "ObjectId"
+        type: 'string'
+        format: 'ObjectId'
       name:
-        type: "string"
+        type: 'string'
       user:
-         $ref: "#/definitions/User"
+        $ref: '#/definitions/User'
       createdAt:
-        type: "string"
-        format: "date-time"
+        type: 'string'
+        format: 'date-time'
   Memo:
-    type: "object"
+    type: 'object'
     properties:
       _id:
-        type: "string"
-        format: "ObjectId"
+        type: 'string'
+        format: 'ObjectId'
       category:
-         $ref: "#/definitions/Category"
+        $ref: '#/definitions/Category'
       createdAt:
-        type: "string"
-        format: "date-time"
+        type: 'string'
+        format: 'date-time'
   History:
-    type: "object"
+    type: 'object'
     properties:
       _id:
-        type: "string"
-        format: "ObjectId"
+        type: 'string'
+        format: 'ObjectId'
       user:
-         $ref: "#/definitions/User"
+        $ref: '#/definitions/User'
       memo:
-         $ref: "#/definitions/Memo"
+        $ref: '#/definitions/Memo'
       category:
-         $ref: "#/definitions/Category"
+        $ref: '#/definitions/Category'
       text:
-        type: "string"
-        format: "HTML"
+        type: 'string'
+        format: 'HTML'
       weather:
-        type: "string"
-        format: "미정"
+        $ref: '#/definitions/weather'
       gps:
-        type: "string"
-        format: "미정"
+        $ref: '#/definitions/gps'
       createdAt:
-        type: "string"
-        format: "date-time"
+        type: 'string'
+        format: 'date-time'
+  weather:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+      main:
+        type: 'string'
+      description:
+        type: 'string'
+      icon:
+        type: 'string'
+    externalDocs:
+      url: https://openweathermap.org/current
+  gps:
+    type: 'object'
+    properties:
+      latitude:
+        type: 'string'
+      longitude:
+        type: 'string'
 externalDocs:
   description: 'Github'
   url: 'https://github.com/Memo8-KoreaUniv/kramo'
