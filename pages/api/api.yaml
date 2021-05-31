@@ -15,8 +15,12 @@ tags:
     description: '유저 도메인'
   - name: 'users'
     description: '유저 DB 관련 (주로 관리자용)'
+  - name: 'category'
+    description: '카테고리 도메인'
   - name: 'memo'
     description: '메모 도메인'
+  - name: 'history'
+    description: '히스토리 도메인'
     # externalDocs:
     #   description: 'Github'
     #   url: 'https://github.com/Memo8-KoreaUniv/kramo'
@@ -40,7 +44,7 @@ paths:
     get:
       tags:
         - 'user'
-      summary: '유저정보 로드'
+      summary: '내 정보 로드'
       description: '쿠키값을 바탕으로 유저정보를 로드합니다.'
       operationId: ''
       parameters:
@@ -55,12 +59,9 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '유저정보 로드 성공!'
               userInfo:
                 type: object
-                description: 'kramoUserInfo!'
+                $ref: '#/definitions/User'
         '401':
           description: '해당 토큰을 담은 쿠키가 없을때'
           schema:
@@ -102,9 +103,6 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '유저정보 로드 성공!'
               userInfo:
                 type: object
                 description: 'kramoUserInfo!'
@@ -127,6 +125,199 @@ paths:
               alertText:
                 type: string
                 description: '에러 내용'
+  /api/user/{userId}:
+    get:
+      tags:
+        - 'user'
+      summary: '유저 정보 로드'
+      description: 'userId 값을 바탕으로 유저정보를 로드합니다.'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              userInfo:
+                type: object
+                description: 'kramoUserInfo!'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
+    put:
+      tags:
+        - 'user'
+      summary: '유저 정보 수정'
+      description: 'userId 값을 가진 유저 정보 수정 (이름, 닉네임, 전화번호만 수정 가능)'
+      operationId: ''
+      parameters:
+        - in: body
+          name: 'user'
+          description: 변경할 정보들 (키 값이 없어도 가능)
+          schema:
+            type: object
+            required:
+              - userName
+            properties:
+              name?:
+                type: string
+              nickname?:
+                type: string
+              mobile?:
+                type: string
+      security:
+      - ormakkc: []
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              updatedUser:
+                type: object
+                $ref: '#/definitions/User'
+        '400':
+          description: '존재하지 않는 유저 (param의 userId값이 유효하지 않은 경우)'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '유저가 존재하지 않습니다!'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/user/{userId}/memos:
+    get:
+      tags:
+        - 'user'
+      summary: '특정 유저의 메모들 로드'
+      description: 'userId 값을 바탕으로 유저정보를 로드합니다. 메모별 가장 최근 히스토리를 기준으로 로드됩니다.'
+      operationId: ''
+      parameters:
+        - name: 'page'
+          in: 'path'
+          description: '페이지는 1이 가장 최근'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - name: 'count'
+          in: 'query'
+          description: '페이지 몇 개씩 끊을 건지 개수'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              memos:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '...':
+                      type: string
+                      description: '에러 내용'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
+  /api/user/{userId}/category:
+    post:
+      tags:
+        - 'user'
+      summary: '특정 유저 카테고리 추가'
+      description: 'userId 값을 바탕으로 특정 카테고리를 추가합니다'
+      operationId: ''
+      parameters:
+        - name: 'name'
+          in: 'path'
+          required: true
+          description: '카테고리 이름'
+          type: 'string'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              category:
+                type: object
+                $ref: '#/definitions/Category'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
+  /api/user/{userId}/categories:
+    get:
+      tags:
+        - 'user'
+      summary: '특정 유저의 카테고리들 로드'
+      description: 'userId 값을 바탕으로 카테고리들을 로드합니다. 가나다 기준으로 정렬되어 로드됩니다.'
+      operationId: ''
+      parameters:
+        - name: 'count'
+          in: 'path'
+          required: true
+          description: '만약 입력되지 않았다면, 모두 로드합니다.'
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              categories:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/Category'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
   /api/users:
     get:
       tags:
@@ -137,6 +328,14 @@ paths:
       responses:
         '200':
           description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              users:
+                type: 'array'
+                items:
+                  type: object
+                  $ref: '#/definitions/User'
         '500':
           description: '서버 에러'
           schema:
@@ -145,6 +344,8 @@ paths:
               alertText:
                 type: string
                 description: '에러 내용'
+      security:
+        - ormakkc: []
     post:
       tags:
         - 'users'
@@ -153,9 +354,7 @@ paths:
       operationId: ''
       consumes:
         - 'application/json'
-        - 'application/xml'
       produces:
-        - 'application/xml'
         - 'application/json'
       parameters:
         - in: body
@@ -174,8 +373,111 @@ paths:
               mobile:
                 type: string
       responses:
+        '200':
+          description: '성공'
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                $ref: '#/definitions/User'
         '405':
           description: 'Invalid input'
+      security:
+        - ormakkc: []
+  /api/category/{categoryId}:
+    put:
+      tags:
+        - 'category'
+      summary: '카테고리 이름 수정'
+      description: '해당 카테고리의 이름을 수정합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
+      operationId: ''
+      parameters:
+        - in: body
+          name: name
+          description: '바꿀 이름'
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+          required: true
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'category'
+      summary: '카테고리 삭제'
+      description: '해당 카테고리를 삭제합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/category/{categoryId}/memos:
+    get:
+      tags:
+        - 'category'
+      summary: '특정 카테고리의 메모들 로드'
+      description: '해당 categoryID 를 바탕으로 메모들을 로드합니다. (해당 매모들의 최근 히스토리로) (* 로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'page'
+          in: 'path'
+          description: '페이지는 1이 가장 최근'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - name: 'count'
+          in: 'query'
+          description: '페이지 몇 개씩 끊을 건지 개수'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              memos:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '...':
+                      type: string
+                      description: '에러 내용'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
   /api/memo:
     post:
       tags:
@@ -221,7 +523,7 @@ paths:
     get:
       tags:
         - 'memo'
-      summary: '메모 히스토리 로드'
+      summary: '메모 로드'
       description: '메모 히스토리를 n개만큼 가져옵니다. (로그인 필요)'
       operationId: ''
       parameters:
@@ -237,6 +539,11 @@ paths:
           required: true
           type: 'integer'
           format: 'int64'
+        - name: 'weather'
+          in: 'query'
+          description: '날씨'
+          type: 'string'
+          format: 'api_weather'
       responses:
         '200':
           description: '성공'
@@ -294,6 +601,73 @@ paths:
             properties:
               newMemo:
                 $ref: '#/definitions/History'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'memo'
+      summary: '메모 삭제'
+      description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/history/{historyId}:
+    get:
+      tags:
+        - 'history'
+      summary: '히스토리 로드'
+      description: '해당 히스토리의 내용을 가져옵니다. (로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+              histories:
+                type: object
+                $ref: '#/definitions/User'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'history'
+      summary: '히스토리 삭제'
+      description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
         '401':
           description: '권한이 없음'
         '500':
