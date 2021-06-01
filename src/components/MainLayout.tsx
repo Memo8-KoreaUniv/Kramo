@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react'
 
-import { FileTextTwoTone, UserOutlined, MenuOutlined, UserAddOutlined, FolderOpenOutlined } from '@ant-design/icons'
-import { Layout, Menu, Input, Row, Col, Dropdown, Button, Divider, Drawer, Space } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
+import { Layout, Menu, Row, Col, Dropdown, Button, Divider, Space } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
-import Link from 'next/link'
 import cookie from 'react-cookies'
 import { useRecoilState } from 'recoil'
 
 import kaxios from 'src/interceptors'
-import { FlexDiv } from 'style/div'
 
 import { meState } from '../state/me'
-import { xs, sm, md, lg, xl, useWindowSize } from 'src/utils/size'
-import MenuLayout from './MenuLayout'
 import MenuSider from './MenuSider'
 import MenuDrawer from './MenuDrawer'
 
