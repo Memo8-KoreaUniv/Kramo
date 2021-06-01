@@ -13,12 +13,12 @@ import kaxios from 'src/interceptors'
 import { FlexDiv } from 'style/div'
 
 import { meState } from '../state/me'
-import { xs, sm, md, lg, xl, useWindowSize } from 'src/size'
+import { xs, sm, md, lg, xl, useWindowSize } from 'src/utils/size'
 import MenuLayout from './MenuLayout'
+import MenuSider from './MenuSider'
+import MenuDrawer from './MenuDrawer'
 
 const { Header, Footer, Sider, Content } = Layout
-const { Search } = Input
-const { SubMenu } = Menu
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [collapsed, setCollapsed] = useState(true)
@@ -47,77 +47,6 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     alert('로그아웃 성공!')
     router.push('/')
     return
-  }
-
-  const onCollapse = (collapsed: boolean) => {
-    console.log(collapsed)
-    setCollapsed(collapsed)
-  }
-
-  function MenuSider() {
-    if (useWindowSize()[0] > xs)
-      return (
-        <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-          <FlexDiv>
-            <Link href="/">
-              <a>
-                <FlexDiv justify={'center'} align={'center'}>
-                  <FileTextTwoTone
-                    twoToneColor="#005f99"
-                    style={{
-                      fontSize: '3rem',
-                      color: '#08c',
-                      margin: '1rem 0',
-                    }}
-                  />
-                  {!collapsed ? (
-                    <h1 style={{ color: '#C3D4D9', margin: '0 0.5rem' }}>
-                      Kramo
-                    </h1>
-                  ) : (
-                    ''
-                  )}
-                </FlexDiv>
-              </a>
-            </Link>
-          </FlexDiv>
-          <MenuLayout />
-        </Sider>
-      ) 
-    
-    else return (<></>)
-  }
-
-  function MenuDrawer() {
-    const [visible, setVisible] = useState(false)
-
-    const showDrawer = () => {
-      setVisible(true)
-    }
-  
-    const onClose = () => {
-      setVisible(false)
-    }
-
-    if (useWindowSize()[0] <= xs)
-      return (
-        <>
-          <Button type="primary" onClick={showDrawer}>
-            <MenuOutlined />
-          </Button>
-          <Drawer
-            placement="left"
-            closable={false}
-            onClose={onClose}
-            visible={visible}
-          >
-            <MenuLayout />
-          </Drawer>
-        </>
-
-      )
-    
-    else return (<></>)
   }
 
   return (

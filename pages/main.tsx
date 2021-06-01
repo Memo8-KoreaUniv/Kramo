@@ -23,7 +23,7 @@ import {
 import Link from 'next/link'
 
 import { MOCK_DATA, info, memo } from './index'
-import { xs, sm, md, lg, xl, useWindowSize }from 'src/size'
+import { xs, sm, md, lg, xl, useWindowSize } from 'src/utils/size'
 
 function useMemos() {
   const [memos, setMemos] = useState<memo[]>(MOCK_DATA)
