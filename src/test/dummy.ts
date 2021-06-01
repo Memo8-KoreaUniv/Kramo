@@ -4,7 +4,7 @@ import { Types } from 'mongoose'
  * USER1 더미데이터
  * @_id {email}
  */
-export const USER1_EMAIL = 'ddrrpg@naver.com'
+export const USER1_EMAIL = 'test@naver.com'
 export const USER1_PASSWORD = 'password'
 export const USER1_CREATEDAT = new Date('2021-05-22T13:01:45+09:00')
 export const USER1_ID = new Types.ObjectId('60a9e08a2e4b3029bfc68332')
