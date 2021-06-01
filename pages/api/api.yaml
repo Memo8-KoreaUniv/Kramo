@@ -132,6 +132,13 @@ paths:
       summary: '유저 정보 로드'
       description: 'userId 값을 바탕으로 유저정보를 로드합니다.'
       operationId: ''
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -160,6 +167,12 @@ paths:
       description: 'userId 값을 가진 유저 정보 수정 (이름, 닉네임, 전화번호만 수정 가능)'
       operationId: ''
       parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
         - in: body
           name: 'user'
           description: 변경할 정보들 (키 값이 없어도 가능)
@@ -175,7 +188,7 @@ paths:
               mobile?:
                 type: string
       security:
-      - ormakkc: []
+        - ormakkc: []
       responses:
         '200':
           description: '성공'
@@ -209,8 +222,14 @@ paths:
       description: 'userId 값을 바탕으로 유저정보를 로드합니다. 메모별 가장 최근 히스토리를 기준으로 로드됩니다.'
       operationId: ''
       parameters:
-        - name: 'page'
+        - name: 'userId'
           in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'page'
+          in: 'query'
           description: '페이지는 1이 가장 최근'
           required: true
           type: 'integer'
@@ -255,8 +274,14 @@ paths:
       description: 'userId 값을 바탕으로 특정 카테고리를 추가합니다'
       operationId: ''
       parameters:
-        - name: 'name'
+        - name: 'userId'
           in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'name'
+          in: 'query'
           required: true
           description: '카테고리 이름'
           type: 'string'
@@ -289,8 +314,14 @@ paths:
       description: 'userId 값을 바탕으로 카테고리들을 로드합니다. 가나다 기준으로 정렬되어 로드됩니다.'
       operationId: ''
       parameters:
-        - name: 'count'
+        - name: 'userId'
           in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'count'
+          in: 'query'
           required: true
           description: '만약 입력되지 않았다면, 모두 로드합니다.'
           type: 'integer'
@@ -393,6 +424,12 @@ paths:
       description: '해당 카테고리의 이름을 수정합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
       operationId: ''
       parameters:
+        - name: 'categoryId'
+          in: 'path'
+          description: 'DB 카테고리 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
         - in: body
           name: name
           description: '바꿀 이름'
@@ -421,6 +458,13 @@ paths:
       summary: '카테고리 삭제'
       description: '해당 카테고리를 삭제합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'categoryId'
+          in: 'path'
+          description: 'DB 카테고리 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -442,8 +486,14 @@ paths:
       description: '해당 categoryID 를 바탕으로 메모들을 로드합니다. (해당 매모들의 최근 히스토리로) (* 로그인 필요)'
       operationId: ''
       parameters:
-        - name: 'page'
+        - name: 'categoryId'
           in: 'path'
+          description: 'DB 카테고리 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'page'
+          in: 'query'
           description: '페이지는 1이 가장 최근'
           required: true
           type: 'integer'
@@ -529,7 +579,7 @@ paths:
       parameters:
         - name: 'memoId'
           in: 'path'
-          description: 'ID of memo to return'
+          description: 'DB 메모 ID'
           required: true
           type: 'string'
           format: 'ObjectId'
@@ -576,6 +626,12 @@ paths:
       description: '메모를 수정합니다. 실질적으로 history 도큐먼트가 추가됩니다. (로그인 필요)'
       operationId: ''
       parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
         - in: body
           name: memo
           description: '추가할 메모 데이터'
@@ -617,6 +673,13 @@ paths:
       summary: '메모 삭제'
       description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -637,6 +700,13 @@ paths:
       summary: '히스토리 로드'
       description: '해당 히스토리의 내용을 가져옵니다. (로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'historyId'
+          in: 'path'
+          description: 'DB 히스토리 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -665,6 +735,13 @@ paths:
       summary: '히스토리 삭제'
       description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'historyId'
+          in: 'path'
+          description: 'DB 히스토리 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
