@@ -54,7 +54,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     setCollapsed(collapsed)
   }
 
-  const MenuSider = () => {
+  function MenuSider() {
     if (useWindowSize()[0] > xs)
       return (
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -111,39 +111,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
             onClose={onClose}
             visible={visible}
           >
-            <Menu style={{ zIndex: 5 }} mode="inline">
-              <SubMenu key="sub1" icon={<FolderOpenOutlined />} title="내 메모">
-                <Menu.Item key="1" onClick={onClose}>
-                  <Link href="/test">
-                    <a>카테고리1</a>
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="2" onClick={onClose}>카테고리2</Menu.Item>
-              </SubMenu>
-              {me ? (
-                <Menu.Item key="2" icon={<UserOutlined />} onClick={onClose}>
-                  <Link href="/mypage">
-                    <a>마이페이지</a>
-                  </Link>
-                </Menu.Item>
-              ) : (
-                <Menu.Item key="2" icon={<UserOutlined />} onClick={onClose}>
-                  <Link href="/login">
-                    <a>로그인</a>
-                  </Link>
-                </Menu.Item>
-              )}
-              <Menu.Item key="3" icon={<UserAddOutlined />} onClick={onClose}>
-                <Link href="/register">
-                  <a>회원가입</a>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="4" icon={<UserOutlined />} onClick={onClose}>
-                <Link href="/metest">
-                  <a>내정보 로드 테스트</a>
-                </Link>
-              </Menu.Item>
-            </Menu>
+            <MenuLayout />
           </Drawer>
         </>
 
