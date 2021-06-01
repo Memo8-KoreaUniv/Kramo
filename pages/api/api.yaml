@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: 'Kramo 의 API 문서입니다. NextJS 를 기반으로 돌아가고, 아직 작성중입니다. 밑에 예시코드들은 작성할 때 참고하기 위해 아직 지우지 않았습니다.'
+  description: 'Kramo 의 API 문서입니다. NextJS 를 기반으로 돌아가고, 작성 중에 있습니다.'
   version: '0.0.1'
   title: 'Kramo'
   contact:
@@ -8,21 +8,22 @@ info:
   license:
     name: 'MIT'
     url: 'https://opensource.org/licenses/MIT'
-# host: 'kramo'
-# basePath: '/v1'
-# tags:
-#   - name: 'pet'
-#     description: 'Everything about your Pets'
-#     externalDocs:
-#       description: 'Find out more'
-#       url: 'http://swagger.io'
-#   - name: 'store'
-#     description: 'Access to Petstore orders'
-#   - name: 'user'
-#     description: 'Operations about user'
-#     externalDocs:
-#       description: 'Github'
-#       url: 'https://github.com/Memo8-KoreaUniv/kramo'
+host: 'www.host미정'
+basePath: '/v0'
+tags:
+  - name: 'user'
+    description: '유저 도메인'
+  - name: 'users'
+    description: '유저 DB 관련 (주로 관리자용)'
+  - name: 'category'
+    description: '카테고리 도메인'
+  - name: 'memo'
+    description: '메모 도메인'
+  - name: 'history'
+    description: '히스토리 도메인'
+    # externalDocs:
+    #   description: 'Github'
+    #   url: 'https://github.com/Memo8-KoreaUniv/kramo'
 schemes:
   - 'http'
   # - 'https'
@@ -43,7 +44,7 @@ paths:
     get:
       tags:
         - 'user'
-      summary: '유저정보 로드'
+      summary: '내 정보 로드'
       description: '쿠키값을 바탕으로 유저정보를 로드합니다.'
       operationId: ''
       parameters:
@@ -58,12 +59,9 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '유저정보 로드 성공!'
               userInfo:
                 type: object
-                description: 'kramoUserInfo!'
+                $ref: '#/definitions/User'
         '401':
           description: '해당 토큰을 담은 쿠키가 없을때'
           schema:
@@ -105,9 +103,6 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '유저정보 로드 성공!'
               userInfo:
                 type: object
                 description: 'kramoUserInfo!'
@@ -131,16 +126,43 @@ paths:
                 type: string
                 description: '에러 내용'
   /api/user/{userId}:
+    get:
+      tags:
+        - 'user'
+      summary: '유저 정보 로드'
+      description: 'userId 값을 바탕으로 유저정보를 로드합니다.'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              userInfo:
+                type: object
+                description: 'kramoUserInfo!'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
     put:
       tags:
         - 'user'
       summary: '유저 정보 수정'
-      description: 'userId 값을 가진 유저 정보 수정, 이름, 닉네임, 전화번호만 수정 가능'
+      description: 'userId 값을 가진 유저 정보 수정 (이름, 닉네임, 전화번호만 수정 가능)'
       operationId: ''
       parameters:
         - in: body
-          name: 'update object'
-          description: The user to update. (키 값이 없어도 가능)
+          name: 'user'
+          description: 변경할 정보들 (키 값이 없어도 가능)
           schema:
             type: object
             required:
@@ -152,18 +174,17 @@ paths:
                 type: string
               mobile?:
                 type: string
+      security:
+      - ormakkc: []
       responses:
         '200':
           description: '성공'
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '유저정보 로드 성공!'
               updatedUser:
                 type: object
-                description: 'kramoUserInfo!'
+                $ref: '#/definitions/User'
         '400':
           description: '존재하지 않는 유저 (param의 userId값이 유효하지 않은 경우)'
           schema:
@@ -180,6 +201,123 @@ paths:
               alertText:
                 type: string
                 description: '에러 내용'
+  /api/user/{userId}/memos:
+    get:
+      tags:
+        - 'user'
+      summary: '특정 유저의 메모들 로드'
+      description: 'userId 값을 바탕으로 유저정보를 로드합니다. 메모별 가장 최근 히스토리를 기준으로 로드됩니다.'
+      operationId: ''
+      parameters:
+        - name: 'page'
+          in: 'path'
+          description: '페이지는 1이 가장 최근'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - name: 'count'
+          in: 'query'
+          description: '페이지 몇 개씩 끊을 건지 개수'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              memos:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '...':
+                      type: string
+                      description: '에러 내용'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
+  /api/user/{userId}/category:
+    post:
+      tags:
+        - 'user'
+      summary: '특정 유저 카테고리 추가'
+      description: 'userId 값을 바탕으로 특정 카테고리를 추가합니다'
+      operationId: ''
+      parameters:
+        - name: 'name'
+          in: 'path'
+          required: true
+          description: '카테고리 이름'
+          type: 'string'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              category:
+                type: object
+                $ref: '#/definitions/Category'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
+  /api/user/{userId}/categories:
+    get:
+      tags:
+        - 'user'
+      summary: '특정 유저의 카테고리들 로드'
+      description: 'userId 값을 바탕으로 카테고리들을 로드합니다. 가나다 기준으로 정렬되어 로드됩니다.'
+      operationId: ''
+      parameters:
+        - name: 'count'
+          in: 'path'
+          required: true
+          description: '만약 입력되지 않았다면, 모두 로드합니다.'
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              categories:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/Category'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
   /api/users:
     get:
       tags:
@@ -190,6 +328,14 @@ paths:
       responses:
         '200':
           description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              users:
+                type: 'array'
+                items:
+                  type: object
+                  $ref: '#/definitions/User'
         '500':
           description: '서버 에러'
           schema:
@@ -198,6 +344,8 @@ paths:
               alertText:
                 type: string
                 description: '에러 내용'
+      security:
+        - ormakkc: []
     post:
       tags:
         - 'users'
@@ -206,9 +354,7 @@ paths:
       operationId: ''
       consumes:
         - 'application/json'
-        - 'application/xml'
       produces:
-        - 'application/xml'
         - 'application/json'
       parameters:
         - in: body
@@ -227,284 +373,401 @@ paths:
               mobile:
                 type: string
       responses:
-        '405':
-          description: 'Invalid input'
-  /pet/findByStatus:
-    get:
-      tags:
-        - 'pet'
-      summary: 'Finds Pets by status'
-      description: 'Multiple status values can be provided with comma separated strings'
-      operationId: 'findPetsByStatus'
-      produces:
-        - 'application/xml'
-        - 'application/json'
-      parameters:
-        - name: 'status'
-          in: 'query'
-          description: 'Status values that need to be considered for filter'
-          required: true
-          type: 'array'
-          items:
-            type: 'string'
-            enum:
-              - 'available'
-              - 'pending'
-              - 'sold'
-            default: 'available'
-          collectionFormat: 'multi'
-      responses:
         '200':
-          description: 'successful operation'
-        '400':
-          description: 'Invalid status value'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/findByTags:
-    get:
-      tags:
-        - 'pet'
-      summary: 'Finds Pets by tags'
-      description: 'Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing.'
-      operationId: 'findPetsByTags'
-      produces:
-        - 'application/xml'
-        - 'application/json'
-      parameters:
-        - name: 'tags'
-          in: 'query'
-          description: 'Tags to filter by'
-          required: true
-          type: 'array'
-          items:
-            type: 'string'
-          collectionFormat: 'multi'
-      responses:
-        '200':
-          description: 'successful operation'
-        '400':
-          description: 'Invalid tag value'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      deprecated: true
-  /pet/{petId}:
-    get:
-      tags:
-        - 'pet'
-      summary: 'Find pet by ID'
-      description: 'Returns a single pet'
-      operationId: 'getPetById'
-      produces:
-        - 'application/xml'
-        - 'application/json'
-      parameters:
-        - name: 'petId'
-          in: 'path'
-          description: 'ID of pet to return'
-          required: true
-          type: 'integer'
-          format: 'int64'
-      responses:
-        '200':
-          description: 'successful operation'
-        '400':
-          description: 'Invalid ID supplied'
-        '404':
-          description: 'Pet not found'
-      security:
-        - api_key: []
-    post:
-      tags:
-        - 'pet'
-      summary: 'Updates a pet in the store with form data'
-      description: ''
-      operationId: 'updatePetWithForm'
-      consumes:
-        - 'application/x-www-form-urlencoded'
-      produces:
-        - 'application/xml'
-        - 'application/json'
-      parameters:
-        - name: 'petId'
-          in: 'path'
-          description: 'ID of pet that needs to be updated'
-          required: true
-          type: 'integer'
-          format: 'int64'
-        - name: 'name'
-          in: 'formData'
-          description: 'Updated name of the pet'
-          required: false
-          type: 'string'
-        - name: 'status'
-          in: 'formData'
-          description: 'Updated status of the pet'
-          required: false
-          type: 'string'
-      responses:
+          description: '성공'
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                $ref: '#/definitions/User'
         '405':
           description: 'Invalid input'
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-    delete:
+        - ormakkc: []
+  /api/category/{categoryId}:
+    put:
       tags:
-        - 'pet'
-      summary: 'Deletes a pet'
-      description: ''
-      operationId: 'deletePet'
-      produces:
-        - 'application/xml'
-        - 'application/json'
+        - 'category'
+      summary: '카테고리 이름 수정'
+      description: '해당 카테고리의 이름을 수정합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
+      operationId: ''
       parameters:
-        - name: 'api_key'
-          in: 'header'
-          required: false
-          type: 'string'
-        - name: 'petId'
-          in: 'path'
-          description: 'Pet id to delete'
+        - in: body
+          name: name
+          description: '바꿀 이름'
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
           required: true
-          type: 'integer'
-          format: 'int64'
-      responses:
-        '400':
-          description: 'Invalid ID supplied'
-        '404':
-          description: 'Pet not found'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/{petId}/uploadImage:
-    post:
-      tags:
-        - 'pet'
-      summary: 'uploads an image'
-      description: ''
-      operationId: 'uploadFile'
-      consumes:
-        - 'multipart/form-data'
-      produces:
-        - 'application/json'
-      parameters:
-        - name: 'petId'
-          in: 'path'
-          description: 'ID of pet to update'
-          required: true
-          type: 'integer'
-          format: 'int64'
-        - name: 'additionalMetadata'
-          in: 'formData'
-          description: 'Additional data to pass to server'
-          required: false
-          type: 'string'
-        - name: 'file'
-          in: 'formData'
-          description: 'file to upload'
-          required: false
-          type: 'file'
       responses:
         '200':
-          description: 'successful operation'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /store/inventory:
-    get:
-      tags:
-        - 'store'
-      summary: 'Returns pet inventories by status'
-      description: 'Returns a map of status codes to quantities'
-      operationId: 'getInventory'
-      produces:
-        - 'application/json'
-      parameters: []
-      responses:
-        '200':
-          description: 'successful operation'
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
           schema:
             type: 'object'
-            additionalProperties:
-              type: 'integer'
-              format: 'int32'
-      security:
-        - api_key: []
-  /store/order:
-    post:
-      tags:
-        - 'store'
-      summary: 'Place an order for a pet'
-      description: ''
-      operationId: 'placeOrder'
-      produces:
-        - 'application/xml'
-        - 'application/json'
-      parameters:
-        - in: query
-          name: 'userId'
-          type: integer
-          description: 'Pet object that needs to be added to the store'
-          required: true
-      responses:
-        '200':
-          description: 'successful operation'
-        '400':
-          description: 'Invalid Order'
-  /store/order/{orderId}:
-    get:
-      tags:
-        - 'store'
-      summary: 'Find purchase order by ID'
-      description: 'For valid response try integer IDs with value >= 1 and <= 10.         Other values will generated exceptions'
-      operationId: 'getOrderById'
-      produces:
-        - 'application/xml'
-        - 'application/json'
-      parameters:
-        - name: 'orderId'
-          in: 'path'
-          description: 'ID of pet that needs to be fetched'
-          required: true
-          type: 'integer'
-          maximum: 10.0
-          minimum: 1.0
-          format: 'int64'
-      responses:
-        '200':
-          description: 'successful operation'
-        '400':
-          description: 'Invalid ID supplied'
-        '404':
-          description: 'Order not found'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
     delete:
       tags:
-        - 'store'
-      summary: 'Delete purchase order by ID'
-      description: 'For valid response try integer IDs with positive integer value.         Negative or non-integer values will generate API errors'
-      operationId: 'deleteOrder'
-      produces:
-        - 'application/xml'
-        - 'application/json'
+        - 'category'
+      summary: '카테고리 삭제'
+      description: '해당 카테고리를 삭제합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/category/{categoryId}/memos:
+    get:
+      tags:
+        - 'category'
+      summary: '특정 카테고리의 메모들 로드'
+      description: '해당 categoryID 를 바탕으로 메모들을 로드합니다. (해당 매모들의 최근 히스토리로) (* 로그인 필요)'
+      operationId: ''
       parameters:
-        - name: 'orderId'
+        - name: 'page'
           in: 'path'
-          description: 'ID of the order that needs to be deleted'
+          description: '페이지는 1이 가장 최근'
           required: true
           type: 'integer'
-          minimum: 1.0
+          format: 'int64'
+        - name: 'count'
+          in: 'query'
+          description: '페이지 몇 개씩 끊을 건지 개수'
+          required: true
+          type: 'integer'
           format: 'int64'
       responses:
-        '400':
-          description: 'Invalid ID supplied'
-        '404':
-          description: 'Order not found'
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              memos:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '...':
+                      type: string
+                      description: '에러 내용'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/memo:
+    post:
+      tags:
+        - 'memo'
+      summary: '새 메모'
+      description: '해당 메모 히스토리를 추가합니다. (* 로그인 필요)'
+      operationId: ''
+      parameters:
+        - in: body
+          name: memo
+          description: '추가할 메모 데이터'
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                format: 'ObjectId'
+              categoryId:
+                type: string
+                format: 'ObjectId'
+              text:
+                type: string
+                format: 'HTML'
+              weather:
+                $ref: '#/definitions/weather'
+              gps:
+                $ref: '#/definitions/gps'
+          required: true
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/memo/{memoId}:
+    get:
+      tags:
+        - 'memo'
+      summary: '메모 로드'
+      description: '메모 히스토리를 n개만큼 가져옵니다. (로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'ID of memo to return'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'count'
+          in: 'query'
+          description: '불러올 최근 히스토리 개수'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - name: 'weather'
+          in: 'query'
+          description: '날씨'
+          type: 'string'
+          format: 'api_weather'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+              histories:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/User'
+                description: '히스토리 n개!'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    post:
+      tags:
+        - 'memo'
+      summary: '메모 수정'
+      description: '메모를 수정합니다. 실질적으로 history 도큐먼트가 추가됩니다. (로그인 필요)'
+      operationId: ''
+      parameters:
+        - in: body
+          name: memo
+          description: '추가할 메모 데이터'
+          schema:
+            type: object
+            properties:
+              memoId:
+                type: string
+                format: 'ObjectId'
+              text:
+                type: string
+                format: 'HTML'
+              weather:
+                $ref: '#/definitions/weather'
+              gps:
+                $ref: '#/definitions/gps'
+          required: true
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              newMemo:
+                $ref: '#/definitions/History'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'memo'
+      summary: '메모 삭제'
+      description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/history/{historyId}:
+    get:
+      tags:
+        - 'history'
+      summary: '히스토리 로드'
+      description: '해당 히스토리의 내용을 가져옵니다. (로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+              histories:
+                type: object
+                $ref: '#/definitions/User'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'history'
+      summary: '히스토리 삭제'
+      description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
+      operationId: ''
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+definitions:
+  User:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+        format: 'ObjectId'
+      naverId:
+        type: 'string'
+        format: 'naverId'
+        description: '네이버에서 제공한 id값'
+      mobile:
+        type: 'string'
+        format: 'phone-num'
+      email:
+        type: 'string'
+        format: 'email'
+      name:
+        type: 'string'
+      nickname:
+        type: 'string'
+      createdAt:
+        type: 'string'
+        format: 'date-time'
+  Category:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+        format: 'ObjectId'
+      name:
+        type: 'string'
+      user:
+        $ref: '#/definitions/User'
+      createdAt:
+        type: 'string'
+        format: 'date-time'
+  Memo:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+        format: 'ObjectId'
+      category:
+        $ref: '#/definitions/Category'
+      createdAt:
+        type: 'string'
+        format: 'date-time'
+  History:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+        format: 'ObjectId'
+      user:
+        $ref: '#/definitions/User'
+      memo:
+        $ref: '#/definitions/Memo'
+      category:
+        $ref: '#/definitions/Category'
+      text:
+        type: 'string'
+        format: 'HTML'
+      weather:
+        $ref: '#/definitions/weather'
+      gps:
+        $ref: '#/definitions/gps'
+      createdAt:
+        type: 'string'
+        format: 'date-time'
+  weather:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+      main:
+        type: 'string'
+      description:
+        type: 'string'
+      icon:
+        type: 'string'
+    externalDocs:
+      url: https://openweathermap.org/current
+  gps:
+    type: 'object'
+    properties:
+      latitude:
+        type: 'string'
+      longitude:
+        type: 'string'
 externalDocs:
   description: 'Github'
   url: 'https://github.com/Memo8-KoreaUniv/kramo'
