@@ -130,6 +130,56 @@ paths:
               alertText:
                 type: string
                 description: '에러 내용'
+  /api/user/{userId}:
+    put:
+      tags:
+        - 'user'
+      summary: '유저 정보 수정'
+      description: 'userId 값을 가진 유저 정보 수정, 이름, 닉네임, 전화번호만 수정 가능'
+      operationId: ''
+      parameters:
+        - in: body
+          name: 'update object'
+          description: The user to update. (키 값이 없어도 가능)
+          schema:
+            type: object
+            required:
+              - userName
+            properties:
+              name?:
+                type: string
+              nickname?:
+                type: string
+              mobile?:
+                type: string
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '유저정보 로드 성공!'
+              updatedUser:
+                type: object
+                description: 'kramoUserInfo!'
+        '400':
+          description: '존재하지 않는 유저 (param의 userId값이 유효하지 않은 경우)'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '유저가 존재하지 않습니다!'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
   /api/users:
     get:
       tags:

@@ -24,18 +24,22 @@ export async function getServerSideProps(context: NextPageContext) {
       props: { me: { message: '쿠키가 없습니다!' } }, // will be passed to the page component as props
     }
   }
-  const parsedCookies = cookie.parse(context?.req?.headers.cookie)
-  console.log(parsedCookies)
-  console.log('parsedCookies')
-  const res = await kaxios({
-    url: '/user',
-    method: 'get',
-    headers: {
-      Cookie: context?.req?.headers.cookie,
-    },
-  })
-  console.log(res)
-  return {
-    props: { me: res.data.userInfo }, // will be passed to the page component as props
+  try {
+    const parsedCookies = cookie.parse(context?.req?.headers.cookie)
+    console.log(parsedCookies)
+    console.log('parsedCookies')
+    const res = await kaxios({
+      url: '/user',
+      method: 'get',
+      headers: {
+        Cookie: context?.req?.headers.cookie,
+      },
+    })
+    console.log(res)
+    return {
+      props: { me: res.data.userInfo }, // will be passed to the page component as props
+    }
+  } catch (e) {
+    console.log(e)
   }
 }
