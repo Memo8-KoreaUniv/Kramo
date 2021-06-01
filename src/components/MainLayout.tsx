@@ -134,11 +134,11 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               minHeight: '5vh',
             }}>
             <Row justify="space-between" align="middle" gutter={10}>
-              <Col></Col>
+              <Col span={1}></Col>
               <Col>{MenuDrawer()}</Col>
+              <Col span={10}></Col>
               <Col>
                 <Space size="middle">
-                  <Search placeholder="Search" style={{ width: useWindowSize()[0] > xs ? 200 : 150 }} />
                   <Dropdown
                     overlay={<Menu>
                       <Menu.Item>
