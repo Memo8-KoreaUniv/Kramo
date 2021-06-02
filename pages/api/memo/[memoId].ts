@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { CategoryModel, HistoryModel, MemoModel } from 'src/model'
+import { HistoryModel, MemoModel } from 'src/model'
 import { connectToDatabase } from 'src/utils/mongo'
 
 export default async function memo(req: NextApiRequest, res: NextApiResponse) {

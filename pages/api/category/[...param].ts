@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { CategoryModel, HistoryModel } from 'src/model'
+import { HistoryModel } from 'src/model'
 import { connectToDatabase } from 'src/utils/mongo'
 import { pageParser } from 'src/utils/pageParser'
 
@@ -25,7 +25,6 @@ export default async function category(
   try {
     await connectToDatabase()
     switch (param[1]) {
-      /* ​/api​/user​/{categoryId}​/memos */
       case 'memos':
         if (req.method == 'GET') {
           const { page, count } = req.query

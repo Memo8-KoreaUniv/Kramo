@@ -22,7 +22,6 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connectToDatabase()
     switch (param[1]) {
-      /* ​/api​/user​/{userId}​/memos */
       case 'memos':
         if (req.method == 'GET') {
           const { page, count } = req.query

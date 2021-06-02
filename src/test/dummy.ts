@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+
 import { GPS } from 'src/types'
 
 /**
