@@ -1,11 +1,25 @@
 import { prop, plugin, Ref } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
-import { GPS as GPS_TYPE } from 'src/types'
+import { GPS as GPS_TYPE, Weather as WHEATHER_TYPE } from 'src/types'
 
 import { Category, PopulatedCategory } from './category'
 import { Memo, PopulatedMemo } from './memo'
 import { PopulatedUser, User } from './user'
+
+class Weather {
+  @prop({ type: () => Number })
+  public id?: number
+
+  @prop({ type: () => String })
+  public main!: string
+
+  @prop({ type: () => String })
+  public description!: string
+
+  @prop({ type: () => String })
+  public icon!: string
+}
 
 class GPS {
   @prop({ type: () => Number })
@@ -32,8 +46,8 @@ export class History {
   @prop({ type: () => Date })
   public createdAt!: Date
 
-  @prop({ type: () => String })
-  public weather!: any
+  @prop({ type: () => Weather })
+  public weather!: WHEATHER_TYPE
 
   @prop({ type: () => GPS })
   public gps!: GPS_TYPE

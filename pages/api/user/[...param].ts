@@ -74,7 +74,9 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
           try {
             const findCategoriesResult = await CategoryModel.find({
               user: userId as any,
-            }).limit(parseInt(count))
+            })
+              .sort({ name: 1 })
+              .limit(parseInt(count))
             res.status(200).json({ categories: findCategoriesResult })
           } catch (e) {
             console.log(e)

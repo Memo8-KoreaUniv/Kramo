@@ -564,10 +564,10 @@ paths:
           schema:
             type: object
             properties:
-              userId:
+              user:
                 type: string
                 format: 'ObjectId'
-              categoryId:
+              category:
                 type: string
                 format: 'ObjectId'
               text:
@@ -622,17 +622,16 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '에러 내용'
               histories:
                 type: array
                 items:
                   type: object
-                  $ref: '#/definitions/User'
+                  $ref: '#/definitions/History'
                 description: '히스토리 n개!'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
         '500':
           description: '서버 에러'
           schema:
@@ -660,7 +659,10 @@ paths:
           schema:
             type: object
             properties:
-              memoId:
+              user:
+                type: string
+                format: 'ObjectId'
+              category:
                 type: string
                 format: 'ObjectId'
               text:
@@ -681,6 +683,8 @@ paths:
                 $ref: '#/definitions/History'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
         '500':
           description: '서버 에러'
           schema:
@@ -707,6 +711,8 @@ paths:
           description: '성공'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
         '500':
           description: '서버 에러'
           schema:
@@ -735,14 +741,13 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '에러 내용'
-              histories:
+              history:
                 type: object
                 $ref: '#/definitions/User'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 히스토리'
         '500':
           description: '서버 에러'
           schema:
