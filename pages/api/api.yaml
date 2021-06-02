@@ -347,6 +347,14 @@ paths:
                   $ref: '#/definitions/Category'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '해당 유저의 카테고리가 없음'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
         '500':
           description: '서버 에러'
           schema:

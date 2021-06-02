@@ -60,11 +60,25 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
             res.status(200).json({ category: addCategoryResult })
           } catch (e) {
             console.log(e)
-            res
-              .status(409)
-              .json({
-                alertText: '카테고리가 이미 존재하거나 DB에 오류가 생겼습니다!',
-              })
+            res.status(409).json({
+              alertText: '카테고리가 이미 존재하거나 DB에 오류가 생겼습니다!',
+            })
+          }
+        }
+        break
+      case 'categories':
+        if (req.method == 'GET') {
+          const count = req.query.count as string
+          try {
+            const findCategoriesResult = await CategoryModel.find({
+              user: userId as any,
+            }).limit(parseInt(count))
+            res.status(200).json({ categories: findCategoriesResult })
+          } catch (e) {
+            console.log(e)
+            res.status(409).json({
+              alertText: '카테고리가 존재하지 않습니다!',
+            })
           }
         }
         break
