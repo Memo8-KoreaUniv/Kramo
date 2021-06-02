@@ -296,6 +296,14 @@ paths:
                 $ref: '#/definitions/Category'
         '401':
           description: '권한이 없음'
+        '409':
+          description: 'DB가 이미 존재함'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
         '500':
           description: '서버 에러'
           schema:
