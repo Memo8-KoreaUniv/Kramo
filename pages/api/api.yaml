@@ -457,7 +457,13 @@ paths:
           required: true
       responses:
         '200':
-          description: '성공'
+          description: '바꿀 이름'
+          schema:
+            type: object
+            properties:
+              changedCategory:
+                type: object
+                $ref: '#/definitions/Category'
         '401':
           description: '권한이 없음'
         '500':
@@ -795,6 +801,9 @@ definitions:
       createdAt:
         type: 'string'
         format: 'date-time'
+      updatedAt:
+        type: 'string'
+        format: 'date-time'
   Category:
     type: 'object'
     properties:
@@ -808,6 +817,9 @@ definitions:
       createdAt:
         type: 'string'
         format: 'date-time'
+      updatedAt:
+        type: 'string'
+        format: 'date-time'
   Memo:
     type: 'object'
     properties:
@@ -817,6 +829,9 @@ definitions:
       category:
         $ref: '#/definitions/Category'
       createdAt:
+        type: 'string'
+        format: 'date-time'
+      updatedAt:
         type: 'string'
         format: 'date-time'
   History:
@@ -839,6 +854,9 @@ definitions:
       gps:
         $ref: '#/definitions/gps'
       createdAt:
+        type: 'string'
+        format: 'date-time'
+      updatedAt:
         type: 'string'
         format: 'date-time'
   weather:
