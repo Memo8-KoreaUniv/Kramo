@@ -1,9 +1,19 @@
 import { prop, plugin, Ref } from '@typegoose/typegoose'
 import mongooseAutoPopulate from 'mongoose-autopopulate'
 
+import { GPS as GPS_TYPE } from 'src/types'
+
 import { Category, PopulatedCategory } from './category'
 import { Memo, PopulatedMemo } from './memo'
 import { PopulatedUser, User } from './user'
+
+class GPS {
+  @prop({ type: () => Number })
+  public latitude?: number
+
+  @prop({ type: () => Number })
+  public longitude?: number
+}
 
 @plugin(mongooseAutoPopulate)
 export class History {
@@ -14,7 +24,7 @@ export class History {
   public category?: PopulatedCategory
 
   @prop({ ref: () => Memo })
-  public memo?: Ref<Memo>
+  public memo!: Ref<Memo>
 
   @prop({ type: () => String })
   public text?: string
@@ -23,10 +33,10 @@ export class History {
   public createdAt!: Date
 
   @prop({ type: () => String })
-  public weather!: string
+  public weather!: any
 
-  @prop({ type: () => String })
-  public gps!: string
+  @prop({ type: () => GPS })
+  public gps!: GPS_TYPE
 }
 
 export interface PopulatedHistory {
@@ -34,6 +44,6 @@ export interface PopulatedHistory {
   memo?: PopulatedMemo
   text?: string
   createdAt: Date
-  weather?: string
-  gps?: string
+  weather?: any
+  gps?: GPS_TYPE
 }

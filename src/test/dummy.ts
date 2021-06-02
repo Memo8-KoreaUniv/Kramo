@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+import { GPS } from 'src/types'
 
 /**
  * USER1 더미데이터
@@ -49,6 +50,26 @@ export const MEMO1 = {
 }
 
 /**
+ * MEMO1 더미 데이터
+ * @relation USER1
+ * @relation CATEGORY1
+ * @_id {user}:{category}:{createdAt}
+ */
+export const MEMO2_CREATEDAT = new Date('2021-05-23T13:03:45+09:00')
+export const MEMO2_ID = new Types.ObjectId('60a9e0be2c6a430a9634d6c9')
+export const MEMO2 = {
+  _id: MEMO2_ID,
+  category: CATEGORY1_ID as any,
+  user: USER1_ID as any,
+  createdAt: MEMO2_CREATEDAT,
+}
+
+const DUMMY_GPS: GPS = {
+  latitude: 17.1,
+  longitude: 120,
+}
+
+/**
  * HISTORY1 더미 데이터
  * @relation USER1
  * @relation CATEGORY1
@@ -64,8 +85,55 @@ export const HISTORY1 = {
   user: USER1_ID,
   category: CATEGORY1_ID,
   memo: MEMO1_ID,
-  text: 'test_text',
+  text: 'history1',
   weather: 'test_weather',
-  gps: 'test_gps',
+  gps: DUMMY_GPS,
   createdAt: HISTORY1_CREATEDAT,
 }
+
+export const HISTORY2_CREATEDAT = new Date('Sun May 23 2021 14:19:43 GMT+0900')
+export const HISTORY2_ID_STRING = '60a9e0db2183479d02922edb'
+export const HISTORY2_ID = new Types.ObjectId(HISTORY2_ID_STRING)
+
+export const HISTORY2 = {
+  _id: HISTORY2_ID,
+  user: USER1_ID,
+  category: CATEGORY1_ID,
+  memo: MEMO1_ID,
+  text: 'history2',
+  weather: 'test_weather',
+  gps: DUMMY_GPS,
+  createdAt: HISTORY2_CREATEDAT,
+}
+
+export const HISTORY3_CREATEDAT = new Date('Sun May 23 2021 15:19:43 GMT+0900')
+export const HISTORY3_ID_STRING = '60a9e0db2183479d02922edc'
+export const HISTORY3_ID = new Types.ObjectId(HISTORY3_ID_STRING)
+
+export const HISTORY3 = {
+  _id: HISTORY3_ID,
+  user: USER1_ID,
+  category: CATEGORY1_ID,
+  memo: MEMO1_ID,
+  text: 'history3',
+  weather: 'test_weather',
+  gps: DUMMY_GPS,
+  createdAt: HISTORY3_CREATEDAT,
+}
+
+export const HISTORY4_CREATEDAT = new Date('Sun May 23 2021 20:19:43 GMT+0900')
+export const HISTORY4_ID_STRING = '60a9e0db2183479d02922edd'
+export const HISTORY4_ID = new Types.ObjectId(HISTORY4_ID_STRING)
+
+export const HISTORY4 = {
+  _id: HISTORY4_ID,
+  user: USER1_ID,
+  category: CATEGORY1_ID,
+  memo: MEMO2_ID,
+  text: 'history4',
+  weather: 'test_weather',
+  gps: DUMMY_GPS,
+  createdAt: HISTORY4_CREATEDAT,
+}
+
+export const HISTORIES = [HISTORY1, HISTORY2, HISTORY3, HISTORY4]
