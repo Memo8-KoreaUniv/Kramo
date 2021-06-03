@@ -721,6 +721,63 @@ paths:
               alertText:
                 type: string
                 description: '에러 내용'
+  /api/memo/{memoId}/pin:
+    post:
+      tags:
+        - 'memo'
+      summary: '핀 설정'
+      description: '해당 메모를 핀 설정합니다(로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'memo'
+      summary: '핀 해제'
+      description: '해당 메모를 핀 해제합니다. (* 로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
   /api/history/{historyId}:
     get:
       tags:
