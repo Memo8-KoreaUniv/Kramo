@@ -833,6 +833,8 @@ definitions:
         format: 'ObjectId'
       category:
         $ref: '#/definitions/Category'
+      pinned:
+        type: boolean
       createdAt:
         type: 'string'
         format: 'date-time'
