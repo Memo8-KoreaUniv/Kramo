@@ -35,10 +35,10 @@ function useMemos() {
 
   const sortMemo = (id: string) => {
     const newMemos = memos.map((memo: memo) => {
-      if (memo.id === id) {
-        memo.pinned = !memo.pinned;
-      }
-      return memo
+        if (memo.id === id) {
+          memo.pinned = !memo.pinned;
+        }
+        return memo
       }
     ).sort((a: memo, b: memo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
 
@@ -75,14 +75,14 @@ function MemoView({ memos, deleteMemo, sortMemo }) {
       <div className="site-card-wrapper">
         <Row gutter={[30,30]}>
           {memos.sort((a: memo, b: memo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
-            .map((memo: memo) => {
-              return (
-                <Col>
-                  <MemoCardItem memo={memo} deleteMemo={deleteMemo} sortMemo={sortMemo} />
-                </Col>
-              )
-            }
-          )
+              .map((memo: memo) => {
+                return (
+                  <Col>
+                    <MemoCardItem key={memo.id} memo={memo} deleteMemo={deleteMemo} sortMemo={sortMemo} />
+                  </Col>
+                )
+              }
+            )
           }
         </Row>
       </div>
