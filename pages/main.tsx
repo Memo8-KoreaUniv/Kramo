@@ -23,6 +23,7 @@ import {
 import Link from 'next/link'
 
 import { MOCK_DATA, info, memo } from './index'
+import { xs, sm, md, lg, xl, useWindowSize } from 'src/utils/size'
 
 function useMemos() {
   const [memos, setMemos] = useState<memo[]>(MOCK_DATA)
@@ -40,7 +41,7 @@ function useMemos() {
 
 export function Main() {
   const { memos, deleteMemo } = useMemos()
-
+  
   return (
     <div
       className="site-layout-background"
@@ -53,19 +54,18 @@ export function Main() {
   )
 }
 
+
+
 function MemoView({ memos, deleteMemo }) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
-        <Row>
-          {memos.map((memo: memo, index: number) => {
+        <Row gutter={[30,30]}>
+          {memos.map((memo: memo) => {
             return (
-              <>
-                <Col className="gutter-row" span={8}>
-                  <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
-                </Col>
-                {index % 3 == 2 ? <Divider /> : ''}
-              </>
+              <Col>
+                <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
+              </Col>
             )
           })}
         </Row>
@@ -75,24 +75,28 @@ function MemoView({ memos, deleteMemo }) {
 }
 
 function MemoTimeline() {
-  return (
-    <Col span={6}>
-      <h1>Timeline</h1>
-      <Timeline>
-        <Timeline.Item color="blue">
-          2021년 5월 21일 12:53
-          <br />
-          스타벅스 주엽강선점
-        </Timeline.Item>
-        <Timeline.Item color="blue">
-          2021년 5월 22일 10:32
-          <br />
-          일산호수공원
-        </Timeline.Item>
-        <Timeline.Item color="gray" />
-        <Timeline.Item color="gray" />
-      </Timeline>
-    </Col>
+  if (useWindowSize()[0] >= md)
+    return (
+      <Col span={6}>
+        <h1>Timeline</h1>
+        <Timeline>
+          <Timeline.Item color="blue">
+            2021년 5월 21일 12:53
+            <br />
+            스타벅스 주엽강선점
+          </Timeline.Item>
+          <Timeline.Item color="blue">
+            2021년 5월 22일 10:32
+            <br />
+            일산호수공원
+          </Timeline.Item>
+          <Timeline.Item color="gray" />
+          <Timeline.Item color="gray" />
+        </Timeline>
+      </Col>
+    )
+  else return (
+    <></>
   )
 }
 
@@ -147,7 +151,8 @@ function MemoCardItem({ memo, deleteMemo }) {
 
   return (
     <Card
-      style={{ width: 300 }}
+      style={{ width: useWindowSize()[0] > sm ? 300 : 280 }}
+      size={ useWindowSize()[0] > sm ? "default" : "small"}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
         <Link href={{ pathname: '/editor' }}>
