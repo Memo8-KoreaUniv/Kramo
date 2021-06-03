@@ -33,21 +33,34 @@ function useMemos() {
     setMemos(newMemos)
   }
 
+  const sortMemo = (id: string) => {
+    const newMemos = memos.map((memo: memo) => {
+      if (memo.id === id) {
+        memo.pinned = !memo.pinned;
+      }
+      return memo
+      }
+    ).sort((a: memo, b: memo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+
+    setMemos(newMemos)
+  }
+
   return {
     memos,
     deleteMemo,
+    sortMemo,
   }
 }
 
 export function Main() {
-  const { memos, deleteMemo } = useMemos()
+  const { memos, deleteMemo, sortMemo } = useMemos()
   
   return (
     <div
       className="site-layout-background"
       style={{ padding: 24, textAlign: 'left' }}>
       <Row>
-        <MemoView memos={memos} deleteMemo={deleteMemo} />
+        <MemoView memos={memos} deleteMemo={deleteMemo} sortMemo={sortMemo} />
         <MemoTimeline />
       </Row>
     </div>
@@ -56,18 +69,21 @@ export function Main() {
 
 
 
-function MemoView({ memos, deleteMemo }) {
+function MemoView({ memos, deleteMemo, sortMemo }) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30,30]}>
-          {memos.map((memo: memo) => {
-            return (
-              <Col>
-                <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
-              </Col>
-            )
-          })}
+          {memos.sort((a: memo, b: memo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+            .map((memo: memo) => {
+              return (
+                <Col>
+                  <MemoCardItem memo={memo} deleteMemo={deleteMemo} sortMemo={sortMemo} />
+                </Col>
+              )
+            }
+          )
+          }
         </Row>
       </div>
     </Col>
@@ -119,15 +135,10 @@ function MemoInfo({ info }) {
   )
 }
 
-function MemoCardItem({ memo, deleteMemo }) {
+function MemoCardItem({ memo, deleteMemo, sortMemo }) {
   const { Meta } = Card
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [isMemoPinned, setIsMemoPinned] = useState(false)
   const [visible, setVisible] = useState(false)
-
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
 
   const handleOk = () => {
     setIsModalVisible(false)
@@ -146,7 +157,7 @@ function MemoCardItem({ memo, deleteMemo }) {
   }
 
   const togglePinned = () => {
-    setIsMemoPinned(!isMemoPinned)
+    sortMemo(memo.id)
   }
 
   return (
@@ -169,7 +180,7 @@ function MemoCardItem({ memo, deleteMemo }) {
               <Col span={4}>
                 <Button
                   shape="circle"
-                  icon={isMemoPinned ? <PushpinFilled /> : <PushpinOutlined />}
+                  icon={memo.pinned ? <PushpinFilled /> : <PushpinOutlined />}
                   onClick={togglePinned}
                 />
               </Col>

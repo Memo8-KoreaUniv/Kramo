@@ -15,6 +15,7 @@ export type memo = {
   title: string
   content: string
   profile: string
+  pinned: boolean
   infos: info[]
 }
 
@@ -27,6 +28,7 @@ export const MOCK_DATA: memo[] = [
     content:
       '오늘은 제일 바쁜 목요일\n끝났으면 좋겠다 빨리\n다음주는 더 더워지겠지??',
     profile: 'default',
+    pinned: false,
     infos: [
       {
         time: '2021년 5월 20일 13:19',
@@ -51,6 +53,7 @@ export const MOCK_DATA: memo[] = [
     content:
       '사이렌 오더 +1\n마이 스타벅스 리뷰 참여 +1\n이벤트 음료 주문 +3\n골드레벨 12개 달성 시 무료 쿠폰',
     profile: 'default',
+    pinned: false,
     infos: [
       {
         time: '2021년 5월 19일 20:19',
@@ -69,6 +72,7 @@ export const MOCK_DATA: memo[] = [
     title: '5월 19일 오늘의 일기',
     content: '모처럼의 휴일\n과제만 없었으면 어후',
     profile: 'default',
+    pinned: true,
     infos: [
       {
         time: '2021년 5월 16일 11:12',
@@ -82,6 +86,7 @@ export const MOCK_DATA: memo[] = [
     title: '이마트에서 장보기',
     content: '닭가슴살, 계란 한 판, 시저샐러드',
     profile: 'default',
+    pinned: true,
     infos: [
       {
         time: '2021년 5월 14일 19:00',
@@ -96,6 +101,7 @@ export const MOCK_DATA: memo[] = [
     title: '밖에 비온다',
     content: '주룩주룩',
     profile: 'default',
+    pinned: false,
     infos: [
       {
         time: '2021년 5월 28일 14:00',
