@@ -3,16 +3,16 @@
 # KRAMO
 
 <div style="display:flex; justify-content: center;">
-  <img src='../kramo/public/logo.png'>
+  <img src='https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/test.png'>
 </div>
 
 <br>
-<center>
-A memo application based on Markdown!<br/>
-  ( Match results and Get points!)
-  <br/>
-  <a href="#" target="_blank">Go!</a>
-</center>
+  <div style="display:flex; flex-direction:column; align-items:center; justify-content: center;">
+    A memo application based on Markdown!
+    <br/>
+    <br/>
+    <a href="#" target="_blank">Go!</a>
+  </div>
 <br>
 
 <p align="center">
@@ -32,12 +32,12 @@ A memo application based on Markdown!<br/>
 
 - Simple UI
 
-![메인화면](../kramo/public/main.png)
+![메인화면](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/main.png)
 
 - Markdown Support
 - Naver Login
 
-![네이버로그인](../kramo/public/naver-login-page.png)
+![네이버로그인](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/naver-login-page.png)
 
 - Each modification saves a certain amount of history, so you can roll back to that history.
 - Memo Category Features
