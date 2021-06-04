@@ -2,9 +2,8 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { HistoryModel, MemoModel } from 'src/model'
+import { MemoModel } from 'src/model'
 import { connectToDatabase } from 'src/utils/mongo'
-import { pageParser } from 'src/utils/pageParser'
 
 /**
  * /api/memo/{memoId}/memos
@@ -19,28 +18,38 @@ import { pageParser } from 'src/utils/pageParser'
 export default async function memo(req: NextApiRequest, res: NextApiResponse) {
   const { param } = req.query
   const memoId = param[0]
+  console.log({ param })
   try {
     await connectToDatabase()
     switch (param[1]) {
       case 'pin':
-        if (req.method == 'POST') {
+        if (req.method === 'POST') {
           try {
-            await MemoModel.findByIdAndUpdate(memoId, {
-              pinned: true,
-            })
-            res.status(200).json({})
+            const newMemo = await MemoModel.findByIdAndUpdate(
+              memoId,
+              {
+                pinned: true,
+              },
+              { new: true },
+            )
+            console.log({ newMemo })
+            res.status(200).json({ newMemo })
+            return
           } catch (e) {
             res.status(409).json({ alertText: '유효하지 않은 메모입니다!' })
+            return
           }
         }
-        if (req.method == 'DELETE') {
+        if (req.method === 'DELETE') {
           try {
             await MemoModel.findByIdAndUpdate(memoId, {
               pinned: false,
             })
             res.status(200).json({})
+            return
           } catch (e) {
             res.status(409).json({ alertText: '유효하지 않은 메모입니다!' })
+            return
           }
         }
         res.status(501).json({ alertText: 'Unexpected request Method!' })

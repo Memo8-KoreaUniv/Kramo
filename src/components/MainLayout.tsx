@@ -92,7 +92,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
             }}>
             <Row>
               <Col span={8} offset={8}>
-                <Search placeholder="Search" style={{ width: 200 }} />
+                {/* <Search placeholder="Search" style={{ width: 200 }} /> */}
                 <Dropdown
                   overlay={
                     <Menu>
