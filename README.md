@@ -3,8 +3,7 @@
 # KRAMO
 
 <div style="display:flex; justify-content: center;">
-<img src='../kramo/public/logo.png'>
-<!-- ![로고](../kramo/public/logo.png) -->
+  <img src='../kramo/public/logo.png'>
 </div>
 
 <br>
@@ -38,7 +37,7 @@ A memo application based on Markdown!<br/>
 - Markdown Support
 - Naver Login
 
-![메인화면](../kramo/public/naver-login-page.png)
+![네이버로그인](../kramo/public/naver-login-page.png)
 
 - Each modification saves a certain amount of history, so you can roll back to that history.
 - Memo Category Features
