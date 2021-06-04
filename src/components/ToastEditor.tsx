@@ -5,7 +5,7 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/react-editor'
 import { Button, Row, Col } from 'antd'
 
-export default function MemoEditor() {
+export default function ToastEditor() {
   const editorRef: LegacyRef<Editor> = React.createRef()
 
   const handleClick = () => {
@@ -26,7 +26,7 @@ export default function MemoEditor() {
       </Row>
       <Editor
         previewStyle="vertical"
-        height="400px"
+        height="600px"
         initialEditType="wysiwyg"
         initialValue={'메모를 입력하세요'}
         ref={editorRef}
