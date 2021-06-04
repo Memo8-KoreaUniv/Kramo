@@ -3,7 +3,7 @@
 # KRAMO
 
 <div style="display:flex; justify-content: center;">
-  <img src='https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/test.png'>
+  <img src='https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/logo.png'>
 </div>
 
 <br>
