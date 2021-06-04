@@ -13,7 +13,7 @@
     <br/>
     <a href="#" target="_blank">Go!</a>
   </div>
-<br>
+<br> 
 
 <p align="center">
   <a href="#about-the-project"> About The Project</a> •
@@ -26,18 +26,18 @@
 
 ## About The Project
 
-(_It will be deployed soon. We will upload Url when the deployment is complete._)
+_Project URL (TBD)_
 
 ### Key Features
 
 - Simple UI
 
-![메인화면](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/main.png)
+<img src="https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/main.png" width=400>
 
 - Markdown Support
 - Naver Login
 
-![네이버로그인](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/naver-login-page.png)
+<img src="https://github.com/Memo8-KoreaUniv/kramo/blob/dev/public/main.png" width=400>
 
 - Each modification saves a certain amount of history, so you can roll back to that history.
 - Memo Category Features
@@ -65,13 +65,12 @@
 4. Edit configuration `.env.*`
 
 - To run this project, you will need to add the following environment variables to your `.env.*` file
-- Security is required of environment variable, could contact us.
-  - `ddrrpg@naver.com`
+- Security is required of environment variable, could contact by [issue](https://github.com/Memo8-KoreaUniv/kramo/issues).
 
 ## Documentation
 
 [Documentation](https://github.com/Memo8-KoreaUniv/kramo/wiki)
-[API Docs](#)(Will be uploaded when documents created based on swagger are deployed)
+[API Docs](#)(TBD)
 
 - [Documents ing..](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/pages/api/api.yaml)
 
@@ -99,7 +98,7 @@ or in root directory
 $ eslint **/*.{js,ts,tsx}
 ```
 
-### Lining Rules
+### Lint Rules
 
 `eslintrc.js`
 
@@ -215,7 +214,7 @@ module.exports = {
 ### ETC
 
 - Weather API by [openweathermap](https://openweathermap.org/API)
-- API Doc by [Swagger](http://swagger.io/)
+- API Doc by [Swagger](http://swagger.io/) (TBD)
 - [JWT](https://jwt.io/) Authentication
 - Global-State management
 
@@ -228,6 +227,12 @@ module.exports = {
 - Blog : https://programming119.tistory.com
 - Site : [https://i-am-seo-sang.vercel.app/](https://i-am-seo-sang.vercel.app/)
 - E-mail : ddrrpg@naver.com
+
+pyville
+
+panggyun
+
+vwjdtjdwnsv
 
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg
 [license-url]: #license
