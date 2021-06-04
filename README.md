@@ -220,6 +220,7 @@ module.exports = {
 - Global-State management
 
 <br/>
+
 ## Authors
 
 [SeoSang](https://github.com/SeoSang)
