@@ -8,8 +8,13 @@
 
 <br>
   <div style="display:flex; flex-direction:column; align-items:center; justify-content: center;">
-    A memo application based on Markdown!
+    A memo application that keeps track of you in a diachronic and synchronic way.
     <br/>
+    You can access your traces with the current memo content itself.
+    <br/>
+    Both the WYSIWYG editor and the Markdown editor are supported.
+    <br/>
+    No Signup is needed if you have a [NAVER](https://www.naver.com) account! Try it now.
     <br/>
     <a href="#" target="_blank">Go!</a>
   </div>
@@ -47,7 +52,7 @@ _Project URL (TBD)_
 
 ### Prerequisites
 
-- Install Node JS, React, TypeScript
+- Installation of Node.js, React and TypeScript is required.
 - Optional installation of A and B is recommended.
 
 ### Installation
@@ -64,19 +69,19 @@ _Project URL (TBD)_
    ```
 4. Edit configuration `.env.*`
 
-- To run this project, you will need to add the following environment variables to your `.env.*` file
-- Security is required of environment variable, could contact by [issue](https://github.com/Memo8-KoreaUniv/kramo/issues).
+- To run the project, you need to add the following environment variables to your `.env.*` files.
+- You can contact us by [issue](https://github.com/Memo8-KoreaUniv/kramo/issues) if you need help with your `.env.*` files, since the security is required of environment variables.
 
 ## Documentation
 
 [Documentation](https://github.com/Memo8-KoreaUniv/kramo/wiki)
 [API Docs](#)(TBD)
 
-- [Documents ing..](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/pages/api/api.yaml)
+- [Documents (under construction)](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/pages/api/api.yaml)
 
 ## Running Tests
 
-To run tests, run the following command
+To conduct tests, run the following command in your terminal.
 
 ```bash
 $ npm run test
@@ -92,7 +97,7 @@ ES-Lint is used to capture anti-patterns and maintain a consistent code style.
 $ npm run lint
 ```
 
-or in root directory
+or in your root directory
 
 ```bash
 $ eslint **/*.{js,ts,tsx}
@@ -226,9 +231,13 @@ module.exports = {
 
 - Blog : https://programming119.tistory.com
 - Site : [https://i-am-seo-sang.vercel.app/](https://i-am-seo-sang.vercel.app/)
-- E-mail : ddrrpg@naver.com
+- E-mail : [ddrrpg@naver.com](mailto:ddrrpg@naver.com)
 
-pyville
+[pyville](https://github.com/pyville)
+
+- Blog : [Blog](https://blog.naver.com/firifafa)
+- Site : [Notion](https://www.notion.so/a5ce953db7f142ccae356f5f3e44d983)
+- E-mail : [firifafa@naver.com](mailto:firifafa@naver.com)
 
 panggyun
 
