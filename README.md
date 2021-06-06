@@ -14,7 +14,7 @@
     <br/>
     Both the WYSIWYG editor and the Markdown editor are supported.
     <br/>
-    No Signup is needed if you have a [NAVER](https://www.naver.com) account! Try it now.
+    No Signup is needed if you have a <a href="https://www.naver.com">NAVER</a> account! Try it now.
     <br/>
     <a href="#" target="_blank">Go!</a>
   </div>
