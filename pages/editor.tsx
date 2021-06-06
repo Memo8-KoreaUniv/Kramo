@@ -1,14 +1,22 @@
 import dynamic from 'next/dynamic';
 import React from 'react'
+import { useSetRecoilState } from 'recoil'
+import { historiesState, loadHistories } from 'src/state/history'
+
 
 const PostEditor = dynamic(
   () => import('src/components/ToastEditor'),
-  { ssr: false }
+  { ssr: false }   
 )
 
-//TODO 여기서 이제 API를 이용해서, 받아온 메모 아이디 바탕으로
-//DB에서 메모를 가져오고, 뿌리면 되나...?
-function writePost():JSX.Element {
+function editPost():JSX.Element {
+  const historyId = '60a9e0db2183479d02922eda'
+  const setHistories = useSetRecoilState(historiesState)
+  const memoLoad = async () => {
+    const historyInfo = await loadHistories(historyId)
+    setHistories(historyInfo)
+  }
+  memoLoad()
   return (
     <>
       <PostEditor memo="<br><br><br>제대로 입력되는지 테스트"/>
@@ -16,4 +24,4 @@ function writePost():JSX.Element {
   )
 }
 
-export default writePost;
+export default editPost;
