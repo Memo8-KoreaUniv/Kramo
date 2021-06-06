@@ -9,25 +9,28 @@ import { Menu } from 'antd'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 
+import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
+import { CategoryInfo } from 'src/types/user'
 
 const { SubMenu } = Menu
 
 const MenuLayout = () => {
+  const categories = useRecoilValue(categoriesState)
   const me = useRecoilValue(meState)
-
   return (
     <>
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
         <SubMenu key="sub1" icon={<FolderOpenOutlined />} title="내 메모">
-          <Menu.Item key="1">
-            <Link href="/test">
-              <a>카테고리1</a>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="2">카테고리2</Menu.Item>
+          {categories.map((category: CategoryInfo) => {
+            return (
+              <Menu.Item key={`menu_${category._id}`}>
+                {category.name}
+              </Menu.Item>
+            )
+          })}
         </SubMenu>
-        {me ? (
+        {me?._id ? (
           <Menu.Item key="2" icon={<UserOutlined />}>
             <Link href="/mypage">
               <a>마이페이지</a>

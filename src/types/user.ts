@@ -1,5 +1,5 @@
 export interface UserInfo {
-  _id?: string
+  _id: string
   naverId?: string
   name: string
   nickname: string
@@ -7,4 +7,12 @@ export interface UserInfo {
   mobile: string
   updatedAt?: Date
   createdAt?: Date
+}
+
+export interface CategoryInfo {
+  _id: string
+  name: string
+  user: UserInfo
+  createdAt?: Date
+  updatedAt?: Date
 }
