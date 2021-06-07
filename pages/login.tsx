@@ -82,6 +82,7 @@ const Login = () => {
       return
     }
     naverLogin()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
