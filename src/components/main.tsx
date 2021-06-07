@@ -24,7 +24,7 @@ import Link from 'next/link'
 
 import { sm, md, useWindowSize } from 'src/utils/size'
 
-import { MOCK_DATA, info, memo } from './index'
+import { MOCK_DATA, info, memo } from '../../pages/index'
 
 function useMemos() {
   const [memos, setMemos] = useState<memo[]>(MOCK_DATA)

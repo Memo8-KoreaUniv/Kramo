@@ -7,7 +7,7 @@ import { Category, PopulatedCategory } from './category'
 import { History } from './history'
 import { PopulatedUser, User } from './user'
 
-@pre<Memo>('save', async function (next) {
+@pre<Memo>('save', async function (_) {
   this.pinned = this.pinned ? this.pinned : false
 })
 @plugin(mongooseAutoPopulate)
@@ -20,6 +20,9 @@ export class Memo {
 
   @prop({ type: () => Boolean })
   public pinned!: boolean
+
+  @prop({ type: () => Date })
+  public createdAt!: Date
 
   public async getHistories(
     this: DocumentType<Memo>,
