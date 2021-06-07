@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Main } from './main'
+import { Main } from '../src/components/main'
 
 // 타입 정의
 
@@ -90,29 +90,17 @@ export const MOCK_DATA: memo[] = [
       },
     ],
   },
+
   {
     id: 'some-random-value-4',
-    title: '이호창 본부장 강연 메모',
-    content: '양념으로 얼룩진 밥을 감싸줄 수 있는 건 한 장의 김 뿐이다.\n김 for prime life.',
+    title: '밖에 비온다',
+    content: '주룩주룩',
     profile: 'default',
     infos: [
       {
-        time: '2021년 5월 10일 16:00',
-        place: '김갑생 할머니김 본사',
-        weather: '❓',
-      },
-    ],
-  },
-  {
-    id: 'some-random-value-5',
-    title: '한마음 산악회 산행 일정',
-    content: '열쩡열쩡열쩡!',
-    profile: 'default',
-    infos: [
-      {
-        time: '2021년 5월 8일 13:00',
-        place: '청계산',
-        weather: '🔥',
+        time: '2021년 5월 28일 14:00',
+        place: '우리집',
+        weather: '💨',
       },
     ],
   },
