@@ -68,8 +68,12 @@ function MemoView({
         <Row gutter={[30, 30]}>
           {memos.map((memo: memo) => {
             return (
-              <Col key={`MemoCardItem_${memo.id}`}>
-                <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
+              <Col key={`Col${memo.id}`}>
+                <MemoCardItem
+                  key={`MemoCardItem_${memo.id}`}
+                  memo={memo}
+                  deleteMemo={deleteMemo}
+                />
               </Col>
             )
           })}
@@ -200,11 +204,11 @@ function MemoCardItem({
         <Timeline>
           {memo.infos.map((info: info) => {
             return (
-              <>
+              <div key={`timeline_upper_${info}`}>
                 <Timeline.Item color="blue">
                   <MemoInfo info={info} />
                 </Timeline.Item>
-              </>
+              </div>
             )
           })}
         </Timeline>
@@ -226,11 +230,11 @@ function MemoCardItem({
         <Timeline>
           {memo.infos.map((info: info) => {
             return (
-              <>
+              <div key={`timeline_lower_${info}`}>
                 <Timeline.Item color="blue">
                   <MemoInfo info={info} />
                 </Timeline.Item>
-              </>
+              </div>
             )
           })}
         </Timeline>
