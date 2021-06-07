@@ -6,3 +6,9 @@ node_modules/
 
 # production server output
 dist
+
+# secure data
+.env*
+
+# 기타
+/TODO*
