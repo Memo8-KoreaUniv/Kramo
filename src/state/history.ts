@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil'
 
 import kaxios from 'src/interceptors'
-import { HistoryInfo } from 'src/types/user'
+import { HistoryInfo } from 'src/types/history'
 
 export const historiesState = atom<HistoryInfo[] | []>({
   key: 'histories',

@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil'
 
 import kaxios from 'src/interceptors'
-import { MemoInfo } from 'src/types/user'
+import { MemoInfo } from 'src/types/memo'
 
 export const memosState = atom<MemoInfo[] | []>({
   key: 'memos',
