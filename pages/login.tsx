@@ -32,7 +32,7 @@ const Login = () => {
   const naverLogin = () => {
     const login = new window.naver.LoginWithNaverId({
       clientId: process.env.NEXT_PUBLIC_NAVER_CLIENT_ID,
-      callbackUrl: 'http://localhost:3000/login',
+      callbackUrl: `${process.env.SERVICE_URL}/login`,
       loginButton: { color: 'green', type: 3, height: 50 },
       callbackHandle: true,
     })
