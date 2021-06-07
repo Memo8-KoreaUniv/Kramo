@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { UserOutlined } from '@ant-design/icons'
 import { Layout, Menu, Row, Col, Dropdown, Button, Divider, Space } from 'antd'
@@ -11,13 +11,12 @@ import { useRecoilState } from 'recoil'
 import kaxios from 'src/interceptors'
 
 import { meState } from '../state/me'
-import MenuSider from './MenuSider'
 import MenuDrawer from './MenuDrawer'
+import MenuSider from './MenuSider'
 
-const { Header, Footer, Sider, Content } = Layout
+const { Header, Footer, Content } = Layout
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
-  const [collapsed, setCollapsed] = useState(true)
   const [me, setMe] = useRecoilState(meState)
   const router = useRouter()
 
@@ -65,24 +64,26 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               <Col>
                 <Space size="middle">
                   <Dropdown
-                    overlay={<Menu>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          마이페이지
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          회원정보 수정
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item onClick={onClickLogout}>
-                        <a>로그아웃</a>
-                      </Menu.Item>
-                    </Menu>}
+                    overlay={
+                      <Menu>
+                        <Menu.Item>
+                          <a target="_blank" rel="noopener noreferrer" href="#">
+                            마이페이지
+                          </a>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <a target="_blank" rel="noopener noreferrer" href="#">
+                            회원정보 수정
+                          </a>
+                        </Menu.Item>
+                        <Menu.Item onClick={onClickLogout}>
+                          <a>로그아웃</a>
+                        </Menu.Item>
+                      </Menu>
+                    }
                     placement="bottomRight"
                     arrow>
-                    <Button>{<UserOutlined/>}User</Button>
+                    <Button>{<UserOutlined />}User</Button>
                   </Dropdown>
                 </Space>
               </Col>
@@ -108,4 +109,3 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
 }
 
 export default MainLayout
-
