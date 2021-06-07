@@ -22,7 +22,9 @@ import {
 } from 'antd'
 import Link from 'next/link'
 
-import { MOCK_DATA, info, memo } from './index'
+import { sm, md, useWindowSize } from 'src/utils/size'
+
+import { MOCK_DATA, info, memo } from '../../pages/index'
 
 function useMemos() {
   const [memos, setMemos] = useState<memo[]>(MOCK_DATA)
@@ -53,19 +55,26 @@ export function Main() {
   )
 }
 
-function MemoView({ memos, deleteMemo }) {
+function MemoView({
+  memos,
+  deleteMemo,
+}: {
+  memos: memo[]
+  deleteMemo: (id: string) => void
+}) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
-        <Row>
-          {memos.map((memo: memo, index: number) => {
+        <Row gutter={[30, 30]}>
+          {memos.map((memo: memo) => {
             return (
-              <>
-                <Col className="gutter-row" span={8}>
-                  <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
-                </Col>
-                {index % 3 == 2 ? <Divider /> : ''}
-              </>
+              <Col key={`Col${memo.id}`}>
+                <MemoCardItem
+                  key={`MemoCardItem_${memo.id}`}
+                  memo={memo}
+                  deleteMemo={deleteMemo}
+                />
+              </Col>
             )
           })}
         </Row>
@@ -75,28 +84,30 @@ function MemoView({ memos, deleteMemo }) {
 }
 
 function MemoTimeline() {
-  return (
-    <Col span={6}>
-      <h1>Timeline</h1>
-      <Timeline>
-        <Timeline.Item color="blue">
-          2021년 5월 21일 12:53
-          <br />
-          스타벅스 주엽강선점
-        </Timeline.Item>
-        <Timeline.Item color="blue">
-          2021년 5월 22일 10:32
-          <br />
-          일산호수공원
-        </Timeline.Item>
-        <Timeline.Item color="gray" />
-        <Timeline.Item color="gray" />
-      </Timeline>
-    </Col>
-  )
+  if (useWindowSize()[0] >= md)
+    return (
+      <Col span={6}>
+        <h1>Timeline</h1>
+        <Timeline>
+          <Timeline.Item color="blue">
+            2021년 5월 21일 12:53
+            <br />
+            스타벅스 주엽강선점
+          </Timeline.Item>
+          <Timeline.Item color="blue">
+            2021년 5월 22일 10:32
+            <br />
+            일산호수공원
+          </Timeline.Item>
+          <Timeline.Item color="gray" />
+          <Timeline.Item color="gray" />
+        </Timeline>
+      </Col>
+    )
+  else return <></>
 }
 
-function MemoInfo({ info }) {
+function MemoInfo({ info }: any) {
   return (
     <span>
       <Row>
@@ -115,15 +126,17 @@ function MemoInfo({ info }) {
   )
 }
 
-function MemoCardItem({ memo, deleteMemo }) {
+function MemoCardItem({
+  memo,
+  deleteMemo,
+}: {
+  memo: memo
+  deleteMemo: (id: string) => void
+}) {
   const { Meta } = Card
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isMemoPinned, setIsMemoPinned] = useState(false)
   const [visible, setVisible] = useState(false)
-
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
 
   const handleOk = () => {
     setIsModalVisible(false)
@@ -147,10 +160,11 @@ function MemoCardItem({ memo, deleteMemo }) {
 
   return (
     <Card
-      style={{ width: 300 }}
+      style={{ width: useWindowSize()[0] > sm ? 300 : 280 }}
+      size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
-        <Link href={{ pathname: '/editor'}}>
+        <Link key={`Link_${memo.id}`} href={{ pathname: '/editor' }}>
           <EditOutlined key="edit" />
         </Link>,
         <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.id)} />,
@@ -190,11 +204,11 @@ function MemoCardItem({ memo, deleteMemo }) {
         <Timeline>
           {memo.infos.map((info: info) => {
             return (
-              <>
+              <div key={`timeline_upper_${info}`}>
                 <Timeline.Item color="blue">
                   <MemoInfo info={info} />
                 </Timeline.Item>
-              </>
+              </div>
             )
           })}
         </Timeline>
@@ -216,11 +230,11 @@ function MemoCardItem({ memo, deleteMemo }) {
         <Timeline>
           {memo.infos.map((info: info) => {
             return (
-              <>
+              <div key={`timeline_lower_${info}`}>
                 <Timeline.Item color="blue">
                   <MemoInfo info={info} />
                 </Timeline.Item>
-              </>
+              </div>
             )
           })}
         </Timeline>

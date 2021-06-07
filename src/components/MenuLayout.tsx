@@ -18,7 +18,7 @@ const MenuLayout = () => {
 
   return (
     <>
-      <Menu style={{ zIndex: 5 }} mode="vertical-left" theme="dark">
+      <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
         <SubMenu key="sub1" icon={<FolderOpenOutlined />} title="내 메모">
           <Menu.Item key="1">
             <Link href="/test">
