@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil'
 
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
-import { CategoryInfo } from 'src/types/user'
+import { CategoryInfo } from 'src/types/category'
 
 const { SubMenu } = Menu
 

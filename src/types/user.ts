@@ -8,11 +8,3 @@ export interface UserInfo {
   updatedAt?: Date
   createdAt?: Date
 }
-
-export interface CategoryInfo {
-  _id: string
-  name: string
-  user: UserInfo
-  createdAt?: Date
-  updatedAt?: Date
-}

@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil'
 
 import kaxios from 'src/interceptors'
-import { CategoryInfo } from 'src/types/user'
+import { CategoryInfo } from 'src/types/category'
 
 export const categoriesState = atom<CategoryInfo[] | []>({
   key: 'categories',
