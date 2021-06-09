@@ -25,5 +25,33 @@ export const loadCategories = async (userId: string) => {
     return res.data.categories
   } catch (e) {
     console.error(e)
+    return false
+  }
+}
+
+export const addCategories = async (userId: string, name: string) => {
+  try {
+    const res = await kaxios({
+      url: `/user/${userId}/category`,
+      method: 'post',
+      params: { name },
+    })
+    return res.data.category
+  } catch (e) {
+    console.error(e)
+    return false
+  }
+}
+
+export const deleteCategories = async (categoryId: string) => {
+  try {
+    const res = await kaxios({
+      url: `/category/${categoryId}`,
+      method: 'delete',
+    })
+    return res.data
+  } catch (e) {
+    console.error(e)
+    return false
   }
 }

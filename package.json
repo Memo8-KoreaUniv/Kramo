@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "set NODE_ENV=dev && next dev",
-    "build": "set NODE_ENV=prod && next build && tsc --project tsconfig.server.json",
+    "build": "set NODE_ENV=prod && next build && tsc --project tsconfig.json",
     "start": "set NODE_ENV=dev && next start",
     "test": "set NODE_ENV=test && jest",
     "lint": "eslint **/*.{js,ts,tsx}",

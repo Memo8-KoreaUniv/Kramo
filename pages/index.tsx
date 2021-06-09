@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Main } from './main'
+import { Main } from '../src/components/main'
 
 // 타입 정의
 
@@ -103,7 +103,7 @@ export const MOCK_DATA: memo[] = [
         weather: '💨',
       },
     ],
-  },  
+  },
 ]
 
 export default function Index() {
