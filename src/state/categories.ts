@@ -3,6 +3,8 @@ import { atom, selector } from 'recoil'
 import kaxios from 'src/interceptors'
 import { CategoryInfo } from 'src/types/category'
 
+const CATEGORY_MAX_NUMBER = 10
+
 export const categoriesState = atom<CategoryInfo[] | []>({
   key: 'categories',
   default: [],
@@ -16,6 +18,14 @@ export const isCategoryLoadedState = selector<boolean>({
   },
 })
 
+export const categoryAddAvailState = selector<boolean>({
+  key: 'categoryAddAvail',
+  get: ({ get }) => {
+    const categoryInstance = get(categoriesState)
+    return categoryInstance.length < CATEGORY_MAX_NUMBER
+  },
+})
+
 export const loadCategories = async (userId: string) => {
   try {
     const res = await kaxios({
@@ -25,6 +35,9 @@ export const loadCategories = async (userId: string) => {
     return res.data.categories
   } catch (e) {
     console.error(e)
+    if (e.response.data?.alertText) {
+      return e.response.data?.alertText
+    }
     return false
   }
 }
@@ -39,6 +52,9 @@ export const addCategories = async (userId: string, name: string) => {
     return res.data.category
   } catch (e) {
     console.error(e)
+    if (e.response.data?.alertText) {
+      return e.response.data?.alertText
+    }
     return false
   }
 }
@@ -52,6 +68,9 @@ export const deleteCategories = async (categoryId: string) => {
     return res.data
   } catch (e) {
     console.error(e)
+    if (e.response.data?.alertText) {
+      return e.response.data?.alertText
+    }
     return false
   }
 }
