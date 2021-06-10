@@ -1,8 +1,9 @@
 import dynamic from 'next/dynamic';
-import React from 'react'
-import { useSetRecoilState } from 'recoil'
-import { historiesState, loadHistories } from 'src/state/history'
+import React,{useEffect} from 'react'
+import { useRecoilState,useSetRecoilState, useRecoilValue } from 'recoil'
 
+import { historiesState, loadHistories } from 'src/state/history'
+import { HistoryInfo } from 'src/types/history';
 
 const PostEditor = dynamic(
   () => import('src/components/ToastEditor'),
@@ -10,16 +11,18 @@ const PostEditor = dynamic(
 )
 
 function editPost():JSX.Element {
-  const historyId = '60a9e0db2183479d02922eda'
-  const setHistories = useSetRecoilState(historiesState)
-  const memoLoad = async () => {
-    const historyInfo = await loadHistories(historyId)
+  const memoId = '60a9e0db2183479d02922eda'
+  const [histories,setHistories] = useRecoilState(historiesState)
+
+  //TBD: how many history...?15
+  const historyLoad = async () => {
+    const historyInfo = await loadHistories(memoId)
     setHistories(historyInfo)
   }
-  memoLoad()
+  historyLoad()
   return (
     <>
-      <PostEditor memo="<br><br><br>제대로 입력되는지 테스트"/>
+      <PostEditor memo={histories[0].text}/>
     </>
   )
 }
