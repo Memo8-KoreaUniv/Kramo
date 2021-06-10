@@ -51,7 +51,7 @@ const Login = () => {
 
   useEffect(() => {
     /* 로그인 돼있었을시 기본 페이지로 */
-    if (me) {
+    if (me?._id) {
       alert(`이미 로그인이 되어있습니다!`)
       router.push('/')
       return

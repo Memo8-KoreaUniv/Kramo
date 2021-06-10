@@ -1,5 +1,5 @@
 export interface UserInfo {
-  _id?: string
+  _id: string
   naverId?: string
   name: string
   nickname: string

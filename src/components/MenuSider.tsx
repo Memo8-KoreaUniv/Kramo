@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { FileTextTwoTone } from '@ant-design/icons'
 import { Layout } from 'antd'
 import Link from 'next/link'
+import { useRecoilState } from 'recoil'
 
+import { menuCollapsedState } from 'src/state/etc'
 import { xs, useWindowSize } from 'src/utils/size'
 import { FlexDiv } from 'style/div'
 
@@ -12,7 +14,7 @@ import MenuLayout from './MenuLayout'
 const { Sider } = Layout
 
 const MenuSider = () => {
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useRecoilState(menuCollapsedState)
   const onCollapse = (collapsed: boolean) => {
     console.log(collapsed)
     setCollapsed(collapsed)
