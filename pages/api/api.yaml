@@ -266,6 +266,46 @@ paths:
                 description: '에러 내용'
       security:
         - ormakkc: []
+  /api/user/{userId}/pin:
+    get:
+      tags:
+        - 'user'
+      summary: '특정 유저의 모든 메모들의 pinned 상태 로드'
+      description: '특정 유저의 모든 메모들의 pinned 상태를 가져옵니다.'
+      operationId: ''
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              pinned:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    'memoId':
+                      type: boolean
+                      description: 'pinned 상태'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
   /api/user/{userId}/category:
     post:
       tags:

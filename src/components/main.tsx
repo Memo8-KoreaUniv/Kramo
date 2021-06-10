@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { meState } from '../state/me';
+import kaxios from 'src/interceptors';
 
 import {
   DeleteOutlined,
@@ -24,31 +27,157 @@ import Link from 'next/link'
 
 import { sm, md, useWindowSize } from 'src/utils/size'
 
-import { MOCK_DATA, info, memo } from '../../pages/index'
+import { MemoInfo } from '../types/memo'
 
 function useMemos() {
-  const [memos, setMemos] = useState<memo[]>(MOCK_DATA)
+  const [memos, setMemos] = useState<MemoInfo[]>([])
 
-  const deleteMemo = (id: string) => {
-    const newMemos = memos.filter((memo) => memo.id !== id)
+  const loadMemos = async (userId: string) => {
+    try {
+        const res = await kaxios({
+          url: `/user/${userId}/memos`,
+          method: 'get',
+          params: {
+            page: 1,
+            count: 10,
+          }
+        })
+        const loadedMemos = res.data.memos
+        initPin(userId, loadedMemos as MemoInfo[])
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+  const addMemo = async (userId: string) => {
+    const body: object = {
+      "user": userId,
+      "category": "C1",
+      "text": "test message",
+      "weather": {
+        "id": 0,
+        "main": "날씨맑음",
+        "description": "날씨맑음",
+        "icon": "b01"
+      },
+      "gps": {
+        "latitude": "37.663872",
+        "longitude": "126.769791",
+      }
+    }
+    // console.log(body)
+    try {
+      await kaxios({
+        url: `/memo`,
+        method: 'post',
+        data: body,
+        })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const deleteMemo = async (memoId: string) => {
+    try {
+      await kaxios({
+        url: `/memo/${memoId}`,
+        method: 'delete',
+      })
+      const newMemos = memos.filter((memo: MemoInfo) => memo.memo !== memoId)
+      setMemos(newMemos)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const sortMemos = (memoId: string) => {
+    const newMemos = memos.map((memo: MemoInfo) => {
+        if (memo.memo === memoId) {
+          try {
+            memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
+            memo.pinned = !memo.pinned
+          } catch(e) {
+            return memo
+          }
+        }
+        return memo
+      }
+    ).sort((a: MemoInfo, b: MemoInfo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+    
     setMemos(newMemos)
+  }
+
+  const initPin = async (userId: string, loadedMemos: MemoInfo[]) => {
+    try {
+      const res = await kaxios({
+        url: `/user/${userId}/pin`,
+        method: 'get',
+      })
+      const pinInfo = res.data.pin
+      const pinnedMemos = loadedMemos.map((memo) => {
+        memo.pinned = pinInfo[memo.memo]
+        return memo
+        }
+      )
+      setMemos(pinnedMemos)
+    } catch (e) {
+      console.error(e)
+    } 
+  }
+
+  const pinMemo = async (memoId: string) => {
+    try {
+      await kaxios({
+        url: `/memo/${memoId}/pin`,
+        method: 'post',
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const unpinMemo = async (memoId: string) => {
+    try {
+      await kaxios({
+        url: `/memo/${memoId}/pin`,
+        method: 'delete',
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return {
     memos,
+    setMemos,
+    loadMemos,
+    addMemo,
     deleteMemo,
+    sortMemos,
   }
 }
 
 export function Main() {
-  const { memos, deleteMemo } = useMemos()
+  const { memos, loadMemos, deleteMemo, sortMemos } = useMemos()
+  const [me] = useRecoilState(meState)
+
+  useEffect(() => {
+    if (!me) {
+      return
+    }
+    if (!(me._id)) {
+      return
+    }
+    loadMemos(me._id!);
+  },[]);
+  
 
   return (
     <div
       className="site-layout-background"
       style={{ padding: 24, textAlign: 'left' }}>
       <Row>
-        <MemoView memos={memos} deleteMemo={deleteMemo} />
+        <MemoView memos={memos} deleteMemo={deleteMemo} sortMemos={sortMemos} />
         <MemoTimeline />
       </Row>
     </div>
@@ -58,21 +187,24 @@ export function Main() {
 function MemoView({
   memos,
   deleteMemo,
+  sortMemos,
 }: {
-  memos: memo[]
-  deleteMemo: (id: string) => void
+  memos: MemoInfo[]
+  deleteMemo: (memoId: string) => void
+  sortMemos: (memoId: string) => void
 }) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
-          {memos.map((memo: memo) => {
+          {memos.sort((a: MemoInfo, b: MemoInfo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0)).map((memo: MemoInfo) => {
             return (
-              <Col key={`Col${memo.id}`}>
+              <Col key={`Col${memo._id}`}>
                 <MemoCardItem
-                  key={`MemoCardItem_${memo.id}`}
+                  key={`MemoCardItem_${memo._id}`}
                   memo={memo}
                   deleteMemo={deleteMemo}
+                  sortMemos={sortMemos}
                 />
               </Col>
             )
@@ -107,20 +239,20 @@ function MemoTimeline() {
   else return <></>
 }
 
-function MemoInfo({ info }: any) {
+function MemoDetail({ gps, weather, updatedAt }: any) {
   return (
     <span>
       <Row>
         <Col span={4} style={{ textAlign: 'center' }}>
-          {info.weather}
+          {weather.icon}
         </Col>
-        <Col span={20}>{info.time}</Col>
+        <Col span={20}>{updatedAt}</Col>
       </Row>
       <Row>
         <Col span={4} style={{ textAlign: 'center' }}>
           <EnvironmentOutlined />
         </Col>
-        <Col span={20}>{info.place}</Col>
+        <Col span={20}>{gps.id}</Col>
       </Row>
     </span>
   )
@@ -129,13 +261,14 @@ function MemoInfo({ info }: any) {
 function MemoCardItem({
   memo,
   deleteMemo,
+  sortMemos,
 }: {
-  memo: memo
-  deleteMemo: (id: string) => void
+  memo: MemoInfo
+  deleteMemo: (memoId: string) => void
+  sortMemos: (memoId: string) => void
 }) {
   const { Meta } = Card
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [isMemoPinned, setIsMemoPinned] = useState(false)
   const [visible, setVisible] = useState(false)
 
   const handleOk = () => {
@@ -155,7 +288,7 @@ function MemoCardItem({
   }
 
   const togglePinned = () => {
-    setIsMemoPinned(!isMemoPinned)
+    sortMemos(memo.memo)
   }
 
   return (
@@ -164,21 +297,21 @@ function MemoCardItem({
       size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
-        <Link key={`Link_${memo.id}`} href={{ pathname: '/editor' }}>
+        <Link key={`Link_${memo._id}`} href={{ pathname: '/editor' }}>
           <EditOutlined key="edit" />
         </Link>,
-        <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.id)} />,
+        <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.memo)} />,
       ]}>
       <Meta
         avatar={<Avatar icon={<UserOutlined />} />}
         title={
           <>
             <Row>
-              <Col span={20}>{memo.title}</Col>
+              <Col span={20}>{memo.text.split('\n')[0]}</Col>
               <Col span={4}>
                 <Button
                   shape="circle"
-                  icon={isMemoPinned ? <PushpinFilled /> : <PushpinOutlined />}
+                  icon={memo.pinned ? <PushpinFilled /> : <PushpinOutlined />}
                   onClick={togglePinned}
                 />
               </Col>
@@ -187,22 +320,22 @@ function MemoCardItem({
         }
         description={
           <>
-            {memo.content.split('\n')[0]}
+            {memo.text.split('\n')[0]}
             <br />
             ...
             <Divider />
-            <MemoInfo info={memo.infos[memo.infos.length - 1]} />
+            <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
           </>
         }
       />
       <Drawer
-        title={memo.title}
+        title={memo.text.split('\n')[0]}
         placement="right"
         closable={true}
         onClose={onClose}
         visible={visible}>
         <Timeline>
-          {memo.infos.map((info: info) => {
+          {/*memo.infos.map((info: info) => {
             return (
               <div key={`timeline_upper_${info}`}>
                 <Timeline.Item color="blue">
@@ -210,10 +343,11 @@ function MemoCardItem({
                 </Timeline.Item>
               </div>
             )
-          })}
+          })*/}
+          <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
         </Timeline>
         <Divider />
-        {memo.content.split('\n').map((line: string) => {
+        {memo.text.split('\n').map((line: string) => {
           return (
             <span key={`span_1_${line}`}>
               {line}
@@ -223,12 +357,12 @@ function MemoCardItem({
         })}
       </Drawer>
       <Modal
-        title={memo.title}
+        title={memo.text.split('\n')[0]}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}>
         <Timeline>
-          {memo.infos.map((info: info) => {
+          {/*memo.infos.map((info: info) => {
             return (
               <div key={`timeline_lower_${info}`}>
                 <Timeline.Item color="blue">
@@ -236,10 +370,11 @@ function MemoCardItem({
                 </Timeline.Item>
               </div>
             )
-          })}
+          })*/}
+          <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
         </Timeline>
         <Divider />
-        {memo.content.split('\n').map((line: string) => {
+        {memo.text.split('\n').map((line: string) => {
           return (
             <span key={`span_2_${line}`}>
               {line}
