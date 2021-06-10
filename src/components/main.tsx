@@ -22,8 +22,9 @@ import {
 } from 'antd'
 import Link from 'next/link'
 
-import { MOCK_DATA, info, memo } from './index'
-import { xs, sm, md, lg, xl, useWindowSize } from 'src/utils/size'
+import { sm, md, useWindowSize } from 'src/utils/size'
+
+import { MOCK_DATA, info, memo } from '../../pages/index'
 
 function useMemos() {
   const [memos, setMemos] = useState<memo[]>(MOCK_DATA)
@@ -41,7 +42,7 @@ function useMemos() {
 
 export function Main() {
   const { memos, deleteMemo } = useMemos()
-  
+
   return (
     <div
       className="site-layout-background"
@@ -54,17 +55,25 @@ export function Main() {
   )
 }
 
-
-
-function MemoView({ memos, deleteMemo }) {
+function MemoView({
+  memos,
+  deleteMemo,
+}: {
+  memos: memo[]
+  deleteMemo: (id: string) => void
+}) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
-        <Row gutter={[30,30]}>
+        <Row gutter={[30, 30]}>
           {memos.map((memo: memo) => {
             return (
-              <Col>
-                <MemoCardItem memo={memo} deleteMemo={deleteMemo} />
+              <Col key={`Col${memo.id}`}>
+                <MemoCardItem
+                  key={`MemoCardItem_${memo.id}`}
+                  memo={memo}
+                  deleteMemo={deleteMemo}
+                />
               </Col>
             )
           })}
@@ -95,12 +104,10 @@ function MemoTimeline() {
         </Timeline>
       </Col>
     )
-  else return (
-    <></>
-  )
+  else return <></>
 }
 
-function MemoInfo({ info }) {
+function MemoInfo({ info }: any) {
   return (
     <span>
       <Row>
@@ -119,15 +126,17 @@ function MemoInfo({ info }) {
   )
 }
 
-function MemoCardItem({ memo, deleteMemo }) {
+function MemoCardItem({
+  memo,
+  deleteMemo,
+}: {
+  memo: memo
+  deleteMemo: (id: string) => void
+}) {
   const { Meta } = Card
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isMemoPinned, setIsMemoPinned] = useState(false)
   const [visible, setVisible] = useState(false)
-
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
 
   const handleOk = () => {
     setIsModalVisible(false)
@@ -152,10 +161,10 @@ function MemoCardItem({ memo, deleteMemo }) {
   return (
     <Card
       style={{ width: useWindowSize()[0] > sm ? 300 : 280 }}
-      size={ useWindowSize()[0] > sm ? "default" : "small"}
+      size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
-        <Link href={{ pathname: '/editor' }}>
+        <Link key={`Link_${memo.id}`} href={{ pathname: '/editor' }}>
           <EditOutlined key="edit" />
         </Link>,
         <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.id)} />,
@@ -195,11 +204,11 @@ function MemoCardItem({ memo, deleteMemo }) {
         <Timeline>
           {memo.infos.map((info: info) => {
             return (
-              <>
+              <div key={`timeline_upper_${info}`}>
                 <Timeline.Item color="blue">
                   <MemoInfo info={info} />
                 </Timeline.Item>
-              </>
+              </div>
             )
           })}
         </Timeline>
@@ -221,11 +230,11 @@ function MemoCardItem({ memo, deleteMemo }) {
         <Timeline>
           {memo.infos.map((info: info) => {
             return (
-              <>
+              <div key={`timeline_lower_${info}`}>
                 <Timeline.Item color="blue">
                   <MemoInfo info={info} />
                 </Timeline.Item>
-              </>
+              </div>
             )
           })}
         </Timeline>

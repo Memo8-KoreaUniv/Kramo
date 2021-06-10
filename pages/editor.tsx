@@ -1,15 +1,15 @@
-import React, { LegacyRef } from 'react'
+import React from 'react'
 
-import 'codemirror/lib/codemirror.css'
-import '@toast-ui/editor/dist/toastui-editor.css'
-import { Editor } from '@toast-ui/react-editor'
+// import 'codemirror/lib/codemirror.css'
+// import '@toast-ui/editor/dist/toastui-editor.css'
+// import { Editor } from '@toast-ui/react-editor'
 import { Button, Row, Col } from 'antd'
 
 export default function MemoEditor() {
-  const editorRef: LegacyRef<Editor> = React.createRef()
+  // const editorRef: LegacyRef<Editor> = React.createRef()
 
   const handleClick = () => {
-    console.log(editorRef.current?.getInstance().getHtml())
+    // console.log(editorRef.current?.getInstance().getHtml())
   }
 
   return (
@@ -24,13 +24,13 @@ export default function MemoEditor() {
           </Button>
         </Col>
       </Row>
-      <Editor
+      {/* <Editor
         previewStyle="vertical"
         height="400px"
         initialEditType="wysiwyg"
         initialValue={'메모를 입력하세요'}
         ref={editorRef}
-      />
+      /> */}
     </>
   )
 }
