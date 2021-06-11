@@ -310,6 +310,7 @@ function AddCardButton(
   return (
     <>
       <Card 
+        key={`AddCardButton_Card`}
         style={{ 
           width: useWindowSize()[0] > sm ? 300 : 280, 
           textAlign: 'center', 
@@ -327,11 +328,11 @@ function AddCardButton(
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Select style={{ width: 120 }} onChange={(value: string)=>setCategoryId(CategoryPairs[value])}>
+        <Select key={`AddCardButton_Select`} style={{ width: 120 }} onChange={(value: string)=>setCategoryId(CategoryPairs[value])}>
           {categories.map((category) => {
             CategoryPairs[category.name] = category._id
             return (
-              <Option value={category.name}>
+              <Option key={`AddCardButton_Select_${category._id}`} value={category.name}>
                 {category.name}
               </Option>
               )
