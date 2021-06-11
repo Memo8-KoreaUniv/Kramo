@@ -67,14 +67,9 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
         overlay={
           <Menu>
             <Menu.Item>
-              <a target="_blank" rel="noopener noreferrer" href="#">
-                마이페이지
-              </a>
-            </Menu.Item>
-            <Menu.Item>
-              <a target="_blank" rel="noopener noreferrer" href="#">
-                회원정보 수정
-              </a>
+              <Link href="/mypage">
+                <a>마이페이지</a>
+              </Link>
             </Menu.Item>
             <Menu.Item onClick={onClickLogout}>
               <a>로그아웃</a>
