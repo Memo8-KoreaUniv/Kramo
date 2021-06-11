@@ -46,6 +46,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
           )
 
           res.status(200).json({ memos: listMemoResult })
+          return
         }
         res.status(501).json({ alertText: 'Unexpected request Method!' })
         break
