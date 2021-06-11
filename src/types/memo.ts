@@ -6,7 +6,6 @@ export interface MemoInfo {
     category?: string
     memo: any
     text: string
-    pinned: boolean
     user: UserInfo
     gps: GPS
     weather: Weather

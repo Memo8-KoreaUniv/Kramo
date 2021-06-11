@@ -46,7 +46,7 @@ function useMemos() {
           }
         })
         const loadedMemos = res.data.memos
-        initPin(userId, loadedMemos as MemoInfo[])
+        setMemos(loadedMemos as MemoInfo[])
       } catch (e) {
         console.error(e)
       }
@@ -97,35 +97,16 @@ function useMemos() {
     const newMemos = memos.map((memo: MemoInfo) => {
         if (memo.memo._id === memoId) {
           try {
-            memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
-            memo.pinned = !memo.pinned
+            memo.memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
+            memo.memo.pinned = !memo.memo.pinned
           } catch(e) {
             return memo
           }
         }
         return memo
       }
-    ).sort((a: MemoInfo, b: MemoInfo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
-    
+    ).sort((a: MemoInfo, b: MemoInfo) => (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0))
     setMemos(newMemos)
-  }
-
-  const initPin = async (userId: string, loadedMemos: MemoInfo[]) => {
-    try {
-      const res = await kaxios({
-        url: `/user/${userId}/pin`,
-        method: 'get',
-      })
-      const pinInfo = res.data.pin
-      const pinnedMemos = loadedMemos.map((memo) => {
-        memo.pinned = pinInfo[memo.memo._id]
-        return memo
-        }
-      )
-      setMemos(pinnedMemos)
-    } catch (e) {
-      console.error(e)
-    } 
   }
 
   const pinMemo = async (memoId: string) => {
@@ -202,7 +183,7 @@ function MemoView({
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
-          {memos.sort((a: MemoInfo, b: MemoInfo) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0)).map((memo: MemoInfo) => {
+          {memos.sort((a: MemoInfo, b: MemoInfo) => (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0)).map((memo: MemoInfo) => {
             return (
               <Col key={`Col${memo._id}`}>
                 <MemoCardItem
@@ -412,7 +393,7 @@ function MemoCardItem({
               <Col span={4}>
                 <Button
                   shape="circle"
-                  icon={memo.pinned ? <PushpinFilled /> : <PushpinOutlined />}
+                  icon={memo.memo.pinned ? <PushpinFilled /> : <PushpinOutlined />}
                   onClick={togglePinned}
                 />
               </Col>
