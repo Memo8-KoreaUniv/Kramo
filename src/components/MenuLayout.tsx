@@ -90,13 +90,15 @@ const MenuLayout = () => {
         title="카테고리를 추가하시겠습니까?"
         visible={isModalVisible}
         onOk={handleOk}
-        onCancel={handleCancel}>
+        onCancel={handleCancel}
+        destroyOnClose={true}>
         <Input
           value={categoryValue}
           onChange={(e) => {
             setCategoryValue(e.target.value)
           }}
           placeholder="카테고리명"
+          autoFocus={true}
         />
       </Modal>
       <Divider style={{ color: MENU_LABEL_COLOR }} />
