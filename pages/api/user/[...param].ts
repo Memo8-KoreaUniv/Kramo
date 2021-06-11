@@ -90,6 +90,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
               .sort({ name: 1 })
               .limit(parseInt(count))
             res.status(200).json({ categories: findCategoriesResult })
+            return
           } catch (e) {
             console.log(e)
             res.status(409).json({

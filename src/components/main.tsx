@@ -11,6 +11,7 @@ import {
   PushpinFilled,
   PushpinOutlined,
   UserOutlined,
+  PlusOutlined,
 } from '@ant-design/icons'
 import {
   Avatar,
@@ -22,6 +23,8 @@ import {
   Modal,
   Row,
   Timeline,
+  Input,
+  Select,
 } from 'antd'
 import Link from 'next/link'
 
@@ -49,11 +52,11 @@ function useMemos() {
       }
     }
 
-  const addMemo = async (userId: string) => {
+  const addMemo = async (userId: string, category: string, text: string) => {
     const body: object = {
       "user": userId,
-      "category": "C1",
-      "text": "test message",
+      "category": category,
+      "text": text,
       "weather": {
         "id": 0,
         "main": "날씨맑음",
@@ -65,7 +68,6 @@ function useMemos() {
         "longitude": "126.769791",
       }
     }
-    // console.log(body)
     try {
       await kaxios({
         url: `/memo`,
@@ -158,7 +160,7 @@ function useMemos() {
 }
 
 export function Main() {
-  const { memos, loadMemos, deleteMemo, sortMemos } = useMemos()
+  const { memos, loadMemos, addMemo, deleteMemo, sortMemos } = useMemos()
   const [me] = useRecoilState(meState)
 
   useEffect(() => {
@@ -177,7 +179,7 @@ export function Main() {
       className="site-layout-background"
       style={{ padding: 24, textAlign: 'left' }}>
       <Row>
-        <MemoView memos={memos} deleteMemo={deleteMemo} sortMemos={sortMemos} />
+        <MemoView memos={memos} addMemo={addMemo} deleteMemo={deleteMemo} sortMemos={sortMemos} />
         <MemoTimeline />
       </Row>
     </div>
@@ -186,10 +188,12 @@ export function Main() {
 
 function MemoView({
   memos,
+  addMemo,
   deleteMemo,
   sortMemos,
 }: {
   memos: MemoInfo[]
+  addMemo: (memoId: string, category: string, text: string) => void
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
 }) {
@@ -209,6 +213,9 @@ function MemoView({
               </Col>
             )
           })}
+          <Col key={`ColAddCardButton`}>
+            <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
+          </Col>
         </Row>
       </div>
     </Col>
@@ -258,6 +265,108 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
   )
 }
 
+function AddCardButton(
+  {
+    addMemo,
+  }: 
+  {
+    addMemo: (memoId: string, category: string, text: string) => void,
+  }
+  ) {
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [content, setContent] = useState('')
+  const [categories, setCategories] = useState([])
+  const [categoryId, setCategoryId] = useState('')
+  const CategoryPairs: { [key: string]: string } = {}
+  const [me] = useRecoilState(meState)
+
+  const { Option } = Select;
+
+  const getCategories = async (userId: string) => {
+
+    try {
+      const res = await kaxios({
+        url: `/user/${userId}/categories`,
+        method: 'get',
+        params: {
+          count: 10,
+        }
+      })
+      const loadedCategories = res.data.categories
+      setCategories(loadedCategories)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+
+  const handleOk = () => {
+
+    addMemo(me!._id!, categoryId, content)
+    setIsModalVisible(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalVisible(false)
+  }
+
+  const { TextArea } = Input;
+
+  if (!me) {
+    return <></>
+  }
+
+  if (!(me._id)) {
+    return <></>
+  }
+
+  getCategories(me._id)
+
+  return (
+    <>
+      <Card 
+        style={{ 
+          width: useWindowSize()[0] > sm ? 300 : 280, 
+          textAlign: 'center', 
+          verticalAlign: 'middle', 
+          opacity: 0.5,
+        }}
+        size={useWindowSize()[0] > sm ? 'default' : 'small'}
+        onClick={showModal}
+      >
+        <PlusOutlined style={{ fontSize: '70px' }} />
+      </Card>
+      <Modal
+        title="메모 추가"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Select style={{ width: 120 }} onChange={(value: string)=>setCategoryId(CategoryPairs[value])}>
+          {categories.map((category) => {
+            CategoryPairs[category.name] = category._id
+            return (
+              <Option value={category.name}>
+                {category.name}
+              </Option>
+              )
+            }
+          )}
+        </Select>
+        <TextArea
+          rows={4}
+          placeholder="메모 내용" 
+          allowClear={true}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      </Modal>
+    </>
+  )
+}
+
 function MemoCardItem({
   memo,
   deleteMemo,
@@ -268,16 +377,7 @@ function MemoCardItem({
   sortMemos: (memoId: string) => void
 }) {
   const { Meta } = Card
-  const [isModalVisible, setIsModalVisible] = useState(false)
   const [visible, setVisible] = useState(false)
-
-  const handleOk = () => {
-    setIsModalVisible(false)
-  }
-
-  const handleCancel = () => {
-    setIsModalVisible(false)
-  }
 
   const showDrawer = () => {
     setVisible(true)
@@ -356,33 +456,6 @@ function MemoCardItem({
           )
         })}
       </Drawer>
-      <Modal
-        title={memo.text.split('\n')[0]}
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}>
-        <Timeline>
-          {/*memo.infos.map((info: info) => {
-            return (
-              <div key={`timeline_lower_${info}`}>
-                <Timeline.Item color="blue">
-                  <MemoInfo info={info} />
-                </Timeline.Item>
-              </div>
-            )
-          })*/}
-          <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
-        </Timeline>
-        <Divider />
-        {memo.text.split('\n').map((line: string) => {
-          return (
-            <span key={`span_2_${line}`}>
-              {line}
-              <br />
-            </span>
-          )
-        })}
-      </Modal>
     </Card>
   )
 }
