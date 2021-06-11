@@ -4,7 +4,7 @@ import { UserInfo } from './user';
 export interface MemoInfo {
     _id: string
     category?: string
-    memo: string
+    memo: any
     text: string
     pinned: boolean
     user: UserInfo

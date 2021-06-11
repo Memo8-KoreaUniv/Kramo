@@ -80,12 +80,13 @@ function useMemos() {
   }
 
   const deleteMemo = async (memoId: string) => {
+    console.log(`${memoId} 삭제`)
     try {
       await kaxios({
         url: `/memo/${memoId}`,
         method: 'delete',
       })
-      const newMemos = memos.filter((memo: MemoInfo) => memo.memo !== memoId)
+      const newMemos = memos.filter((memo: MemoInfo) => memo.memo._id !== memoId)
       setMemos(newMemos)
     } catch (e) {
       console.error(e)
@@ -94,7 +95,7 @@ function useMemos() {
 
   const sortMemos = (memoId: string) => {
     const newMemos = memos.map((memo: MemoInfo) => {
-        if (memo.memo === memoId) {
+        if (memo.memo._id === memoId) {
           try {
             memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
             memo.pinned = !memo.pinned
@@ -117,7 +118,7 @@ function useMemos() {
       })
       const pinInfo = res.data.pin
       const pinnedMemos = loadedMemos.map((memo) => {
-        memo.pinned = pinInfo[memo.memo]
+        memo.pinned = pinInfo[memo.memo._id]
         return memo
         }
       )
@@ -388,7 +389,7 @@ function MemoCardItem({
   }
 
   const togglePinned = () => {
-    sortMemos(memo.memo)
+    sortMemos(memo.memo._id)
   }
 
   return (
@@ -400,7 +401,7 @@ function MemoCardItem({
         <Link key={`Link_${memo._id}`} href={{ pathname: '/editor' }}>
           <EditOutlined key="edit" />
         </Link>,
-        <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.memo)} />,
+        <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.memo._id)} />,
       ]}>
       <Meta
         avatar={<Avatar icon={<UserOutlined />} />}
