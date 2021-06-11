@@ -7,6 +7,7 @@ import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
 import cookie from 'react-cookies'
 import { useRecoilState, useSetRecoilState } from 'recoil'
+import Link from 'next/link'
 
 import { categoriesState, loadCategories } from 'src/state/categories'
 
@@ -43,6 +44,50 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     return
   }
 
+  const loggedOutUserMenu = () => {
+    return (
+      <Space size="middle">
+        <Button>
+          <Link href="/login">
+              <a>로그인</a>
+            </Link>
+        </Button>
+        <Button>
+          <Link href="/register">
+            <a>회원가입</a>
+          </Link>
+        </Button>
+      </Space>
+    )
+  }
+
+  const loggedInUserMenu = () => {
+    return (
+      <Dropdown
+        overlay={
+          <Menu>
+            <Menu.Item>
+              <a target="_blank" rel="noopener noreferrer" href="#">
+                마이페이지
+              </a>
+            </Menu.Item>
+            <Menu.Item>
+              <a target="_blank" rel="noopener noreferrer" href="#">
+                회원정보 수정
+              </a>
+            </Menu.Item>
+            <Menu.Item onClick={onClickLogout}>
+              <a>로그아웃</a>
+            </Menu.Item>
+          </Menu>
+        }
+        placement="bottomRight"
+        arrow>
+        <Button>{<UserOutlined />}User</Button>
+      </Dropdown>
+    )
+  }
+
   return (
     <>
       <Layout>
@@ -61,30 +106,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               <Col>{MenuDrawer()}</Col>
               <Col span={10}></Col>
               <Col>
-                <Space size="middle">
-                  <Dropdown
-                    overlay={
-                      <Menu>
-                        <Menu.Item>
-                          <a target="_blank" rel="noopener noreferrer" href="#">
-                            마이페이지
-                          </a>
-                        </Menu.Item>
-                        <Menu.Item>
-                          <a target="_blank" rel="noopener noreferrer" href="#">
-                            회원정보 수정
-                          </a>
-                        </Menu.Item>
-                        <Menu.Item onClick={onClickLogout}>
-                          <a>로그아웃</a>
-                        </Menu.Item>
-                      </Menu>
-                    }
-                    placement="bottomRight"
-                    arrow>
-                    <Button>{<UserOutlined />}User</Button>
-                  </Dropdown>
-                </Space>
+                { me ? loggedInUserMenu() : loggedOutUserMenu() }
               </Col>
               <Col span={1}></Col>
             </Row>
