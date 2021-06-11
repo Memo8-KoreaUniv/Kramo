@@ -55,7 +55,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
         if (req.method == 'GET') {
           const allMemos = await MemoModel.find({ user: userId as any })
           const pinned: { [key: string]: any } = {}
-          allMemos.forEach((memo) => pinned[memo._id] = memo.pinned)
+          allMemos.forEach((memo) => (pinned[memo._id] = memo.pinned))
           console.log({ pinned })
           res.status(200).json({ pin: pinned })
           return

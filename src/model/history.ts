@@ -37,7 +37,7 @@ export class History {
   @prop({ autopopulate: true, ref: () => Category })
   public category?: PopulatedCategory
 
-  @prop({ ref: () => Memo })
+  @prop({ autopopulate: true, ref: () => Memo })
   public memo!: Ref<Memo>
 
   @prop({ type: () => String })
