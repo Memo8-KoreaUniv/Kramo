@@ -2,14 +2,11 @@ import React, { useState } from 'react'
 
 import {
   PlusCircleOutlined,
-  UserAddOutlined,
-  UserOutlined,
+  FolderFilled,
   BookTwoTone,
-  AppstoreTwoTone,
 } from '@ant-design/icons'
 import { Divider, Input, Menu, message, Typography } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
-import Link from 'next/link'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import {
@@ -32,20 +29,6 @@ const CategoryTitleLabel = ({ collapsed }: { collapsed: boolean }) => {
       ) : (
         <Typography.Title level={4} style={{ color: MENU_LABEL_COLOR }}>
           카테고리
-        </Typography.Title>
-      )}
-    </FlexDiv>
-  )
-}
-
-const ElseLabel = ({ collapsed }: { collapsed: boolean }) => {
-  return (
-    <FlexDiv>
-      {collapsed ? (
-        <AppstoreTwoTone twoToneColor="white" style={{ fontSize: '1.5rem' }} />
-      ) : (
-        <Typography.Title level={4} style={{ color: MENU_LABEL_COLOR }}>
-          기타 메뉴
         </Typography.Title>
       )}
     </FlexDiv>
@@ -81,6 +64,7 @@ const MenuLayout = () => {
     message.info('카테고리 추가 성공!')
   }
 
+
   const handleCancel = () => {
     setIsModalVisible(false)
   }
@@ -102,11 +86,13 @@ const MenuLayout = () => {
         />
       </Modal>
       <Divider style={{ color: MENU_LABEL_COLOR }} />
-      <CategoryTitleLabel collapsed={menuCollapsed} />
+      <CategoryTitleLabel collapsed={menuCollapsed} /><br/>
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
         {categories.map((category: CategoryInfo) => {
           return (
-            <Menu.Item key={`menu_${category._id}`}>{category.name}</Menu.Item>
+            <Menu.Item key={`menu_${category._id}`} icon={<FolderFilled/>}>
+              {category.name}
+            </Menu.Item>
           )
         })}
         {categoryAddAvail ? (
@@ -116,31 +102,6 @@ const MenuLayout = () => {
         ) : (
           ''
         )}
-        <Divider style={{ color: MENU_LABEL_COLOR }} />
-        <ElseLabel collapsed={menuCollapsed} />
-        {me?._id ? (
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            <Link href="/mypage">
-              <a>마이페이지</a>
-            </Link>
-          </Menu.Item>
-        ) : (
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            <Link href="/login">
-              <a>로그인</a>
-            </Link>
-          </Menu.Item>
-        )}
-        <Menu.Item key="3" icon={<UserAddOutlined />}>
-          <Link href="/register">
-            <a>회원가입</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="4" icon={<UserOutlined />}>
-          <Link href="/metest">
-            <a>내정보 로드 테스트</a>
-          </Link>
-        </Menu.Item>
       </Menu>
     </>
   )

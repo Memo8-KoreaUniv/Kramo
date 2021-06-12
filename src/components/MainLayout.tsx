@@ -46,18 +46,11 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
 
   const loggedOutUserMenu = () => {
     return (
-      <Space size="middle">
-        <Button>
-          <Link href="/login">
-              <a>로그인</a>
-            </Link>
-        </Button>
-        <Button>
-          <Link href="/register">
-            <a>회원가입</a>
-          </Link>
-        </Button>
-      </Space>
+      <Button>
+        <Link href="/login">
+          <a>로그인 · 회원가입</a>
+        </Link>
+     </Button>
     )
   }
 
@@ -74,11 +67,16 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
             <Menu.Item onClick={onClickLogout}>
               <a>로그아웃</a>
             </Menu.Item>
+            <Menu.Item>
+              <Link href="/metest">
+                <a>내정보 로드 테스트</a>
+              </Link>
+            </Menu.Item>
           </Menu>
         }
         placement="bottomRight"
         arrow>
-        <Button>{<UserOutlined />}User</Button>
+        <Button>{<UserOutlined />}{me?.nickname}</Button>
       </Dropdown>
     )
   }
@@ -101,7 +99,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               <Col>{MenuDrawer()}</Col>
               <Col span={10}></Col>
               <Col>
-                { me ? loggedInUserMenu() : loggedOutUserMenu() }
+                { me?._id ? loggedInUserMenu() : loggedOutUserMenu() }
               </Col>
               <Col span={1}></Col>
             </Row>
