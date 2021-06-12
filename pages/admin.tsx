@@ -66,7 +66,6 @@ const Register = () => {
           <Button type="primary" htmlType="submit">
             로그인
           </Button>
-          <Button>가입하기</Button>
         </FlexDiv>
       </Form>
     </>
