@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { CategoryModel, HistoryModel } from 'src/model'
+import { CategoryModel, HistoryModel, MemoModel } from 'src/model'
 import { connectToDatabase } from 'src/utils/mongo'
 import { pageParser } from 'src/utils/pageParser'
 
@@ -39,6 +39,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
               obj[memoId] = history
             }
           }
+
           const listMemoResult = pageParser(
             Object.values(obj),
             page as string,
@@ -46,6 +47,18 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
           )
 
           res.status(200).json({ memos: listMemoResult })
+          return
+        }
+        res.status(501).json({ alertText: 'Unexpected request Method!' })
+        break
+      case 'pin':
+        if (req.method == 'GET') {
+          const allMemos = await MemoModel.find({ user: userId as any })
+          const pinned: { [key: string]: any } = {}
+          allMemos.forEach((memo) => (pinned[memo._id] = memo.pinned))
+          console.log({ pinned })
+          res.status(200).json({ pin: pinned })
+          return
         }
         res.status(501).json({ alertText: 'Unexpected request Method!' })
         return
