@@ -6,11 +6,11 @@ import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
 import cookie from 'react-cookies'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import kaxios from 'src/interceptors'
+import { categoriesState, loadCategories } from 'src/state/categories'
 
-import { meState } from '../state/me'
+import { loadMe, meState } from '../state/me'
 import MenuDrawer from './MenuDrawer'
 import MenuSider from './MenuSider'
 
@@ -18,23 +18,22 @@ const { Header, Footer, Content } = Layout
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [me, setMe] = useRecoilState(meState)
+  const setCategories = useSetRecoilState(categoriesState)
   const router = useRouter()
 
   useEffect(() => {
-    if (me) return
-    kaxios({ url: '/user', method: 'get' })
-      .then((res) => {
-        console.log('me loaded')
-        setMe(res.data.userInfo)
-      })
-      .catch((e) => {
-        if (e.message === 'Request failed with status code 401') {
-          console.log('로그인 되지 않은 상태')
-          return
-        }
-        console.log(JSON.parse(JSON.stringify(e)))
-      })
+    if (me?._id) return
+    loadMyInfo()
   }, [me, setMe])
+
+  const loadMyInfo = async () => {
+    const meInfo = await loadMe()
+    setMe(meInfo)
+    if (meInfo && meInfo._id) {
+      const categoryInfo = await loadCategories(meInfo._id)
+      setCategories(categoryInfo)
+    }
+  }
 
   const onClickLogout = () => {
     cookie.remove(process.env.NEXT_PUBLIC_JWT_TOKEN_NAME!)
