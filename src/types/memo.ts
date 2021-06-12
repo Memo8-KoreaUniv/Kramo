@@ -1,11 +1,12 @@
-import { UserInfo } from 'src/types/user'
-import { CategoryInfo } from 'src/types/category'
-
+import { UserInfo } from './user';
 
 export interface MemoInfo {
-  _id: string
-  user: UserInfo
-  category: CategoryInfo
-  createdAt?: Date
-  updatedAt?: Date
-}
+    _id: string
+    category?: string
+    memo: string
+    text: string
+    pinned: boolean
+    user: UserInfo
+    createdAt?: Date
+    updatedAt?: Date
+  }

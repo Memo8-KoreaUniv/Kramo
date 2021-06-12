@@ -8,9 +8,6 @@ import { Memo, PopulatedMemo } from './memo'
 import { PopulatedUser, User } from './user'
 
 class Weather {
-  @prop({ type: () => Number })
-  public id?: number
-
   @prop({ type: () => String })
   public main!: string
 
