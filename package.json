@@ -21,6 +21,7 @@
     "@toast-ui/editor": "^2.5.2",
     "@toast-ui/react-editor": "^2.5.3",
     "@types/react-cookies": "^0.1.0",
+    "@uiw/react-md-editor": "^3.3.4",
     "antd": "^4.15.5",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
@@ -32,8 +33,10 @@
     "lodash": "^4.17.21",
     "mongoose": "^5.10.18",
     "mongoose-autopopulate": "^0.11.0",
+    "mongoose-dummy": "^1.0.8",
     "mongoose-unique-validator": "^2.0.3",
     "next": "^10.2.3",
+    "next-remove-imports": "^1.0.5",
     "normalize.css": "^8.0.1",
     "react": "^17.0.1",
     "react-cookies": "^0.1.1",
@@ -60,6 +63,7 @@
     "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
+    "babel-cli": "^6.26.0",
     "babel-plugin-styled-components": "^1.12.0",
     "eslint": "^7.27.0",
     "eslint-config-yceffort": "0.0.5",
@@ -76,6 +80,19 @@
     "supertest": "^6.1.3",
     "ts-jest": "^26.5.6",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
-  }
+    "typescript": "^4.3.2"
+  },
+  "description": "Kramo : mark(kram) + memo",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Memo8-KoreaUniv/kramo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Memo8-KoreaUniv/kramo/issues"
+  },
+  "homepage": "https://github.com/Memo8-KoreaUniv/kramo#readme"
 }
