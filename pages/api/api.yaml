@@ -11,10 +11,10 @@ info:
 host: 'www.host미정'
 basePath: '/v0'
 tags:
+  - name: 'admin'
+    description: '관리자용 api'
   - name: 'user'
     description: '유저 도메인'
-  - name: 'users'
-    description: '유저 DB 관련 (주로 관리자용)'
   - name: 'category'
     description: '카테고리 도메인'
   - name: 'memo'
@@ -405,10 +405,10 @@ paths:
                 description: '에러 내용'
       security:
         - ormakkc: []
-  /api/users:
+  /api/admin/users:
     get:
       tags:
-        - 'users'
+        - 'admin'
       summary: '모든 유저정보 로드'
       description: 'DB에 존재하는 users 데이터들을 불러옵니다. (관리자용)'
       operationId: ''
@@ -435,7 +435,7 @@ paths:
         - ormakkc: []
     post:
       tags:
-        - 'users'
+        - 'admin'
       summary: '유저 추가'
       description: '직접 유저 데이터를 mongoDB에 추가합니다.'
       operationId: ''
@@ -470,6 +470,52 @@ paths:
                 $ref: '#/definitions/User'
         '405':
           description: 'Invalid input'
+      security:
+        - ormakkc: []
+  /api/admin/login:
+    post:
+      tags:
+        - 'admin'
+      summary: 'admin 용 로그인'
+      description: 'email과 secret password 를 통해 로그인합니다.'
+      operationId: ''
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              users:
+                type: 'array'
+                items:
+                  type: object
+                  $ref: '#/definitions/User'
+        '401':
+          description: '비밀번호 틀렸을 때'
+        '409':
+          description: '존재하지 않는 유저 or DB 에러'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+        '501':
+          description: 'env 설정 오류'
       security:
         - ormakkc: []
   /api/category/{categoryId}:
