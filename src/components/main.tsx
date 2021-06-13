@@ -282,6 +282,13 @@ function AddCardButton(
 
   const { TextArea } = Input;
 
+  if (!me) {
+    return <></>
+  }
+  if (!(me._id)) {
+    return <></>
+  }
+
   return (
     <>
       <Card 
