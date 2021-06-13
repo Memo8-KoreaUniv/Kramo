@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { meState } from '../state/me';
+import { categoriesState } from '../state/categories';
 import kaxios from 'src/interceptors';
 
 import {
@@ -31,6 +32,7 @@ import Link from 'next/link'
 import { sm, md, useWindowSize } from 'src/utils/size'
 
 import { MemoInfo } from '../types/memo'
+import { CategoryInfo } from '../types/category'
 
 function useMemos() {
   const [memos, setMemos] = useState<MemoInfo[]>([])
@@ -257,29 +259,12 @@ function AddCardButton(
   ) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [content, setContent] = useState('')
-  const [categories, setCategories] = useState([])
   const [categoryId, setCategoryId] = useState('')
   const CategoryPairs: { [key: string]: string } = {}
+  const [categories] = useRecoilState(categoriesState)
   const [me] = useRecoilState(meState)
 
   const { Option } = Select;
-
-  const getCategories = async (userId: string) => {
-
-    try {
-      const res = await kaxios({
-        url: `/user/${userId}/categories`,
-        method: 'get',
-        params: {
-          count: 10,
-        }
-      })
-      const loadedCategories = res.data.categories
-      setCategories(loadedCategories)
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -297,27 +282,17 @@ function AddCardButton(
 
   const { TextArea } = Input;
 
-  if (!me) {
-    return <></>
-  }
-
-  if (!(me._id)) {
-    return <></>
-  }
-
-  getCategories(me._id)
-
   return (
     <>
       <Card 
         key={`AddCardButton_Card`}
         style={{ 
-          width: useWindowSize()[0] > sm ? 300 : 280, 
+          width: 300,
           textAlign: 'center', 
           verticalAlign: 'middle', 
           opacity: 0.5,
         }}
-        size={useWindowSize()[0] > sm ? 'default' : 'small'}
+        size={'default'}
         onClick={showModal}
       >
         <PlusOutlined style={{ fontSize: '70px' }} />
@@ -329,7 +304,7 @@ function AddCardButton(
         onCancel={handleCancel}
       >
         <Select key={`AddCardButton_Select`} style={{ width: 120 }} onChange={(value: string)=>setCategoryId(CategoryPairs[value])}>
-          {categories.map((category) => {
+          {categories.map((category: CategoryInfo) => {
             CategoryPairs[category.name] = category._id
             return (
               <Option key={`AddCardButton_Select_${category._id}`} value={category.name}>
