@@ -31,7 +31,7 @@ describe('Create and find CATEGORY', () => {
     expect(new Date().getTime() > category!.createdAt.getTime()).toBe(true)
   })
 
-  afterAll(async (done)   => {
+  afterAll(async (done)  => {
     // await CategoryModel.deleteOne(CATEGORY1 as any)
     done()
   })
