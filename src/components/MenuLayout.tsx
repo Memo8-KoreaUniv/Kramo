@@ -6,6 +6,7 @@ import {
   UserOutlined,
   BookTwoTone,
   AppstoreTwoTone,
+  SmileTwoTone,
 } from '@ant-design/icons'
 import { Divider, Input, Menu, message, Typography } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
@@ -20,18 +21,35 @@ import {
 import { menuCollapsedState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { CategoryInfo } from 'src/types/category'
+import { UserInfo } from 'src/types/user'
 import { FlexDiv } from 'style/div'
 
 const MENU_LABEL_COLOR = '#fff5eb'
 
-const CategoryTitleLabel = ({ collapsed }: { collapsed: boolean }) => {
-  return (
+const CategoryTitleLabel = ({
+  me = null,
+  collapsed,
+}: {
+  me: UserInfo | null
+  collapsed: boolean
+}) => {
+  return me ? (
     <FlexDiv>
       {collapsed ? (
         <BookTwoTone twoToneColor="white" style={{ fontSize: '1.5rem' }} />
       ) : (
         <Typography.Title level={4} style={{ color: MENU_LABEL_COLOR }}>
           카테고리
+        </Typography.Title>
+      )}
+    </FlexDiv>
+  ) : (
+    <FlexDiv>
+      {collapsed ? (
+        <SmileTwoTone twoToneColor="white" style={{ fontSize: '1.5rem' }} />
+      ) : (
+        <Typography.Title level={4} style={{ color: MENU_LABEL_COLOR }}>
+          로그인 필요
         </Typography.Title>
       )}
     </FlexDiv>
@@ -100,30 +118,43 @@ const MenuLayout = () => {
         />
       </Modal>
       <Divider style={{ color: MENU_LABEL_COLOR }} />
-      <CategoryTitleLabel collapsed={menuCollapsed} />
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
-        {categories.map((category: CategoryInfo) => {
-          return (
-            <Menu.Item key={`menu_${category._id}`}>{category.name}</Menu.Item>
-          )
-        })}
-        {categoryAddAvail ? (
-          <Menu.Item key="1" icon={<PlusCircleOutlined />} onClick={showModal}>
-            추가
-          </Menu.Item>
+        <CategoryTitleLabel me={me} collapsed={menuCollapsed} />
+        {me ? (
+          <>
+            {categories.map((category: CategoryInfo) => (
+              <Menu.Item key={`menu_${category._id}`}>
+                {category.name}
+              </Menu.Item>
+            ))}
+            {categoryAddAvail ? (
+              <Menu.Item
+                key="1"
+                icon={<PlusCircleOutlined />}
+                onClick={showModal}>
+                추가
+              </Menu.Item>
+            ) : (
+              ''
+            )}
+            <Divider style={{ color: MENU_LABEL_COLOR }} />
+          </>
         ) : (
-          ''
+          <Menu.Item key="0_login" icon={<UserOutlined />}>
+            <Link href="/login">
+              <a>로그인</a>
+            </Link>
+          </Menu.Item>
         )}
-        <Divider style={{ color: MENU_LABEL_COLOR }} />
         <ElseLabel collapsed={menuCollapsed} />
         {me?._id ? (
-          <Menu.Item key="2" icon={<UserOutlined />}>
+          <Menu.Item key="2_1" icon={<UserOutlined />}>
             <Link href="/mypage">
               <a>마이페이지</a>
             </Link>
           </Menu.Item>
         ) : (
-          <Menu.Item key="2" icon={<UserOutlined />}>
+          <Menu.Item key="2_2" icon={<UserOutlined />}>
             <Link href="/login">
               <a>로그인</a>
             </Link>
