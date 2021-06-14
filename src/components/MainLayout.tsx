@@ -21,11 +21,6 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const setCategories = useSetRecoilState(categoriesState)
   const router = useRouter()
 
-  useEffect(() => {
-    if (me?._id) return
-    loadMyInfo()
-  }, [me, setMe])
-
   const loadMyInfo = async () => {
     const meInfo = await loadMe()
     setMe(meInfo)
@@ -35,9 +30,15 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     }
   }
 
+  useEffect(() => {
+    if (me?._id) return
+    loadMyInfo()
+  }, [me, setMe])
+
   const onClickLogout = () => {
     cookie.remove(process.env.NEXT_PUBLIC_JWT_TOKEN_NAME!)
     setMe(null)
+    setCategories([])
     alert('로그아웃 성공!')
     router.push('/')
     return

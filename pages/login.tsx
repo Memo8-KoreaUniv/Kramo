@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import { Divider, Image, Typography } from 'antd'
 import { useRouter } from 'next/dist/client/router'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
 import kaxios from 'src/interceptors'
@@ -25,7 +25,7 @@ const Container = styled(FlexDiv)`
 `
 
 const Login = () => {
-  const me = useRecoilValue(meState)
+  const [me, setMe] = useRecoilState(meState)
   const { Title, Text } = Typography
   const router = useRouter()
 
@@ -67,6 +67,7 @@ const Login = () => {
       })
         .then((res) => {
           alert(res.data.alertText)
+          setMe(null)
           router.push('/')
         })
         .catch((err) => {
