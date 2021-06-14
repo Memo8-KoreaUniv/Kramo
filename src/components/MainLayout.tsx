@@ -48,7 +48,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     return (
       <Button>
         <Link href="/login">
-          <a>로그인 · 회원가입</a>
+          <a>로그인</a>
         </Link>
      </Button>
     )
