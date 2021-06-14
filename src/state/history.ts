@@ -25,5 +25,6 @@ export const loadHistories = async (memoId: string) => {
     return res.data.histories
   } catch (e) {
     console.error(e)
+    return false
   }
 }

@@ -1,28 +1,34 @@
 import dynamic from 'next/dynamic';
 import React,{useEffect} from 'react'
-import { useRecoilState,useSetRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
+import { HistoryInfo } from 'src/types/history'
 
 import { historiesState, loadHistories } from 'src/state/history'
-import { HistoryInfo } from 'src/types/history';
-
 const PostEditor = dynamic(
   () => import('src/components/ToastEditor'),
   { ssr: false }   
 )
 
-function editPost():JSX.Element {
-  const memoId = '60a9e0db2183479d02922eda'
-  const [histories,setHistories] = useRecoilState(historiesState)
+const editPost = (memoId:string):JSX.Element => {
+  /*
+  const memo_Id = '60c27ae1cf0ada5f6370861d'
+  const [histories, setHistories] = useRecoilState(historiesState)
 
-  //TBD: how many history...?15
-  const historyLoad = async () => {
-    const historyInfo = await loadHistories(memoId)
+  useEffect(() => {
+    loadMemo()
+  }, [histories, setHistories])
+
+
+  const loadMemo = async () => {
+    const historyInfo = await loadHistories(memo_Id)
     setHistories(historyInfo)
+    console.log(historyInfo)
+
   }
-  historyLoad()
+*/
   return (
     <>
-      <PostEditor memo={histories[0].text}/>
+      <PostEditor memo={' '}/>
     </>
   )
 }
