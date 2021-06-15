@@ -26,7 +26,10 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     setMe(meInfo)
     if (meInfo && meInfo._id) {
       const categoryInfo = await loadCategories(meInfo._id)
-      setCategories(categoryInfo)
+      if (categoryInfo) {
+        // 성공했을 시
+        setCategories(categoryInfo)
+      }
     }
   }
 
