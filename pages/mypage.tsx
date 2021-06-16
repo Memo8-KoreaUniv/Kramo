@@ -39,7 +39,7 @@ const Mypage = () => {
   }>({})
 
   useEffect(() => {
-    if (!me && onUpdateMode) {
+    if (!me) {
       alert('로그인이 필요합니다!')
       router.push('/')
       return
