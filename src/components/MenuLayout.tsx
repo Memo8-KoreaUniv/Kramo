@@ -29,7 +29,7 @@ const CategoryTitleLabel = ({
   me = null,
   collapsed,
 }: {
-  me?: UserInfo | null
+  me: UserInfo | null
   collapsed: boolean
 }) => {
   return me ? (
@@ -105,7 +105,7 @@ const MenuLayout = () => {
         />
       </Modal>
       <Divider style={{ color: MENU_LABEL_COLOR }} />
-      <CategoryTitleLabel collapsed={menuCollapsed} />
+      <CategoryTitleLabel collapsed={menuCollapsed} me={me} />
       <br />
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
         {categories.map((category: CategoryInfo) => {
