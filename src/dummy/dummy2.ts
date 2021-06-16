@@ -4,11 +4,6 @@ import { GPS } from 'src/types'
 
 import { Weather } from 'src/types'
 
-/**
- * USER1 더미데이터는 test
- * @_id {email}
- */
-
 export const USER2_EMAIL = 'vwjdtjdwnsv@naver.com'
 export const USER2_PASSWORD = 'password'
 export const USER2_CREATEDAT = new Date('2021-05-22T13:01:45+09:00')
@@ -63,7 +58,6 @@ export const USERS_ID = [USER2_ID, USER3_ID, USER4_ID, USER5_ID]
 /**
  * CATEGORY1 더미 데이터
  * @relation USER1
- * @_id {user}:{name}
  */
 
 export const CATEGORY2_NAME = 'category2'
@@ -117,7 +111,6 @@ export const CATEGORYS = [CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5]
  * USER2의 MEM21,MEM22 더미 데이터
  * @relation USER2
  * @relation CATEGORY2
- * @_id {user}:{category}:{createdAt}
  */
 export const MEM21_CREATEDAT = new Date('2021-05-05T13:02:45+09:00')
 export const MEM21_ID = new Types.ObjectId('60c27ae1cf0ada5f6370861d')
@@ -139,7 +132,6 @@ export const MEM22 = {
  * USER3의 MEM31,MEM32 더미 데이터
  * @relation USER3
  * @relation CATEGORY3
- * @_id {user}:{category}:{createdAt}
  */
  export const MEM31_CREATEDAT = new Date('2021-05-05T13:02:45+09:00')
  export const MEM31_ID = new Types.ObjectId('60c27b333b2fab3b576080cf')
@@ -162,7 +154,6 @@ export const MEM22 = {
  * USER4의 MEM41,MEM42 더미 데이터
  * @relation USER4
  * @relation CATEGORY4
- * @_id {user}:{category}:{createdAt}
  */
  export const MEM41_CREATEDAT = new Date('2021-05-05T13:02:45+09:00')
  export const MEM41_ID = new Types.ObjectId('60c27b6609fca59f1782b539')
@@ -185,7 +176,6 @@ export const MEM22 = {
  * USER5의 MEM51,MEM52 더미 데이터
  * @relation USER5
  * @relation CATEGORY5
- * @_id {user}:{category}:{createdAt}
  */
  export const MEM51_CREATEDAT = new Date('2021-05-05T13:02:45+09:00')
  export const MEM51_ID = new Types.ObjectId('60c4a76e9d59bf9e3f8dc890')
@@ -212,7 +202,6 @@ export const MEM22 = {
  * @relation USER2
  * @relation CATEGORY2
  * @relation MEM21
- * @_id {memo}:{createdAt}
  */
 const DUMMY_GPS2: GPS = {
   id: '60c46939478ca023861a4a33',
@@ -297,7 +286,6 @@ export const HISTORIES2 = [HISTORY21, HISTORY22, HISTORY23, HISTORY24]
  * @relation USER3
  * @relation CATEGORY3
  * @relation MEM31
- * @_id {memo}:{createdAt}
  */
  const DUMMY_GPS3: GPS = {
   id: '60c46b3bd6491dce10d1258c',
@@ -383,7 +371,6 @@ export const HISTORIES3 = [HISTORY31, HISTORY32, HISTORY33, HISTORY34]
  * @relation USER4
  * @relation CATEGORY4
  * @relation MEM41
- * @_id {memo}:{createdAt}
  */
  const DUMMY_GPS4: GPS = {
   id: '60c46b6de66519a3fd6d66b5',
@@ -466,7 +453,6 @@ export const HISTORIES4 = [HISTORY41, HISTORY42, HISTORY43, HISTORY44]
  * @relation USER5
  * @relation CATEGORY5
  * @relation MEM51
- * @_id {memo}:{createdAt}
  */
  const DUMMY_GPS5: GPS = {
   id: '60c46b8b98629ab0cff89c16',
