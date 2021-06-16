@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { meState } from '../state/me';
-import { categoriesState } from '../state/categories';
-import kaxios from 'src/interceptors';
+import React, { useState, useEffect } from 'react'
 
 import {
   DeleteOutlined,
@@ -28,54 +24,58 @@ import {
   Select,
 } from 'antd'
 import Link from 'next/link'
+import { useRecoilState } from 'recoil'
 
+import kaxios from 'src/interceptors'
 import { sm, md, useWindowSize } from 'src/utils/size'
 
-import { MemoInfo } from '../types/memo'
+import { categoriesState } from '../state/categories'
+import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
+import { MemoInfo } from '../types/memo'
 
 function useMemos() {
   const [memos, setMemos] = useState<MemoInfo[]>([])
 
   const loadMemos = async (userId: string) => {
     try {
-        const res = await kaxios({
-          url: `/user/${userId}/memos`,
-          method: 'get',
-          params: {
-            page: 1,
-            count: 10,
-          }
-        })
-        const loadedMemos = res.data.memos
-        setMemos(loadedMemos as MemoInfo[])
-      } catch (e) {
-        console.error(e)
-      }
+      const res = await kaxios({
+        url: `/user/${userId}/memos`,
+        method: 'get',
+        params: {
+          page: 1,
+          count: 10,
+        },
+      })
+      const loadedMemos = res.data.memos
+      setMemos(loadedMemos as MemoInfo[])
+    } catch (e) {
+      console.error(e)
     }
+  }
 
   const addMemo = async (userId: string, category: string, text: string) => {
-    const body: object = {
-      "user": userId,
-      "category": category,
-      "text": text,
-      "weather": {
-        "id": 0,
-        "main": "날씨맑음",
-        "description": "날씨맑음",
-        "icon": "b01"
+    const body: any = {
+      user: userId,
+      category: category,
+      text: text,
+      weather: {
+        id: 0,
+        main: '날씨맑음',
+        description: '날씨맑음',
+        icon: 'b01',
       },
-      "gps": {
-        "latitude": "37.663872",
-        "longitude": "126.769791",
-      }
+      gps: {
+        latitude: '37.663872',
+        longitude: '126.769791',
+      },
     }
     try {
       await kaxios({
         url: `/memo`,
         method: 'post',
         data: body,
-        })
+      })
     } catch (e) {
       console.error(e)
     }
@@ -88,7 +88,9 @@ function useMemos() {
         url: `/memo/${memoId}`,
         method: 'delete',
       })
-      const newMemos = memos.filter((memo: MemoInfo) => memo.memo._id !== memoId)
+      const newMemos = memos.filter(
+        (memo: MemoInfo) => memo.memo._id !== memoId,
+      )
       setMemos(newMemos)
     } catch (e) {
       console.error(e)
@@ -96,18 +98,22 @@ function useMemos() {
   }
 
   const sortMemos = (memoId: string) => {
-    const newMemos = memos.map((memo: MemoInfo) => {
+    const newMemos = memos
+      .map((memo: MemoInfo) => {
         if (memo.memo._id === memoId) {
           try {
             memo.memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
             memo.memo.pinned = !memo.memo.pinned
-          } catch(e) {
+          } catch (e) {
             return memo
           }
         }
         return memo
-      }
-    ).sort((a: MemoInfo, b: MemoInfo) => (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0))
+      })
+      .sort(
+        (a: MemoInfo, b: MemoInfo) =>
+          (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0),
+      )
     setMemos(newMemos)
   }
 
@@ -151,19 +157,23 @@ export function Main() {
     if (!me) {
       return
     }
-    if (!(me._id)) {
+    if (!me._id) {
       return
     }
-    loadMemos(me._id!);
-  },[]);
-  
+    loadMemos(me._id!)
+  }, [])
 
   return (
     <div
       className="site-layout-background"
       style={{ padding: 24, textAlign: 'left' }}>
       <Row>
-        <MemoView memos={memos} addMemo={addMemo} deleteMemo={deleteMemo} sortMemos={sortMemos} />
+        <MemoView
+          memos={memos}
+          addMemo={addMemo}
+          deleteMemo={deleteMemo}
+          sortMemos={sortMemos}
+        />
         <MemoTimeline />
       </Row>
     </div>
@@ -185,18 +195,23 @@ function MemoView({
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
-          {memos.sort((a: MemoInfo, b: MemoInfo) => (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0)).map((memo: MemoInfo) => {
-            return (
-              <Col key={`Col${memo._id}`}>
-                <MemoCardItem
-                  key={`MemoCardItem_${memo._id}`}
-                  memo={memo}
-                  deleteMemo={deleteMemo}
-                  sortMemos={sortMemos}
-                />
-              </Col>
+          {memos
+            .sort(
+              (a: MemoInfo, b: MemoInfo) =>
+                (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0),
             )
-          })}
+            .map((memo: MemoInfo) => {
+              return (
+                <Col key={`Col${memo._id}`}>
+                  <MemoCardItem
+                    key={`MemoCardItem_${memo._id}`}
+                    memo={memo}
+                    deleteMemo={deleteMemo}
+                    sortMemos={sortMemos}
+                  />
+                </Col>
+              )
+            })}
           <Col key={`ColAddCardButton`}>
             <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
           </Col>
@@ -249,14 +264,11 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
   )
 }
 
-function AddCardButton(
-  {
-    addMemo,
-  }: 
-  {
-    addMemo: (memoId: string, category: string, text: string) => void,
-  }
-  ) {
+function AddCardButton({
+  addMemo,
+}: {
+  addMemo: (memoId: string, category: string, text: string) => void
+}) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [content, setContent] = useState('')
   const [categoryId, setCategoryId] = useState('')
@@ -264,14 +276,13 @@ function AddCardButton(
   const [categories] = useRecoilState(categoriesState)
   const [me] = useRecoilState(meState)
 
-  const { Option } = Select;
+  const { Option } = Select
 
   const showModal = () => {
     setIsModalVisible(true)
   }
 
   const handleOk = () => {
-
     addMemo(me!._id!, categoryId, content)
     setIsModalVisible(false)
   }
@@ -280,50 +291,52 @@ function AddCardButton(
     setIsModalVisible(false)
   }
 
-  const { TextArea } = Input;
+  const { TextArea } = Input
 
   if (!me) {
     return <></>
   }
-  if (!(me._id)) {
+  if (!me._id) {
     return <></>
   }
 
   return (
     <>
-      <Card 
+      <Card
         key={`AddCardButton_Card`}
-        style={{ 
+        style={{
           width: 300,
-          textAlign: 'center', 
-          verticalAlign: 'middle', 
+          textAlign: 'center',
+          verticalAlign: 'middle',
           opacity: 0.5,
         }}
         size={'default'}
-        onClick={showModal}
-      >
+        onClick={showModal}>
         <PlusOutlined style={{ fontSize: '70px' }} />
       </Card>
       <Modal
         title="메모 추가"
         visible={isModalVisible}
         onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Select key={`AddCardButton_Select`} style={{ width: 120 }} onChange={(value: string)=>setCategoryId(CategoryPairs[value])}>
+        onCancel={handleCancel}>
+        <Select
+          key={`AddCardButton_Select`}
+          style={{ width: 120 }}
+          onChange={(value: string) => setCategoryId(CategoryPairs[value])}>
           {categories.map((category: CategoryInfo) => {
             CategoryPairs[category.name] = category._id
             return (
-              <Option key={`AddCardButton_Select_${category._id}`} value={category.name}>
+              <Option
+                key={`AddCardButton_Select_${category._id}`}
+                value={category.name}>
                 {category.name}
               </Option>
-              )
-            }
-          )}
+            )
+          })}
         </Select>
         <TextArea
           rows={4}
-          placeholder="메모 내용" 
+          placeholder="메모 내용"
           allowClear={true}
           onChange={(e) => setContent(e.target.value)}
         />
@@ -365,7 +378,10 @@ function MemoCardItem({
         <Link key={`Link_${memo._id}`} href={{ pathname: '/editor' }}>
           <EditOutlined key="edit" />
         </Link>,
-        <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.memo._id)} />,
+        <DeleteOutlined
+          key="delete"
+          onClick={() => deleteMemo(memo.memo._id)}
+        />,
       ]}>
       <Meta
         avatar={<Avatar icon={<UserOutlined />} />}
@@ -376,7 +392,9 @@ function MemoCardItem({
               <Col span={4}>
                 <Button
                   shape="circle"
-                  icon={memo.memo.pinned ? <PushpinFilled /> : <PushpinOutlined />}
+                  icon={
+                    memo.memo.pinned ? <PushpinFilled /> : <PushpinOutlined />
+                  }
                   onClick={togglePinned}
                 />
               </Col>
@@ -389,7 +407,11 @@ function MemoCardItem({
             <br />
             ...
             <Divider />
-            <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
+            <MemoDetail
+              gps={memo.gps}
+              weather={memo.weather}
+              updatedAt={memo.updatedAt}
+            />
           </>
         }
       />
@@ -409,7 +431,11 @@ function MemoCardItem({
               </div>
             )
           })*/}
-          <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
+          <MemoDetail
+            gps={memo.gps}
+            weather={memo.weather}
+            updatedAt={memo.updatedAt}
+          />
         </Timeline>
         <Divider />
         {memo.text.split('\n').map((line: string) => {

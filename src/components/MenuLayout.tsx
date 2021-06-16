@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'
 import { Divider, Input, Menu, message, Typography } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
+import Link from 'next/link'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import {
@@ -21,7 +22,6 @@ import { meState } from 'src/state/me'
 import { CategoryInfo } from 'src/types/category'
 import { UserInfo } from 'src/types/user'
 import { FlexDiv } from 'style/div'
-import Link from 'next/link'
 
 const MENU_LABEL_COLOR = '#fff5eb'
 

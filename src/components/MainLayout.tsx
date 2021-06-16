@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react'
 
 import { UserOutlined } from '@ant-design/icons'
-import { Layout, Menu, Row, Col, Dropdown, Button, Divider, Space } from 'antd'
+import { Layout, Menu, Row, Col, Dropdown, Button, Divider } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
+import Link from 'next/link'
 import cookie from 'react-cookies'
 import { useRecoilState, useSetRecoilState } from 'recoil'
+
 import { categoriesState, loadCategories } from 'src/state/categories'
 
 import { loadMe, meState } from '../state/me'
 import MenuDrawer from './MenuDrawer'
 import MenuSider from './MenuSider'
-import Link from 'next/link'
 
 const { Header, Footer, Content } = Layout
 
