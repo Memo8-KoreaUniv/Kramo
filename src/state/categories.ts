@@ -35,8 +35,8 @@ export const loadCategories = async (userId: string) => {
     return res.data.categories
   } catch (e) {
     console.error(e)
-    if (e.response.data?.alertText) {
-      return e.response.data?.alertText
+    if (e.response?.data?.alertText) {
+      return e.response?.data?.alertText
     }
     return false
   }
@@ -52,8 +52,8 @@ export const addCategories = async (userId: string, name: string) => {
     return res.data.category
   } catch (e) {
     console.error(e)
-    if (e.response.data?.alertText) {
-      return e.response.data?.alertText
+    if (e.response?.data?.alertText) {
+      return e.response?.data?.alertText
     }
     return false
   }
@@ -68,8 +68,8 @@ export const deleteCategories = async (categoryId: string) => {
     return res.data
   } catch (e) {
     console.error(e)
-    if (e.response.data?.alertText) {
-      return e.response.data?.alertText
+    if (e.response?.data?.alertText) {
+      return e.response?.data?.alertText
     }
     return false
   }

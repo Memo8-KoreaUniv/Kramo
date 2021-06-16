@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { meState } from '../state/me';
-import { categoriesState } from '../state/categories';
-import kaxios from 'src/interceptors';
+import React, { useState, useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { meState } from '../state/me'
+import { categoriesState } from '../state/categories'
+import kaxios from 'src/interceptors'
 
 import {
   DeleteOutlined,
@@ -28,67 +28,69 @@ import {
   Select,
 } from 'antd'
 import Link from 'next/link'
-
+import { GPS } from '../types'
 import { sm, md, useWindowSize } from 'src/utils/size'
-
 import { MemoInfo } from '../types/memo'
 import { CategoryInfo } from '../types/category'
+import { defaultGPS, getPlace } from '../utils/gps'
 
 function useMemos() {
   const [memos, setMemos] = useState<MemoInfo[]>([])
 
   const loadMemos = async (userId: string) => {
     try {
-        const res = await kaxios({
-          url: `/user/${userId}/memos`,
-          method: 'get',
-          params: {
-            page: 1,
-            count: 10,
-          }
-        })
-        const loadedMemos = res.data.memos
-        setMemos(loadedMemos as MemoInfo[])
-      } catch (e) {
-        console.error(e)
-      }
+      const res = await kaxios({
+        url: `/user/${userId}/memos`,
+        method: 'get',
+        params: {
+          page: 1,
+          count: 10,
+        },
+      })
+      const loadedMemos = res.data.memos
+      setMemos(loadedMemos as MemoInfo[])
+    } catch (e) {
+      console.error(e)
     }
+  }
 
-  const addMemo = async (userId: string, category: string, text: string) => {
+  const addMemo = async (
+    userId: string,
+    category: string,
+    text: string,
+    gps: GPS,
+  ) => {
     const body: object = {
-      "user": userId,
-      "category": category,
-      "text": text,
-      "weather": {
-        "id": 0,
-        "main": "날씨맑음",
-        "description": "날씨맑음",
-        "icon": "b01"
+      user: userId,
+      category: category,
+      text: text,
+      weather: {
+        main: '날씨맑음',
+        description: '날씨맑음',
+        icon: 'b01',
       },
-      "gps": {
-        "latitude": "37.663872",
-        "longitude": "126.769791",
-      }
+      gps: gps,
     }
     try {
       await kaxios({
         url: `/memo`,
         method: 'post',
         data: body,
-        })
+      })
     } catch (e) {
       console.error(e)
     }
   }
 
   const deleteMemo = async (memoId: string) => {
-    console.log(`${memoId} 삭제`)
     try {
       await kaxios({
         url: `/memo/${memoId}`,
         method: 'delete',
       })
-      const newMemos = memos.filter((memo: MemoInfo) => memo.memo._id !== memoId)
+      const newMemos = memos.filter(
+        (memo: MemoInfo) => memo.memo._id !== memoId,
+      )
       setMemos(newMemos)
     } catch (e) {
       console.error(e)
@@ -96,18 +98,22 @@ function useMemos() {
   }
 
   const sortMemos = (memoId: string) => {
-    const newMemos = memos.map((memo: MemoInfo) => {
+    const newMemos = memos
+      .map((memo: MemoInfo) => {
         if (memo.memo._id === memoId) {
           try {
             memo.memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
             memo.memo.pinned = !memo.memo.pinned
-          } catch(e) {
+          } catch (e) {
             return memo
           }
         }
         return memo
-      }
-    ).sort((a: MemoInfo, b: MemoInfo) => (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0))
+      })
+      .sort(
+        (a: MemoInfo, b: MemoInfo) =>
+          (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0),
+      )
     setMemos(newMemos)
   }
 
@@ -133,6 +139,17 @@ function useMemos() {
     }
   }
 
+  const getLocation = (success: (pos: GeolocationPosition) => void) => {
+    if (!navigator.geolocation) {
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(success, () => {
+      console.log('Unable to access your current location')
+    })
+    return
+  }
+
   return {
     memos,
     setMemos,
@@ -140,30 +157,37 @@ function useMemos() {
     addMemo,
     deleteMemo,
     sortMemos,
+    getLocation,
   }
 }
 
 export function Main() {
-  const { memos, loadMemos, addMemo, deleteMemo, sortMemos } = useMemos()
+  const { memos, loadMemos, addMemo, deleteMemo, sortMemos, getLocation } =
+    useMemos()
   const [me] = useRecoilState(meState)
 
   useEffect(() => {
     if (!me) {
       return
     }
-    if (!(me._id)) {
+    if (!me._id) {
       return
     }
-    loadMemos(me._id!);
-  },[]);
-  
+    loadMemos(me._id!)
+  }, [])
 
   return (
     <div
       className="site-layout-background"
       style={{ padding: 24, textAlign: 'left' }}>
       <Row>
-        <MemoView memos={memos} addMemo={addMemo} deleteMemo={deleteMemo} sortMemos={sortMemos} />
+        <MemoView
+          memos={memos}
+          addMemo={addMemo}
+          deleteMemo={deleteMemo}
+          sortMemos={sortMemos}
+          getLocation={getLocation}
+        />
         <MemoTimeline />
       </Row>
     </div>
@@ -175,30 +199,41 @@ function MemoView({
   addMemo,
   deleteMemo,
   sortMemos,
+  getLocation,
 }: {
   memos: MemoInfo[]
-  addMemo: (memoId: string, category: string, text: string) => void
+  addMemo: (memoId: string, category: string, text: string, gps: GPS) => void
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
+  getLocation: (success: (pos: GeolocationPosition) => void) => void
 }) {
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
-          {memos.sort((a: MemoInfo, b: MemoInfo) => (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0)).map((memo: MemoInfo) => {
-            return (
-              <Col key={`Col${memo._id}`}>
-                <MemoCardItem
-                  key={`MemoCardItem_${memo._id}`}
-                  memo={memo}
-                  deleteMemo={deleteMemo}
-                  sortMemos={sortMemos}
-                />
-              </Col>
+          {memos
+            .sort(
+              (a: MemoInfo, b: MemoInfo) =>
+                (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0),
             )
-          })}
+            .map((memo: MemoInfo) => {
+              return (
+                <Col key={`Col${memo._id}`}>
+                  <MemoCardItem
+                    key={`MemoCardItem_${memo._id}`}
+                    memo={memo}
+                    deleteMemo={deleteMemo}
+                    sortMemos={sortMemos}
+                  />
+                </Col>
+              )
+            })}
           <Col key={`ColAddCardButton`}>
-            <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
+            <AddCardButton
+              key={`AddCardButton`}
+              addMemo={addMemo}
+              getLocation={getLocation}
+            />
           </Col>
         </Row>
       </div>
@@ -231,6 +266,13 @@ function MemoTimeline() {
 }
 
 function MemoDetail({ gps, weather, updatedAt }: any) {
+  const { latitude, longitude } = gps
+  const [place, setPlace] = useState<string>('알 수 없음')
+
+  useEffect(() => {
+    getPlace(latitude, longitude).then((loadedPlace) => setPlace(loadedPlace))
+  }, [])
+
   return (
     <span>
       <Row>
@@ -243,36 +285,41 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
         <Col span={4} style={{ textAlign: 'center' }}>
           <EnvironmentOutlined />
         </Col>
-        <Col span={20}>{gps.id}</Col>
+        <Col span={20}>{`${place}`}</Col>
       </Row>
     </span>
   )
 }
 
-function AddCardButton(
-  {
-    addMemo,
-  }: 
-  {
-    addMemo: (memoId: string, category: string, text: string) => void,
-  }
-  ) {
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [content, setContent] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+function AddCardButton({
+  addMemo,
+  getLocation,
+}: {
+  addMemo: (memoId: string, category: string, text: string, gps: GPS) => void
+  getLocation: (success: (pos: GeolocationPosition) => void) => void
+}) {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
+  const [content, setContent] = useState<string>('')
+  const [categoryId, setCategoryId] = useState<string>('')
+  const [GPS, setGPS] = useState<GPS>(defaultGPS)
   const CategoryPairs: { [key: string]: string } = {}
   const [categories] = useRecoilState(categoriesState)
   const [me] = useRecoilState(meState)
-
-  const { Option } = Select;
+  const { TextArea } = Input
+  const { Option } = Select
 
   const showModal = () => {
+    getLocation((pos: GeolocationPosition) => {
+      setGPS({
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      })
+    })
     setIsModalVisible(true)
   }
 
   const handleOk = () => {
-
-    addMemo(me!._id!, categoryId, content)
+    addMemo(me!._id!, categoryId, content, GPS)
     setIsModalVisible(false)
   }
 
@@ -280,53 +327,62 @@ function AddCardButton(
     setIsModalVisible(false)
   }
 
-  const { TextArea } = Input;
-
   if (!me) {
     return <></>
   }
-  if (!(me._id)) {
+  if (!me._id) {
     return <></>
   }
 
   return (
     <>
-      <Card 
+      <Card
         key={`AddCardButton_Card`}
-        style={{ 
+        style={{
           width: 300,
-          textAlign: 'center', 
-          verticalAlign: 'middle', 
+          textAlign: 'center',
+          verticalAlign: 'middle',
           opacity: 0.5,
         }}
         size={'default'}
-        onClick={showModal}
-      >
+        onClick={showModal}>
         <PlusOutlined style={{ fontSize: '70px' }} />
       </Card>
       <Modal
         title="메모 추가"
         visible={isModalVisible}
+        centered={true}
+        okText="확인"
+        cancelText="취소"
         onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Select key={`AddCardButton_Select`} style={{ width: 120 }} onChange={(value: string)=>setCategoryId(CategoryPairs[value])}>
+        onCancel={handleCancel}>
+        <Select
+          key={`AddCardButton_Select`}
+          style={{ width: 120 }}
+          onChange={(value: string) => setCategoryId(CategoryPairs[value])}>
           {categories.map((category: CategoryInfo) => {
             CategoryPairs[category.name] = category._id
             return (
-              <Option key={`AddCardButton_Select_${category._id}`} value={category.name}>
+              <Option
+                key={`AddCardButton_Select_${category._id}`}
+                value={category.name}>
                 {category.name}
               </Option>
-              )
-            }
-          )}
+            )
+          })}
         </Select>
         <TextArea
           rows={4}
-          placeholder="메모 내용" 
+          placeholder="메모 내용"
           allowClear={true}
           onChange={(e) => setContent(e.target.value)}
         />
+        <Row>
+          <Col span={4} style={{ textAlign: 'center' }}>
+            <EnvironmentOutlined />
+          </Col>
+          <Col span={20}>{`${GPS.latitude},${GPS.longitude}`}</Col>
+        </Row>
       </Modal>
     </>
   )
@@ -365,7 +421,10 @@ function MemoCardItem({
         <Link key={`Link_${memo._id}`} href={{ pathname: '/editor' }}>
           <EditOutlined key="edit" />
         </Link>,
-        <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.memo._id)} />,
+        <DeleteOutlined
+          key="delete"
+          onClick={() => deleteMemo(memo.memo._id)}
+        />,
       ]}>
       <Meta
         avatar={<Avatar icon={<UserOutlined />} />}
@@ -376,7 +435,9 @@ function MemoCardItem({
               <Col span={4}>
                 <Button
                   shape="circle"
-                  icon={memo.memo.pinned ? <PushpinFilled /> : <PushpinOutlined />}
+                  icon={
+                    memo.memo.pinned ? <PushpinFilled /> : <PushpinOutlined />
+                  }
                   onClick={togglePinned}
                 />
               </Col>
@@ -389,7 +450,11 @@ function MemoCardItem({
             <br />
             ...
             <Divider />
-            <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
+            <MemoDetail
+              gps={memo.gps}
+              weather={memo.weather}
+              updatedAt={memo.updatedAt}
+            />
           </>
         }
       />
@@ -409,7 +474,11 @@ function MemoCardItem({
               </div>
             )
           })*/}
-          <MemoDetail gps={memo.gps} weather={memo.weather} updatedAt={memo.updatedAt} />
+          <MemoDetail
+            gps={memo.gps}
+            weather={memo.weather}
+            updatedAt={memo.updatedAt}
+          />
         </Timeline>
         <Divider />
         {memo.text.split('\n').map((line: string) => {
