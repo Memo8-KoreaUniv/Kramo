@@ -362,7 +362,7 @@ function MemoCardItem({
       size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
-        <Link key={`Link_${memo._id}`} href={{ pathname: '/editor' }}>
+        <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
           <EditOutlined key="edit" />
         </Link>,
         <DeleteOutlined key="delete" onClick={() => deleteMemo(memo.memo._id)} />,

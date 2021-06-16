@@ -7,7 +7,7 @@ import axios from 'axios'
 */
 const kaxios = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_SERVICE_URL}/api`,
-  timeout: 1500,
+  timeout: 150000,
   withCredentials: true,
 })
 

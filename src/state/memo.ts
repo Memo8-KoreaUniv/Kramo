@@ -22,7 +22,7 @@ export const loadMemos = async (userId: string) => {
       url: `/user/${userId}/memos`,
       method: 'get',
     })
-    return res.data.memos
+    return res?.data.memos
   } catch (e) {
     console.error(e)
   }

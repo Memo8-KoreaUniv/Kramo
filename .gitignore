@@ -10,5 +10,7 @@ dist
 # secure data
 .env*
 
+# secure data
+**/.DS_Store
 # 기타
 /TODO*

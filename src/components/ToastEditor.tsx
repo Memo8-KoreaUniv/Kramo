@@ -5,12 +5,12 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/react-editor'
 import { Button, Row, Col } from 'antd'
 
-export default function ToastEditor({memo}) {
-  const editorRef: LegacyRef<Editor> = React.createRef()
+export default function ToastEditor({memo, addMemo, editorRef}) {
+  // const editorRef: LegacyRef<Editor> = React.createRef() 
 
-  const handleClick = () => {
-    console.log(editorRef.current?.getInstance().getHtml())
-  }
+  // const handleClick = () => {
+  //   console.log(editorRef.current?.getInstance().getHtml())
+  // }
 
   return (
     <>
@@ -19,7 +19,7 @@ export default function ToastEditor({memo}) {
           <Button danger>취소</Button>
         </Col>
         <Col span={1}>
-          <Button type="primary" onClick={handleClick}>
+          <Button type="primary" onClick={addMemo}>
             저장
           </Button>
         </Col>

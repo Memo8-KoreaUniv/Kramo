@@ -60,7 +60,6 @@ const MenuLayout = () => {
   const [categoryValue, setCategoryValue] = useState('')
   const categoryAddAvail = useRecoilValue(categoryAddAvailState)
 
-  console.log(menuCollapsed)
   const showModal = () => {
     setIsModalVisible(true)
   }

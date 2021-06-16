@@ -35,8 +35,8 @@ export const loadCategories = async (userId: string) => {
     return res.data.categories
   } catch (e) {
     console.error(e)
-    if (e.response.data?.alertText) {
-      return e.response.data?.alertText
+    if (e.response?.data?.alertText) {
+      return e.response?.data?.alertText
     }
     return false
   }
