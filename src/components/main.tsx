@@ -33,6 +33,7 @@ import { categoriesState } from '../state/categories'
 import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
+import { Spinner } from './Spinner'
 
 export function Main({ categoryId }: { categoryId?: string | undefined }) {
   const {
@@ -42,6 +43,7 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
     deleteMemo,
     sortMemos,
     loadCategoryMemos,
+    loading,
   } = useMemos()
   const [me] = useRecoilState(meState)
 
@@ -55,6 +57,10 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
     }
     loadMemos(me._id!)
   }, [me, me?._id, categoryId])
+
+  if (loading) {
+    return <Spinner></Spinner>
+  }
 
   return (
     <div
