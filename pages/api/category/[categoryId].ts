@@ -29,7 +29,6 @@ export default async function category(
             alertText: '카테고리나 카테고리 이름이 유효하지 않습니다.',
           })
         }
-        break
       case 'DELETE':
         try {
           const { categoryId } = req.query
@@ -41,7 +40,6 @@ export default async function category(
             alertText: '카테고리나 카테고리 이름이 유효하지 않습니다.',
           })
         }
-        break
       default:
         return res.status(501).json({ alertText: 'Unexpected req Method!' })
     }
