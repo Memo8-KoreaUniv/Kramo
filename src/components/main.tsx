@@ -27,7 +27,7 @@ import Link from 'next/link'
 import { useRecoilState } from 'recoil'
 
 import { sm, md, useWindowSize } from 'src/utils/size'
-import useMemos from 'src/utils/useMemo'
+import useMemos from 'src/utils/useMemos'
 
 import { categoriesState } from '../state/categories'
 import { meState } from '../state/me'
