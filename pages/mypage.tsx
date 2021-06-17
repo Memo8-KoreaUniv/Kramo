@@ -7,10 +7,10 @@ import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
 import AskAgainButton from 'src/components/AskAgain'
+import { Spinner } from 'src/components/Spinner'
 import kaxios from 'src/interceptors'
 import { meState } from 'src/state/me'
 import { FlexDiv } from 'style/div'
-import { Spinner } from 'src/components/Spinner'
 
 const myLabelStyle: CSSProperties = {
   color: 'black',
