@@ -115,10 +115,18 @@ const MenuLayout = () => {
             </Menu.Item>
           )
         })}
-        {categoryAddAvail ? (
-          <Menu.Item key="1" icon={<PlusCircleOutlined />} onClick={showModal}>
-            추가
-          </Menu.Item>
+
+        {me ? (
+          categoryAddAvail ? (
+            <Menu.Item
+              key="1"
+              icon={<PlusCircleOutlined />}
+              onClick={showModal}>
+              추가
+            </Menu.Item>
+          ) : (
+            <Typography>카테고리 가득 참</Typography>
+          )
         ) : (
           <Menu.Item key="0_login" icon={<UserOutlined />}>
             <Link href="/login">
