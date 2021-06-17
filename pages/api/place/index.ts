@@ -21,9 +21,9 @@ export default async function place(req: NextApiRequest, res: NextApiResponse) {
         output: 'json',
       },
     })
-    res.status(200).json(addr.data)
+    return res.status(200).json(addr.data)
   } catch (e) {
     console.log(e)
-    res.status(400).json({ alertText: 'Invalid Request' })
+    return res.status(400).json({ alertText: 'Invalid Request' })
   }
 }
