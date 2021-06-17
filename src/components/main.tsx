@@ -54,6 +54,23 @@ function useMemos() {
     }
   }
 
+  const loadCategoryMemos = async (categoryId: string) => {
+    try {
+      const res = await kaxios({
+        url: `/category/${categoryId}/memos`,
+        method: 'get',
+        params: {
+          page: 1,
+          count: 10,
+        },
+      })
+      const loadedMemos = res.data.memos
+      setMemos(loadedMemos as MemoInfo[])
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const addMemo = async (userId: string, category: string, text: string) => {
     const body: any = {
       user: userId,
@@ -146,22 +163,31 @@ function useMemos() {
     addMemo,
     deleteMemo,
     sortMemos,
+    loadCategoryMemos,
   }
 }
 
-export function Main() {
-  const { memos, loadMemos, addMemo, deleteMemo, sortMemos } = useMemos()
+export function Main({ categoryId }: { categoryId?: string | undefined }) {
+  const {
+    memos,
+    loadMemos,
+    addMemo,
+    deleteMemo,
+    sortMemos,
+    loadCategoryMemos,
+  } = useMemos()
   const [me] = useRecoilState(meState)
 
   useEffect(() => {
-    if (!me) {
+    if (!me || !me._id) {
       return
     }
-    if (!me._id) {
+    if (categoryId) {
+      loadCategoryMemos(categoryId)
       return
     }
     loadMemos(me._id!)
-  }, [])
+  }, [me, me?._id, categoryId])
 
   return (
     <div

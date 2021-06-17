@@ -22,10 +22,10 @@ export default async function category(
             },
             { new: true },
           )
-          res.status(200).json({ changedCategory })
+          return res.status(200).json({ changedCategory })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '카테고리나 카테고리 이름이 유효하지 않습니다.',
           })
         }
@@ -34,16 +34,16 @@ export default async function category(
         try {
           const { categoryId } = req.query
           await CategoryModel.findByIdAndDelete(categoryId)
-          res.status(200).json({ alertText: '카테고리 삭제 성공!' })
+          return res.status(200).json({ alertText: '카테고리 삭제 성공!' })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '카테고리나 카테고리 이름이 유효하지 않습니다.',
           })
         }
         break
       default:
-        res.status(501).json({ alertText: 'Unexpected req Method!' })
+        return res.status(501).json({ alertText: 'Unexpected req Method!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -53,6 +53,6 @@ export default async function category(
       return
     }
     console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }
