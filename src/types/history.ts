@@ -13,11 +13,3 @@ export interface HistoryInfo {
   weather: Weather
   gps: GPS
 }
-
-export interface AddHistoriesProps{
-  user: string
-  category: string
-  text: string
-  weather: Weather
-  gps: GPS
-}

@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import React, { LegacyRef, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { HistoryInfo, AddHistoriesProps } from 'src/types/history'
+import { HistoryInfo } from 'src/types/history'
 import { historiesState, loadHistories, addHistories } from 'src/state/history'
 import { Editor as ToastUIEditor } from '@toast-ui/react-editor'
 import { NextPageContext } from 'next'
@@ -24,18 +24,11 @@ const Editor = ({ histories }: { histories: HistoryInfo[] }): JSX.Element => {
       return message.error('아무것도 입력되지 않았습니다!')
     }
 
-    const newHistory: AddHistoriesProps = {
-      user: histories[0].user._id,
-      category: histories[0].category._id,
-      text: innerText,
-      weather: histories[0].weather,
-      gps: histories[0].gps,
-    }
+    const newHistory: HistoryInfo = { ...histories[0], text: innerText }
+    delete newHistory._id
+    delete newHistory.createdAt
 
-    //TODO 날씨
-    //TODO GPS 얻기
-    addHistories(histories[0].memo._id, newHistory)
-    console.log({ ...newHistory })
+    addHistories(newHistory)
   }
 
   return (

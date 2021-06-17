@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil'
 import kaxios from 'src/interceptors'
-import { HistoryInfo,AddHistoriesProps } from 'src/types/history'
+import { HistoryInfo } from 'src/types/history'
 
 export const historiesState = atom<HistoryInfo[] | []>({
   key: 'histories',
@@ -28,15 +28,16 @@ export const loadHistories = async (memoId: string) => {
   }
 }
 
-export const addHistories = async (memoId: string, newHistory:AddHistoriesProps) => {
+export const addHistories = async (newHistory:HistoryInfo) => {
 
   try {
+    const memoId = newHistory.memo._id
     const res = await kaxios({
       url: `/memo/${memoId}`,
       method: 'post',
-      params: {...newHistory},
+      data:{...newHistory},
     })
-    return res.data.category
+    return res?.data.histories
   } catch (e) {
     console.error(e)
     if (e.response.data?.alertText) {
