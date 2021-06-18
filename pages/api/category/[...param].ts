@@ -49,12 +49,12 @@ export default async function category(
             page as string,
             count as string,
           )
-          res.status(200).json({ memos: listMemoResult })
+          return res.status(200).json({ memos: listMemoResult })
         }
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
-        break
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
+
       default:
-        res.status(501).json({ alertText: 'Param is not allowed!' })
+        return res.status(501).json({ alertText: 'Param is not allowed!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -64,6 +64,6 @@ export default async function category(
       return
     }
     console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }

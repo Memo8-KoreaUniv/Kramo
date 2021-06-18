@@ -101,7 +101,6 @@ const MenuLayout = () => {
             setCategoryValue(e.target.value)
           }}
           placeholder="카테고리명"
-          autoFocus={true}
         />
       </Modal>
       <Divider style={{ color: MENU_LABEL_COLOR }} />
@@ -111,7 +110,9 @@ const MenuLayout = () => {
         {categories.map((category: CategoryInfo) => {
           return (
             <Menu.Item key={`menu_${category._id}`} icon={<FolderFilled />}>
-              {category.name}
+              <Link href={`/?categoryId=${category._id}`}>
+                <a>{category.name}</a>
+              </Link>
             </Menu.Item>
           )
         })}

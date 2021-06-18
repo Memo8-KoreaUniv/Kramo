@@ -16,14 +16,13 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
         historyDocument['memo'] = newMemo.id
         try {
           const newHistory = await HistoryModel.create(historyDocument)
-          res.status(200).json(newHistory)
+          return res.status(200).json(newHistory)
         } catch (e) {
           await MemoModel.findByIdAndDelete(newMemo.id)
-          res.status(500).json({ alertText: 'DB Error Occur!' })
+          return res.status(500).json({ alertText: 'DB Error Occur!' })
         }
-        break
       default:
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -33,6 +32,6 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
       return
     }
     console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }
