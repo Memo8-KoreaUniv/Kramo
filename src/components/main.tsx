@@ -24,15 +24,15 @@ import {
 } from 'antd'
 import Link from 'next/link'
 import { useRecoilState } from 'recoil'
-
 import { sm, md, useWindowSize } from 'src/utils/size'
 import useMemos from 'src/utils/useMemos'
-
 import { categoriesState } from '../state/categories'
 import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
 import { Spinner } from './Spinner'
+import { defaultGPS, getLocation, getPlace } from 'src/utils/gps'
+import { GPS } from 'src/types'
 
 export function Main({ categoryId }: { categoryId?: string | undefined }) {
   const {
