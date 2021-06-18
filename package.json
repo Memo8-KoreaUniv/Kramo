@@ -21,7 +21,6 @@
     "@toast-ui/editor": "^2.5.2",
     "@toast-ui/react-editor": "^2.5.3",
     "@types/react-cookies": "^0.1.0",
-    "@uiw/react-md-editor": "^3.3.4",
     "antd": "^4.15.5",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
@@ -40,7 +39,6 @@
     "react": "^17.0.1",
     "react-cookies": "^0.1.1",
     "react-dom": "^17.0.1",
-    "react-json-view-ssr": "^1.19.1",
     "recoil": "^0.3.1",
     "styled-components": "^5.2.1"
   },

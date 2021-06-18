@@ -1,7 +1,6 @@
 import { Types } from 'mongoose'
 
 import { GPS } from 'src/types'
-
 import { Weather } from 'src/types'
 
 export const USER2_EMAIL = 'vwjdtjdwnsv@naver.com'

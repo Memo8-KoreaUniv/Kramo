@@ -1,17 +1,19 @@
-import dynamic from 'next/dynamic'
 import React, { LegacyRef, useEffect } from 'react'
-import { useRecoilState } from 'recoil'
-import { HistoryInfo } from 'src/types/history'
-import { historiesState, loadHistories, addHistories } from 'src/state/history'
+
 import { Editor as ToastUIEditor } from '@toast-ui/react-editor'
-import { NextPageContext } from 'next'
 import { message } from 'antd'
+import { NextPageContext } from 'next'
+import dynamic from 'next/dynamic'
+import { useSetRecoilState } from 'recoil'
+
+import { historiesState, loadHistories, addHistories } from 'src/state/history'
+import { HistoryInfo } from 'src/types/history'
 const PostEditor = dynamic(() => import('src/components/ToastEditor'), {
   ssr: false,
 })
 
 const Editor = ({ histories }: { histories: HistoryInfo[] }): JSX.Element => {
-  const [_, setHistories] = useRecoilState(historiesState)
+  const setHistories = useSetRecoilState(historiesState)
   const editorRef: LegacyRef<ToastUIEditor> = React.createRef()
 
   useEffect(() => {
