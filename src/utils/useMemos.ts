@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import kaxios from 'src/interceptors'
 import { MemoInfo } from 'src/types/memo'
+import { GPS } from 'src/types'
 
 export default function useMemos() {
   const [memos, setMemos] = useState<MemoInfo[]>([])
@@ -46,7 +47,7 @@ export default function useMemos() {
     setLoading(false)
   }
 
-  const addMemo = async (userId: string, category: string, text: string) => {
+  const addMemo = async (userId: string, category: string, text: string, gps: GPS) => {
     setLoading(true)
 
     const body: any = {
@@ -59,10 +60,7 @@ export default function useMemos() {
         description: '날씨맑음',
         icon: 'b01',
       },
-      gps: {
-        latitude: '37.663872',
-        longitude: '126.769791',
-      },
+      gps,
     }
     try {
       await kaxios({
