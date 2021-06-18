@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { UserOutlined } from '@ant-design/icons'
-import { SearchOutlined } from '@ant-design/icons'
-import { Row, Col, Button, Tooltip, Dropdown, Menu, Layout } from 'antd'
+import { Row, Col, Button, Dropdown, Menu, Layout } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
@@ -12,8 +11,8 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
-import { FlexDiv } from 'style/div'
 
+import HeaderButton from './HeaderButton'
 import MenuDrawer from './MenuDrawer'
 import SubTitle from './SubTitle'
 
@@ -22,6 +21,7 @@ const HeaderLayout = Layout.Header
 const Header = () => {
   const [me, setMe] = useRecoilState(meState)
   const setCategories = useSetRecoilState(categoriesState)
+
   const router = useRouter()
 
   const onClickLogout = () => {
@@ -84,11 +84,7 @@ const Header = () => {
       }}>
       <Row justify="space-between" align="middle" gutter={10}>
         <Col span={2}>
-          <FlexDiv>
-            <Tooltip title="카테고리 삭제">
-              <Button type="primary" shape="circle" icon={<SearchOutlined />} />
-            </Tooltip>
-          </FlexDiv>
+          <HeaderButton />
         </Col>
         <Col>{MenuDrawer()}</Col>
         <Col span={10}>
