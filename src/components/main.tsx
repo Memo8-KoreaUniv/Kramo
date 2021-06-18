@@ -26,6 +26,7 @@ import {
 import Link from 'next/link'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
+import { subtitles } from 'src/enum'
 import { subTitleState } from 'src/state/etc'
 import { sm, md, useWindowSize } from 'src/utils/size'
 import useMemos from 'src/utils/useMemos'
@@ -59,7 +60,7 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
       return
     }
     loadMemos(me._id!)
-    setSubTitle('전체 메모')
+    setSubTitle(subtitles.main)
   }, [me, me?._id, categoryId])
 
   if (loading) {

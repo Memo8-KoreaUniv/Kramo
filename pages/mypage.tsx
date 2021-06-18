@@ -12,6 +12,7 @@ import kaxios from 'src/interceptors'
 import { subTitleState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { FlexDiv } from 'style/div'
+import { subtitles } from 'src/enum'
 
 const myLabelStyle: CSSProperties = {
   color: 'black',
@@ -50,7 +51,7 @@ const Mypage = () => {
       return
     }
     setUpdateValues(_.pick(me, 'name', 'nickname', 'mobile'))
-    setSubTitle('마이페이지')
+    setSubTitle(subtitles.mypage)
   }, [me, router, onUpdateMode, loading])
 
   const onClickUpdateButton = () => {
