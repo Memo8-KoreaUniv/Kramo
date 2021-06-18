@@ -7,7 +7,10 @@ export const DEFAULT_GPS: GPS = {
   longitude: 126.976859,
 }
 
-export const getLocation = (geo: Geolocation, success: (pos: GeolocationPosition) => void) => {
+export const getLocation = (
+  geo: Geolocation,
+  success: (pos: GeolocationPosition) => void,
+) => {
   if (!geo) {
     return
   }
