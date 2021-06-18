@@ -27,7 +27,7 @@ import Link from 'next/link'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { subtitles } from 'src/enum'
-import { categorySubtitleState } from 'src/state/category'
+import { categorySubTitleState } from 'src/state/category'
 import { subTitleState } from 'src/state/etc'
 import { sm, md, useWindowSize } from 'src/utils/size'
 import useMemos from 'src/utils/useMemos'
@@ -50,7 +50,7 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
   } = useMemos()
   const [me] = useRecoilState(meState)
   const setSubTitle = useSetRecoilState(subTitleState)
-  const categorySubTitle = useRecoilValue(categorySubtitleState)
+  const categorySubTitle = useRecoilValue(categorySubTitleState)
 
   useEffect(() => {
     if (!me || !me._id) {
@@ -64,7 +64,7 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
     }
     loadMemos(me._id!)
     setSubTitle(subtitles.main)
-  }, [me, me?._id, categoryId, categorySubTitle, categorySubtitleState])
+  }, [me, me?._id, categoryId, categorySubTitle, categorySubTitleState])
 
   if (loading) {
     return <Spinner></Spinner>

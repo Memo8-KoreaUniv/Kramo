@@ -8,8 +8,8 @@ export const categoryState = atom<CategoryInfo | null>({
   default: null,
 })
 
-export const categorySubtitleState = selector<string>({
-  key: 'categorySubtitleState',
+export const categorySubTitleState = selector<string>({
+  key: 'categorySubTitleState',
   get: ({ get }) => {
     const categoryInstance = get(categoryState)
     if (categoryInstance?.name) {
