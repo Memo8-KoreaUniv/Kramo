@@ -10,18 +10,19 @@ import {
 import { Divider, Input, Menu, message, Typography } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import Link from 'next/link'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import {
   addCategories,
   categoriesState,
   categoryAddAvailState,
 } from 'src/state/categories'
-import { menuCollapsedState } from 'src/state/etc'
+import { menuCollapsedState, subTitleState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { CategoryInfo } from 'src/types/category'
 import { UserInfo } from 'src/types/user'
 import { FlexDiv } from 'style/div'
+import { useCallback } from 'react'
 
 const MENU_LABEL_COLOR = '#fff5eb'
 
@@ -62,13 +63,13 @@ const MenuLayout = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [categoryValue, setCategoryValue] = useState('')
   const categoryAddAvail = useRecoilValue(categoryAddAvailState)
+  const setSubTitle = useSetRecoilState(subTitleState)
 
-  console.log(menuCollapsed)
-  const showModal = () => {
+  const showModal = useCallback(() => {
     setIsModalVisible(true)
-  }
+  }, [isModalVisible])
 
-  const handleOk = async () => {
+  const handleOk = useCallback(async () => {
     setIsModalVisible(false)
     if (!me || !me._id) {
       return message.error('로그인이 필요합니다!')
@@ -82,11 +83,12 @@ const MenuLayout = () => {
     }
     setCategories([newCategory, ...categories])
     message.info('카테고리 추가 성공!')
-  }
+  }, [categories, isModalVisible, me, me?._id, categoryAddAvail, categoryValue])
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsModalVisible(false)
-  }
+  }, [isModalVisible])
+
   return (
     <>
       <Modal
@@ -109,7 +111,12 @@ const MenuLayout = () => {
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
         {categories.map((category: CategoryInfo) => {
           return (
-            <Menu.Item key={`menu_${category._id}`} icon={<FolderFilled />}>
+            <Menu.Item
+              key={`menu_${category._id}`}
+              icon={<FolderFilled />}
+              onClick={() => {
+                setSubTitle(category.name)
+              }}>
               <Link href={`/?categoryId=${category._id}`}>
                 <a>{category.name}</a>
               </Link>

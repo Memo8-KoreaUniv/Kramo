@@ -24,7 +24,7 @@ import {
   Select,
 } from 'antd'
 import Link from 'next/link'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { subTitleState } from 'src/state/etc'
 import { sm, md, useWindowSize } from 'src/utils/size'
@@ -47,10 +47,11 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
     loading,
   } = useMemos()
   const [me] = useRecoilState(meState)
-  const [subTitle, setSubTitle] = useRecoilState(subTitleState)
+  const setSubTitle = useSetRecoilState(subTitleState)
 
   useEffect(() => {
     if (!me || !me._id) {
+      setSubTitle('')
       return
     }
     if (categoryId) {
@@ -58,6 +59,7 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
       return
     }
     loadMemos(me._id!)
+    setSubTitle('전체 메모')
   }, [me, me?._id, categoryId])
 
   if (loading) {

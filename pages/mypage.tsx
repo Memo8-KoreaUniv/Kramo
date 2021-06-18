@@ -3,12 +3,13 @@ import React, { CSSProperties, useEffect, useState } from 'react'
 import { Descriptions, Badge, Button, Input, message } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/dist/client/router'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import styled from 'styled-components'
 
 import AskAgainButton from 'src/components/AskAgain'
 import { Spinner } from 'src/components/Spinner'
 import kaxios from 'src/interceptors'
+import { subTitleState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { FlexDiv } from 'style/div'
 
@@ -31,6 +32,8 @@ DescriptionsItem.defaultProps = {
 
 const Mypage = () => {
   const [me, setMe] = useRecoilState(meState)
+  const setSubTitle = useSetRecoilState(subTitleState)
+
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [onUpdateMode, setOnUpdateMode] = useState<boolean>(false)
@@ -47,6 +50,7 @@ const Mypage = () => {
       return
     }
     setUpdateValues(_.pick(me, 'name', 'nickname', 'mobile'))
+    setSubTitle('마이페이지')
   }, [me, router, onUpdateMode, loading])
 
   const onClickUpdateButton = () => {
