@@ -26,142 +26,41 @@ import {
 import Link from 'next/link'
 import { useRecoilState } from 'recoil'
 
-import kaxios from 'src/interceptors'
 import { sm, md, useWindowSize } from 'src/utils/size'
+import useMemos from 'src/utils/useMemos'
 
 import { categoriesState } from '../state/categories'
 import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
+import { Spinner } from './Spinner'
 
-function useMemos() {
-  const [memos, setMemos] = useState<MemoInfo[]>([])
-
-  const loadMemos = async (userId: string) => {
-    try {
-      const res = await kaxios({
-        url: `/user/${userId}/memos`,
-        method: 'get',
-        params: {
-          page: 1,
-          count: 10,
-        },
-      })
-      const loadedMemos = res.data.memos
-      setMemos(loadedMemos as MemoInfo[])
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const addMemo = async (userId: string, category: string, text: string) => {
-    const body: any = {
-      user: userId,
-      category: category,
-      text: text,
-      weather: {
-        id: 0,
-        main: '날씨맑음',
-        description: '날씨맑음',
-        icon: 'b01',
-      },
-      gps: {
-        latitude: '37.663872',
-        longitude: '126.769791',
-      },
-    }
-    try {
-      await kaxios({
-        url: `/memo`,
-        method: 'post',
-        data: body,
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const deleteMemo = async (memoId: string) => {
-    console.log(`${memoId} 삭제`)
-    try {
-      await kaxios({
-        url: `/memo/${memoId}`,
-        method: 'delete',
-      })
-      const newMemos = memos.filter(
-        (memo: MemoInfo) => memo.memo._id !== memoId,
-      )
-      setMemos(newMemos)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const sortMemos = (memoId: string) => {
-    const newMemos = memos
-      .map((memo: MemoInfo) => {
-        if (memo.memo._id === memoId) {
-          try {
-            memo.memo.pinned ? unpinMemo(memoId) : pinMemo(memoId)
-            memo.memo.pinned = !memo.memo.pinned
-          } catch (e) {
-            return memo
-          }
-        }
-        return memo
-      })
-      .sort(
-        (a: MemoInfo, b: MemoInfo) =>
-          (b.memo.pinned ? 1 : 0) - (a.memo.pinned ? 1 : 0),
-      )
-    setMemos(newMemos)
-  }
-
-  const pinMemo = async (memoId: string) => {
-    try {
-      await kaxios({
-        url: `/memo/${memoId}/pin`,
-        method: 'post',
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const unpinMemo = async (memoId: string) => {
-    try {
-      await kaxios({
-        url: `/memo/${memoId}/pin`,
-        method: 'delete',
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  return {
+export function Main({ categoryId }: { categoryId?: string | undefined }) {
+  const {
     memos,
-    setMemos,
     loadMemos,
     addMemo,
     deleteMemo,
     sortMemos,
-  }
-}
-
-export function Main() {
-  const { memos, loadMemos, addMemo, deleteMemo, sortMemos } = useMemos()
+    loadCategoryMemos,
+    loading,
+  } = useMemos()
   const [me] = useRecoilState(meState)
 
   useEffect(() => {
-    if (!me) {
+    if (!me || !me._id) {
       return
     }
-    if (!me._id) {
+    if (categoryId) {
+      loadCategoryMemos(categoryId)
       return
     }
     loadMemos(me._id!)
-  }, [])
+  }, [me, me?._id, categoryId])
+
+  if (loading) {
+    return <Spinner></Spinner>
+  }
 
   return (
     <div

@@ -33,11 +33,11 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
               { new: true },
             )
             console.log({ newMemo })
-            res.status(200).json({ newMemo })
-            return
+            return res.status(200).json({ newMemo })
           } catch (e) {
-            res.status(409).json({ alertText: '유효하지 않은 메모입니다!' })
-            return
+            return res
+              .status(409)
+              .json({ alertText: '유효하지 않은 메모입니다!' })
           }
         }
         if (req.method === 'DELETE') {
@@ -45,17 +45,17 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
             await MemoModel.findByIdAndUpdate(memoId, {
               pinned: false,
             })
-            res.status(200).json({})
-            return
+            return res.status(200).json({})
           } catch (e) {
-            res.status(409).json({ alertText: '유효하지 않은 메모입니다!' })
-            return
+            return res
+              .status(409)
+              .json({ alertText: '유효하지 않은 메모입니다!' })
           }
         }
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
-        break
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
+
       default:
-        res.status(501).json({ alertText: 'Param is not allowed!' })
+        return res.status(501).json({ alertText: 'Param is not allowed!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -65,6 +65,6 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
       return
     }
     console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }

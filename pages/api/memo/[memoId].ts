@@ -17,14 +17,13 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
           })
             .sort({ createdAt: -1 })
             .limit(parseInt(count as string))
-          res.status(200).json({ histories })
+          return res.status(200).json({ histories })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '유효하지 않은 메모입니다',
           })
         }
-        break
       case 'POST':
         try {
           const { memoId } = req.query
@@ -33,7 +32,7 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
           res.status(200).json({ newMemo })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '입력 데이터가 유효하지 않습니다! ',
           })
         }
@@ -46,13 +45,13 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
           res.status(200).json({ alertText: '카테고리 삭제 성공!' })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '유효하지 않은 메모입니다',
           })
         }
         break
       default:
-        res.status(501).json({ alertText: 'Unexpected req Method!' })
+        return res.status(501).json({ alertText: 'Unexpected req Method!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -62,6 +61,6 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
       return
     }
     console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }
