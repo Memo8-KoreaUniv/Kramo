@@ -7,12 +7,12 @@ export const defaultGPS: GPS = {
   longitude: 126.976859,
 }
 
-export const getLocation = (success: (pos: GeolocationPosition) => void) => {
-  if (!navigator.geolocation) {
+export const getLocation = (geo: Geolocation, success: (pos: GeolocationPosition) => void) => {
+  if (!geo) {
     return
   }
 
-  navigator.geolocation.getCurrentPosition(success, () => {
+  geo.getCurrentPosition(success, () => {
     console.log('Unable to access your current location')
   })
   return

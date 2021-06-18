@@ -32,7 +32,7 @@ import { GPS } from '../types'
 import { sm, md, useWindowSize } from 'src/utils/size'
 import { MemoInfo } from '../types/memo'
 import { CategoryInfo } from '../types/category'
-import { defaultGPS, getPlace } from '../utils/gps'
+import { defaultGPS, getLocation, getPlace } from '../utils/gps'
 
 function useMemos() {
   const [memos, setMemos] = useState<MemoInfo[]>([])
@@ -139,16 +139,6 @@ function useMemos() {
     }
   }
 
-  const getLocation = (success: (pos: GeolocationPosition) => void) => {
-    if (!navigator.geolocation) {
-      return
-    }
-
-    navigator.geolocation.getCurrentPosition(success, () => {
-      console.log('Unable to access your current location')
-    })
-    return
-  }
 
   return {
     memos,
@@ -157,12 +147,11 @@ function useMemos() {
     addMemo,
     deleteMemo,
     sortMemos,
-    getLocation,
   }
 }
 
 export function Main() {
-  const { memos, loadMemos, addMemo, deleteMemo, sortMemos, getLocation } =
+  const { memos, loadMemos, addMemo, deleteMemo, sortMemos } =
     useMemos()
   const [me] = useRecoilState(meState)
 
@@ -186,7 +175,6 @@ export function Main() {
           addMemo={addMemo}
           deleteMemo={deleteMemo}
           sortMemos={sortMemos}
-          getLocation={getLocation}
         />
         <MemoTimeline />
       </Row>
@@ -199,13 +187,11 @@ function MemoView({
   addMemo,
   deleteMemo,
   sortMemos,
-  getLocation,
 }: {
   memos: MemoInfo[]
   addMemo: (memoId: string, category: string, text: string, gps: GPS) => void
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
-  getLocation: (success: (pos: GeolocationPosition) => void) => void
 }) {
   return (
     <Col span={18}>
@@ -232,7 +218,6 @@ function MemoView({
             <AddCardButton
               key={`AddCardButton`}
               addMemo={addMemo}
-              getLocation={getLocation}
             />
           </Col>
         </Row>
@@ -293,10 +278,8 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
 
 function AddCardButton({
   addMemo,
-  getLocation,
 }: {
   addMemo: (memoId: string, category: string, text: string, gps: GPS) => void
-  getLocation: (success: (pos: GeolocationPosition) => void) => void
 }) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
   const [content, setContent] = useState<string>('')
@@ -309,7 +292,7 @@ function AddCardButton({
   const { Option } = Select
 
   const showModal = () => {
-    getLocation((pos: GeolocationPosition) => {
+    getLocation(navigator.geolocation, (pos: GeolocationPosition) => {
       setGPS({
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
