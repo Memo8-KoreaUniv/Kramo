@@ -23,7 +23,7 @@ const MenuDrawer = () => {
   if (useWindowSize()[0] <= xs)
     return (
       <>
-        <Button type="primary" onClick={showDrawer}>
+        <Button type="primary" onClick={showDrawer} size="small">
           <MenuOutlined />
         </Button>
         <Drawer

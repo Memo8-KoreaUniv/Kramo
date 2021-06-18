@@ -1,17 +1,32 @@
-import { Typography } from 'antd'
 import { useRecoilValue } from 'recoil'
+import styled from 'styled-components'
 
 import { subTitleState } from 'src/state/etc'
 import { FlexDiv } from 'style/div'
 
+const SubTitleDiv = styled(FlexDiv)`
+  overflow: hidden;
+`
+const SubTitleH = styled.h1`
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 20px;
+  overflow: auto;
+  white-space: nowrap;
+
+  @media (min-width: 768px) {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1.35;
+  }
+`
+
 const SubTitle = () => {
   const text = useRecoilValue(subTitleState)
   return (
-    <FlexDiv>
-      <Typography.Title level={2} style={{ marginBottom: 0 }}>
-        {text}
-      </Typography.Title>
-    </FlexDiv>
+    <SubTitleDiv>
+      <SubTitleH>{text}</SubTitleH>
+    </SubTitleDiv>
   )
 }
 
