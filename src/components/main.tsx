@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-
 import {
   DeleteOutlined,
   EditOutlined,
@@ -86,7 +85,7 @@ function MemoView({
   sortMemos,
 }: {
   memos: MemoInfo[]
-  addMemo: (memoId: string, category: string, text: string) => void
+  addMemo: (memoId: string, category: string, text: string, gps: GPS) => void
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
 }) {
@@ -112,7 +111,10 @@ function MemoView({
               )
             })}
           <Col key={`ColAddCardButton`}>
-            <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
+            <AddCardButton
+              key={`AddCardButton`}
+              addMemo={addMemo}
+            />
           </Col>
         </Row>
       </div>
@@ -145,6 +147,13 @@ function MemoTimeline() {
 }
 
 function MemoDetail({ gps, weather, updatedAt }: any) {
+  const { latitude, longitude } = gps
+  const [place, setPlace] = useState<string>('알 수 없음')
+
+  useEffect(() => {
+    getPlace(latitude, longitude).then((loadedPlace) => setPlace(loadedPlace))
+  }, [])
+
   return (
     <span>
       <Row>
@@ -157,7 +166,7 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
         <Col span={4} style={{ textAlign: 'center' }}>
           <EnvironmentOutlined />
         </Col>
-        <Col span={20}>{gps.id}</Col>
+        <Col span={20}>{`${place}`}</Col>
       </Row>
     </span>
   )
@@ -166,32 +175,36 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
 function AddCardButton({
   addMemo,
 }: {
-  addMemo: (memoId: string, category: string, text: string) => void
+  addMemo: (memoId: string, category: string, text: string, gps: GPS) => void
 }) {
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [content, setContent] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
+  const [content, setContent] = useState<string>('')
+  const [categoryId, setCategoryId] = useState<string>('')
+  const [GPS, setGPS] = useState<GPS>(defaultGPS)
   const CategoryPairs: { [key: string]: string } = {}
   const [categories] = useRecoilState(categoriesState)
   const [me] = useRecoilState(meState)
-
+  const { TextArea } = Input
   const { Option } = Select
 
   const showModal = () => {
+    getLocation(navigator.geolocation, (pos: GeolocationPosition) => {
+      setGPS({
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      })
+    })
     setIsModalVisible(true)
   }
 
   const handleOk = () => {
-    addMemo(me!._id!, categoryId, content)
+    addMemo(me!._id!, categoryId, content, GPS)
     setIsModalVisible(false)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
-
-  const { TextArea } = Input
-
   if (!me) {
     return <></>
   }
@@ -216,6 +229,9 @@ function AddCardButton({
       <Modal
         title="메모 추가"
         visible={isModalVisible}
+        centered={true}
+        okText="확인"
+        cancelText="취소"
         onOk={handleOk}
         onCancel={handleCancel}>
         <Select
@@ -239,6 +255,12 @@ function AddCardButton({
           allowClear={true}
           onChange={(e) => setContent(e.target.value)}
         />
+        <Row>
+          <Col span={4} style={{ textAlign: 'center' }}>
+            <EnvironmentOutlined />
+          </Col>
+          <Col span={20}>{`${GPS.latitude},${GPS.longitude}`}</Col>
+        </Row>
       </Modal>
     </>
   )
