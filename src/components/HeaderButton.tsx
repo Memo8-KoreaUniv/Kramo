@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { SearchOutlined, DeleteOutlined, HomeOutlined } from '@ant-design/icons'
-import { Button, message, Tooltip } from 'antd'
+import { Button, message, Tooltip, Popconfirm } from 'antd'
 import _ from 'lodash'
 import 'normalize.css'
 import 'antd/dist/antd.css'
@@ -55,14 +55,16 @@ const HeaderButton = () => {
     case category?.name:
       return (
         <FlexDiv>
-          <Tooltip title="카테고리 삭제">
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<DeleteOutlined />}
-              onClick={onClickDeleteCategory}
-            />
-          </Tooltip>
+          <Popconfirm
+            placement="bottomLeft"
+            title={'모든 데이터들이 삭제됩니다. 정말로 삭제하시겠습니까?'}
+            onConfirm={onClickDeleteCategory}
+            okText="Yes"
+            cancelText="No">
+            <Tooltip title="카테고리 삭제">
+              <Button type="primary" shape="circle" icon={<DeleteOutlined />} />
+            </Tooltip>
+          </Popconfirm>
         </FlexDiv>
       )
     default:

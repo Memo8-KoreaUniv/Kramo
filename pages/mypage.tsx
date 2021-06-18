@@ -8,11 +8,11 @@ import styled from 'styled-components'
 
 import AskAgainButton from 'src/components/AskAgain'
 import { Spinner } from 'src/components/Spinner'
+import { subtitles } from 'src/enum'
 import kaxios from 'src/interceptors'
 import { subTitleState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { FlexDiv } from 'style/div'
-import { subtitles } from 'src/enum'
 
 const myLabelStyle: CSSProperties = {
   color: 'black',
