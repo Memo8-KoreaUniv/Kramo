@@ -1,6 +1,7 @@
-import { UserInfo } from 'src/types/user'
 import { CategoryInfo } from 'src/types/category'
 import { MemoInfo } from 'src/types/memo'
+import { UserInfo } from 'src/types/user'
+
 import { GPS, Weather } from './index';
 
 export interface HistoryInfo {
