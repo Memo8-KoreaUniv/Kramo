@@ -12,10 +12,10 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
+import { FlexDiv } from 'style/div'
 
 import MenuDrawer from './MenuDrawer'
 import SubTitle from './SubTitle'
-import { FlexDiv } from 'style/div'
 
 const HeaderLayout = Layout.Header
 

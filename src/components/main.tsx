@@ -24,7 +24,7 @@ import {
   Select,
 } from 'antd'
 import Link from 'next/link'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { subtitles } from 'src/enum'
 import { subTitleState } from 'src/state/etc'
@@ -36,6 +36,7 @@ import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
 import { Spinner } from './Spinner'
+import { categorySubtitleState } from 'src/state/category'
 
 export function Main({ categoryId }: { categoryId?: string | undefined }) {
   const {
@@ -49,6 +50,7 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
   } = useMemos()
   const [me] = useRecoilState(meState)
   const setSubTitle = useSetRecoilState(subTitleState)
+  const categorySubTitle = useRecoilValue(categorySubtitleState)
 
   useEffect(() => {
     if (!me || !me._id) {
@@ -57,11 +59,12 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
     }
     if (categoryId) {
       loadCategoryMemos(categoryId)
+      setSubTitle(categorySubTitle)
       return
     }
     loadMemos(me._id!)
     setSubTitle(subtitles.main)
-  }, [me, me?._id, categoryId])
+  }, [me, me?._id, categoryId, categorySubTitle, categorySubtitleState])
 
   if (loading) {
     return <Spinner></Spinner>

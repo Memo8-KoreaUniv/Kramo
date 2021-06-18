@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useCallback } from 'react'
 
 import {
   PlusCircleOutlined,
@@ -17,12 +18,12 @@ import {
   categoriesState,
   categoryAddAvailState,
 } from 'src/state/categories'
-import { menuCollapsedState, subTitleState } from 'src/state/etc'
+import { categoryState } from 'src/state/category'
+import { menuCollapsedState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { CategoryInfo } from 'src/types/category'
 import { UserInfo } from 'src/types/user'
 import { FlexDiv } from 'style/div'
-import { useCallback } from 'react'
 
 const MENU_LABEL_COLOR = '#fff5eb'
 
@@ -59,11 +60,12 @@ const CategoryTitleLabel = ({
 const MenuLayout = () => {
   const me = useRecoilValue(meState)
   const [categories, setCategories] = useRecoilState(categoriesState)
+  const setCategory = useSetRecoilState(categoryState)
   const menuCollapsed = useRecoilValue(menuCollapsedState)
+  const categoryAddAvail = useRecoilValue(categoryAddAvailState)
+
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [categoryValue, setCategoryValue] = useState('')
-  const categoryAddAvail = useRecoilValue(categoryAddAvailState)
-  const setSubTitle = useSetRecoilState(subTitleState)
 
   const showModal = useCallback(() => {
     setIsModalVisible(true)
@@ -88,6 +90,14 @@ const MenuLayout = () => {
   const handleCancel = useCallback(() => {
     setIsModalVisible(false)
   }, [isModalVisible])
+
+  const onClickCategory = useCallback(
+    (category: CategoryInfo) => () => {
+      setCategory(category)
+      setCategoryValue(category.name)
+    },
+    [categories],
+  )
 
   return (
     <>
@@ -114,9 +124,7 @@ const MenuLayout = () => {
             <Menu.Item
               key={`menu_${category._id}`}
               icon={<FolderFilled />}
-              onClick={() => {
-                setSubTitle(category.name)
-              }}>
+              onClick={onClickCategory(category)}>
               <Link href={`/?categoryId=${category._id}`}>
                 <a>{category.name}</a>
               </Link>
