@@ -33,6 +33,7 @@ import { categoriesState } from '../state/categories'
 import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
+import { subTitleState } from 'src/state/etc'
 
 function useMemos() {
   const [memos, setMemos] = useState<MemoInfo[]>([])
@@ -152,12 +153,10 @@ function useMemos() {
 export function Main() {
   const { memos, loadMemos, addMemo, deleteMemo, sortMemos } = useMemos()
   const [me] = useRecoilState(meState)
+  const [subTitle, setSubTitle] = useRecoilState(subTitleState)
 
   useEffect(() => {
-    if (!me) {
-      return
-    }
-    if (!me._id) {
+    if (!me || !me._id) {
       return
     }
     loadMemos(me._id!)

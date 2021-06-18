@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
 import { UserOutlined } from '@ant-design/icons'
 import { Layout, Menu, Row, Col, Dropdown, Button, Divider } from 'antd'
@@ -14,6 +14,7 @@ import { categoriesState, loadCategories } from 'src/state/categories'
 import { loadMe, meState } from '../state/me'
 import MenuDrawer from './MenuDrawer'
 import MenuSider from './MenuSider'
+import SubTitle from './SubTitle'
 
 const { Header, Footer, Content } = Layout
 
@@ -48,7 +49,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
     return
   }
 
-  const loggedOutUserMenu = () => {
+  const loggedOutUserMenu = useCallback(() => {
     return (
       <Button>
         <Link href="/login">
@@ -56,9 +57,9 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
         </Link>
       </Button>
     )
-  }
+  }, [])
 
-  const loggedInUserMenu = () => {
+  const loggedInUserMenu = useCallback(() => {
     return (
       <Dropdown
         overlay={
@@ -86,7 +87,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
         </Button>
       </Dropdown>
     )
-  }
+  }, [me])
 
   return (
     <>
@@ -104,7 +105,9 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
             <Row justify="space-between" align="middle" gutter={10}>
               <Col span={1}></Col>
               <Col>{MenuDrawer()}</Col>
-              <Col span={10}></Col>
+              <Col span={10}>
+                <SubTitle />
+              </Col>
               <Col>{me?._id ? loggedInUserMenu() : loggedOutUserMenu()}</Col>
               <Col span={1}></Col>
             </Row>
