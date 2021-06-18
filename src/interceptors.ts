@@ -6,8 +6,8 @@ import axios from 'axios'
     https://github.com/axios/axios 의 Request Config 챕터 확인
 */
 const kaxios = axios.create({
-  baseURL: 'http://localhost:3000/api',
-  timeout: 1500,
+  baseURL: `${process.env.NEXT_PUBLIC_SERVICE_URL}/api`,
+  timeout: 15000,
   withCredentials: true,
 })
 

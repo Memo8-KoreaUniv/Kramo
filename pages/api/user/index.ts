@@ -29,6 +29,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
         res
           .status(200)
           .json({ alertText: '유저정보 로드 성공!', userInfo: kramoUserInfo })
+        return
         break
       case 'POST':
         let alertText = '로그인 완료!'
@@ -86,7 +87,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
         )
         break
       default:
-        res.status(500).json({ alertText: 'Unexpected req Method!' })
+        res.status(501).json({ alertText: 'Unexpected request Method!' })
     }
   } catch (err) {
     if (err?.response?.status) {

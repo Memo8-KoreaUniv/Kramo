@@ -1,86 +1,97 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import { FileTextTwoTone } from '@ant-design/icons'
-import { Layout, Menu, Input, Row, Col, Dropdown, Button, Divider } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
+import { Layout, Menu, Row, Col, Dropdown, Button, Divider } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import cookie from 'react-cookies'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import kaxios from 'src/interceptors'
-import { FlexDiv } from 'style/div'
+import { categoriesState, loadCategories } from 'src/state/categories'
 
-import { meState } from '../state/me'
-import MenuLayout from './MenuLayout'
+import { loadMe, meState } from '../state/me'
+import MenuDrawer from './MenuDrawer'
+import MenuSider from './MenuSider'
 
-const { Header, Footer, Sider, Content } = Layout
-const { Search } = Input
+const { Header, Footer, Content } = Layout
 
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
-  const [collapsed, setCollapsed] = useState(true)
   const [me, setMe] = useRecoilState(meState)
+  const setCategories = useSetRecoilState(categoriesState)
   const router = useRouter()
 
+  const loadMyInfo = async () => {
+    const meInfo = await loadMe()
+    setMe(meInfo)
+    if (meInfo && meInfo._id) {
+      const categoryInfo = await loadCategories(meInfo._id)
+      if (categoryInfo) {
+        // 성공했을 시
+        setCategories(categoryInfo)
+      }
+    }
+  }
+
   useEffect(() => {
-    if (me) return
-    kaxios({ url: '/user', method: 'get' })
-      .then((res) => {
-        console.log('me loaded')
-        setMe(res.data.userInfo)
-      })
-      .catch((e) => {
-        if (e.message === 'Request failed with status code 401') {
-          console.log('로그인 되지 않은 상태')
-          return
-        }
-        console.log(JSON.parse(JSON.stringify(e)))
-      })
+    if (me?._id) return
+    loadMyInfo()
   }, [me, setMe])
 
   const onClickLogout = () => {
     cookie.remove(process.env.NEXT_PUBLIC_JWT_TOKEN_NAME!)
     setMe(null)
+    setCategories([])
     alert('로그아웃 성공!')
     router.push('/')
     return
   }
 
-  const onCollapse = (collapsed: boolean) => {
-    console.log(collapsed)
-    setCollapsed(collapsed)
+  const loggedOutUserMenu = () => {
+    return (
+      <Button>
+        <Link href="/login">
+          <a>로그인</a>
+        </Link>
+      </Button>
+    )
+  }
+
+  const loggedInUserMenu = () => {
+    return (
+      <Dropdown
+        overlay={
+          <Menu>
+            <Menu.Item>
+              <Link href="/mypage">
+                <a>마이페이지</a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item onClick={onClickLogout}>
+              <a>로그아웃</a>
+            </Menu.Item>
+            <Menu.Item>
+              <Link href="/metest">
+                <a>내정보 로드 테스트</a>
+              </Link>
+            </Menu.Item>
+          </Menu>
+        }
+        placement="bottomRight"
+        arrow>
+        <Button>
+          {<UserOutlined />}
+          {me?.nickname}
+        </Button>
+      </Dropdown>
+    )
   }
 
   return (
     <>
       <Layout>
-        <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-          <FlexDiv>
-            <Link href="/">
-              <a>
-                <FlexDiv justify={'center'} align={'center'}>
-                  <FileTextTwoTone
-                    twoToneColor="#005f99"
-                    style={{
-                      fontSize: '3rem',
-                      color: '#08c',
-                      margin: '1rem 0',
-                    }}
-                  />
-                  {!collapsed ? (
-                    <h1 style={{ color: '#C3D4D9', margin: '0 0.5rem' }}>
-                      Kramo
-                    </h1>
-                  ) : (
-                    ''
-                  )}
-                </FlexDiv>
-              </a>
-            </Link>
-          </FlexDiv>
-          <MenuLayout />
-        </Sider>
+        {MenuSider()}
         <Layout className="site-layout">
           <Header
             className="site-layout-background"
@@ -90,32 +101,12 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               textAlign: 'center',
               minHeight: '5vh',
             }}>
-            <Row>
-              <Col span={8} offset={8}>
-                <Search placeholder="Search" style={{ width: 200 }} />
-                <Dropdown
-                  overlay={
-                    <Menu>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          마이페이지
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="#">
-                          회원정보 수정
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item onClick={onClickLogout}>
-                        <a>로그아웃</a>
-                      </Menu.Item>
-                    </Menu>
-                  }
-                  placement="bottomRight"
-                  arrow>
-                  <Button>User</Button>
-                </Dropdown>
-              </Col>
+            <Row justify="space-between" align="middle" gutter={10}>
+              <Col span={1}></Col>
+              <Col>{MenuDrawer()}</Col>
+              <Col span={10}></Col>
+              <Col>{me?._id ? loggedInUserMenu() : loggedOutUserMenu()}</Col>
+              <Col span={1}></Col>
             </Row>
           </Header>
           <Content

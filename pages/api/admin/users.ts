@@ -10,17 +10,15 @@ export default async function users(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
       case 'GET':
         result = await UserModel.find()
-        res.status(200).json(result)
-        break
+        return res.status(200).json(result)
       case 'POST':
         result = await UserModel.create(req.body)
-        res.status(200).json(result)
-        break
+        return res.status(200).json(result)
       default:
-        res.status(500).json({ alertText: 'Unexpected req Method!' })
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
     }
   } catch (err) {
     console.log(err)
-    res.status(500).send('Unexpected Server Error')
+    return res.status(500).send('Unexpected Server Error')
   }
 }

@@ -11,10 +11,10 @@ info:
 host: 'www.host미정'
 basePath: '/v0'
 tags:
+  - name: 'admin'
+    description: '관리자용 api'
   - name: 'user'
     description: '유저 도메인'
-  - name: 'users'
-    description: '유저 DB 관련 (주로 관리자용)'
   - name: 'category'
     description: '카테고리 도메인'
   - name: 'memo'
@@ -132,6 +132,13 @@ paths:
       summary: '유저 정보 로드'
       description: 'userId 값을 바탕으로 유저정보를 로드합니다.'
       operationId: ''
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -160,6 +167,12 @@ paths:
       description: 'userId 값을 가진 유저 정보 수정 (이름, 닉네임, 전화번호만 수정 가능)'
       operationId: ''
       parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
         - in: body
           name: 'user'
           description: 변경할 정보들 (키 값이 없어도 가능)
@@ -175,7 +188,7 @@ paths:
               mobile?:
                 type: string
       security:
-      - ormakkc: []
+        - ormakkc: []
       responses:
         '200':
           description: '성공'
@@ -209,8 +222,14 @@ paths:
       description: 'userId 값을 바탕으로 유저정보를 로드합니다. 메모별 가장 최근 히스토리를 기준으로 로드됩니다.'
       operationId: ''
       parameters:
-        - name: 'page'
+        - name: 'userId'
           in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'page'
+          in: 'query'
           description: '페이지는 1이 가장 최근'
           required: true
           type: 'integer'
@@ -247,6 +266,46 @@ paths:
                 description: '에러 내용'
       security:
         - ormakkc: []
+  /api/user/{userId}/pin:
+    get:
+      tags:
+        - 'user'
+      summary: '특정 유저의 모든 메모들의 pinned 상태 로드'
+      description: '특정 유저의 모든 메모들의 pinned 상태를 가져옵니다.'
+      operationId: ''
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              pinned:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    'memoId':
+                      type: boolean
+                      description: 'pinned 상태'
+        '401':
+          description: '권한이 없음'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+      security:
+        - ormakkc: []
   /api/user/{userId}/category:
     post:
       tags:
@@ -255,8 +314,14 @@ paths:
       description: 'userId 값을 바탕으로 특정 카테고리를 추가합니다'
       operationId: ''
       parameters:
-        - name: 'name'
+        - name: 'userId'
           in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'name'
+          in: 'query'
           required: true
           description: '카테고리 이름'
           type: 'string'
@@ -271,6 +336,14 @@ paths:
                 $ref: '#/definitions/Category'
         '401':
           description: '권한이 없음'
+        '409':
+          description: 'DB가 이미 존재함'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
         '500':
           description: '서버 에러'
           schema:
@@ -289,8 +362,14 @@ paths:
       description: 'userId 값을 바탕으로 카테고리들을 로드합니다. 가나다 기준으로 정렬되어 로드됩니다.'
       operationId: ''
       parameters:
-        - name: 'count'
+        - name: 'userId'
           in: 'path'
+          description: 'DB 유저 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'count'
+          in: 'query'
           required: true
           description: '만약 입력되지 않았다면, 모두 로드합니다.'
           type: 'integer'
@@ -308,6 +387,14 @@ paths:
                   $ref: '#/definitions/Category'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '해당 유저의 카테고리가 없음'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
         '500':
           description: '서버 에러'
           schema:
@@ -318,10 +405,10 @@ paths:
                 description: '에러 내용'
       security:
         - ormakkc: []
-  /api/users:
+  /api/admin/users:
     get:
       tags:
-        - 'users'
+        - 'admin'
       summary: '모든 유저정보 로드'
       description: 'DB에 존재하는 users 데이터들을 불러옵니다. (관리자용)'
       operationId: ''
@@ -348,7 +435,7 @@ paths:
         - ormakkc: []
     post:
       tags:
-        - 'users'
+        - 'admin'
       summary: '유저 추가'
       description: '직접 유저 데이터를 mongoDB에 추가합니다.'
       operationId: ''
@@ -385,6 +472,52 @@ paths:
           description: 'Invalid input'
       security:
         - ormakkc: []
+  /api/admin/login:
+    post:
+      tags:
+        - 'admin'
+      summary: 'admin 용 로그인'
+      description: 'email과 secret password 를 통해 로그인합니다.'
+      operationId: ''
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+      responses:
+        '200':
+          description: '성공'
+          schema:
+            type: 'object'
+            properties:
+              users:
+                type: 'array'
+                items:
+                  type: object
+                  $ref: '#/definitions/User'
+        '401':
+          description: '비밀번호 틀렸을 때'
+        '409':
+          description: '존재하지 않는 유저 or DB 에러'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+        '501':
+          description: 'env 설정 오류'
+      security:
+        - ormakkc: []
   /api/category/{categoryId}:
     put:
       tags:
@@ -393,6 +526,12 @@ paths:
       description: '해당 카테고리의 이름을 수정합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
       operationId: ''
       parameters:
+        - name: 'categoryId'
+          in: 'path'
+          description: 'DB 카테고리 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
         - in: body
           name: name
           description: '바꿀 이름'
@@ -404,7 +543,13 @@ paths:
           required: true
       responses:
         '200':
-          description: '성공'
+          description: '바꿀 이름'
+          schema:
+            type: object
+            properties:
+              changedCategory:
+                type: object
+                $ref: '#/definitions/Category'
         '401':
           description: '권한이 없음'
         '500':
@@ -421,6 +566,13 @@ paths:
       summary: '카테고리 삭제'
       description: '해당 카테고리를 삭제합니다. 만약 토큰에 기재된 유저값이 카테고리의 유저 id와 일치하지 않다면 권한 에러 반환 (* 로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'categoryId'
+          in: 'path'
+          description: 'DB 카테고리 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -442,8 +594,14 @@ paths:
       description: '해당 categoryID 를 바탕으로 메모들을 로드합니다. (해당 매모들의 최근 히스토리로) (* 로그인 필요)'
       operationId: ''
       parameters:
-        - name: 'page'
+        - name: 'categoryId'
           in: 'path'
+          description: 'DB 카테고리 id'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+        - name: 'page'
+          in: 'query'
           description: '페이지는 1이 가장 최근'
           required: true
           type: 'integer'
@@ -492,10 +650,10 @@ paths:
           schema:
             type: object
             properties:
-              userId:
+              user:
                 type: string
                 format: 'ObjectId'
-              categoryId:
+              category:
                 type: string
                 format: 'ObjectId'
               text:
@@ -529,7 +687,7 @@ paths:
       parameters:
         - name: 'memoId'
           in: 'path'
-          description: 'ID of memo to return'
+          description: 'DB 메모 ID'
           required: true
           type: 'string'
           format: 'ObjectId'
@@ -550,17 +708,16 @@ paths:
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '에러 내용'
               histories:
                 type: array
                 items:
                   type: object
-                  $ref: '#/definitions/User'
+                  $ref: '#/definitions/History'
                 description: '히스토리 n개!'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
         '500':
           description: '서버 에러'
           schema:
@@ -576,13 +733,22 @@ paths:
       description: '메모를 수정합니다. 실질적으로 history 도큐먼트가 추가됩니다. (로그인 필요)'
       operationId: ''
       parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
         - in: body
           name: memo
           description: '추가할 메모 데이터'
           schema:
             type: object
             properties:
-              memoId:
+              user:
+                type: string
+                format: 'ObjectId'
+              category:
                 type: string
                 format: 'ObjectId'
               text:
@@ -603,6 +769,8 @@ paths:
                 $ref: '#/definitions/History'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
         '500':
           description: '서버 에러'
           schema:
@@ -617,11 +785,77 @@ paths:
       summary: '메모 삭제'
       description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+  /api/memo/{memoId}/pin:
+    post:
+      tags:
+        - 'memo'
+      summary: '핀 설정'
+      description: '해당 메모를 핀 설정합니다(로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
+        '500':
+          description: '서버 에러'
+          schema:
+            type: 'object'
+            properties:
+              alertText:
+                type: string
+                description: '에러 내용'
+    delete:
+      tags:
+        - 'memo'
+      summary: '핀 해제'
+      description: '해당 메모를 핀 해제합니다. (* 로그인 필요)'
+      operationId: ''
+      parameters:
+        - name: 'memoId'
+          in: 'path'
+          description: 'DB 메모 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
+      responses:
+        '200':
+          description: '성공'
+        '401':
+          description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 메모(입력 parameters 문제일 확률이 높음)'
         '500':
           description: '서버 에러'
           schema:
@@ -637,20 +871,26 @@ paths:
       summary: '히스토리 로드'
       description: '해당 히스토리의 내용을 가져옵니다. (로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'historyId'
+          in: 'path'
+          description: 'DB 히스토리 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
           schema:
             type: 'object'
             properties:
-              alertText:
-                type: string
-                description: '에러 내용'
-              histories:
+              history:
                 type: object
                 $ref: '#/definitions/User'
         '401':
           description: '권한이 없음'
+        '409':
+          description: '유효하지 않은 히스토리'
         '500':
           description: '서버 에러'
           schema:
@@ -665,6 +905,13 @@ paths:
       summary: '히스토리 삭제'
       description: '해당 메모 전체를 삭제합니다. (* 로그인 필요)'
       operationId: ''
+      parameters:
+        - name: 'historyId'
+          in: 'path'
+          description: 'DB 히스토리 ID'
+          required: true
+          type: 'string'
+          format: 'ObjectId'
       responses:
         '200':
           description: '성공'
@@ -702,6 +949,9 @@ definitions:
       createdAt:
         type: 'string'
         format: 'date-time'
+      updatedAt:
+        type: 'string'
+        format: 'date-time'
   Category:
     type: 'object'
     properties:
@@ -715,6 +965,9 @@ definitions:
       createdAt:
         type: 'string'
         format: 'date-time'
+      updatedAt:
+        type: 'string'
+        format: 'date-time'
   Memo:
     type: 'object'
     properties:
@@ -723,7 +976,12 @@ definitions:
         format: 'ObjectId'
       category:
         $ref: '#/definitions/Category'
+      pinned:
+        type: boolean
       createdAt:
+        type: 'string'
+        format: 'date-time'
+      updatedAt:
         type: 'string'
         format: 'date-time'
   History:
@@ -746,6 +1004,9 @@ definitions:
       gps:
         $ref: '#/definitions/gps'
       createdAt:
+        type: 'string'
+        format: 'date-time'
+      updatedAt:
         type: 'string'
         format: 'date-time'
   weather:
