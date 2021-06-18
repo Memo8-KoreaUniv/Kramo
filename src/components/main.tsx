@@ -31,7 +31,7 @@ import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
 import { Spinner } from './Spinner'
-import { defaultGPS, getLocation, getPlace } from 'src/utils/gps'
+import { DEFAULT_GPS, getLocation, getPlace } from 'src/utils/gps'
 import { GPS } from 'src/types'
 
 export function Main({ categoryId }: { categoryId?: string | undefined }) {
@@ -180,7 +180,7 @@ function AddCardButton({
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
   const [content, setContent] = useState<string>('')
   const [categoryId, setCategoryId] = useState<string>('')
-  const [GPS, setGPS] = useState<GPS>(defaultGPS)
+  const [GPS, setGPS] = useState<GPS>(DEFAULT_GPS)
   const CategoryPairs: { [key: string]: string } = {}
   const [categories] = useRecoilState(categoriesState)
   const [me] = useRecoilState(meState)
