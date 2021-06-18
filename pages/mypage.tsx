@@ -10,6 +10,7 @@ import AskAgainButton from 'src/components/AskAgain'
 import kaxios from 'src/interceptors'
 import { meState } from 'src/state/me'
 import { FlexDiv } from 'style/div'
+import { Spinner } from 'src/components/Spinner'
 
 const myLabelStyle: CSSProperties = {
   color: 'black',
@@ -31,6 +32,7 @@ DescriptionsItem.defaultProps = {
 const Mypage = () => {
   const [me, setMe] = useRecoilState(meState)
   const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false)
   const [onUpdateMode, setOnUpdateMode] = useState<boolean>(false)
   const [updateValues, setUpdateValues] = useState<{
     name?: string
@@ -45,7 +47,7 @@ const Mypage = () => {
       return
     }
     setUpdateValues(_.pick(me, 'name', 'nickname', 'mobile'))
-  }, [me, router, onUpdateMode])
+  }, [me, router, onUpdateMode, loading])
 
   const onClickUpdateButton = () => {
     setOnUpdateMode(!onUpdateMode)
@@ -60,6 +62,7 @@ const Mypage = () => {
       message.warning('변경사항이 없습니다!')
       return
     }
+    setLoading(true)
     try {
       const updatedUser = await kaxios({
         url: `/user/${me?._id}`,
@@ -72,6 +75,11 @@ const Mypage = () => {
     } catch (e) {
       message.error('유저정보 업데이트가 실패했습니다.')
     }
+    setLoading(false)
+  }
+
+  if (loading) {
+    return <Spinner></Spinner>
   }
 
   return (
