@@ -27,6 +27,7 @@ import Link from 'next/link'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { subtitles } from 'src/enum'
+import { categorySubtitleState } from 'src/state/category'
 import { subTitleState } from 'src/state/etc'
 import { sm, md, useWindowSize } from 'src/utils/size'
 import useMemos from 'src/utils/useMemos'
@@ -36,7 +37,6 @@ import { meState } from '../state/me'
 import { CategoryInfo } from '../types/category'
 import { MemoInfo } from '../types/memo'
 import { Spinner } from './Spinner'
-import { categorySubtitleState } from 'src/state/category'
 
 export function Main({ categoryId }: { categoryId?: string | undefined }) {
   const {
