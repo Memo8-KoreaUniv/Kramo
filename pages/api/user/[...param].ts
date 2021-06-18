@@ -46,23 +46,18 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
             count as string,
           )
 
-          res.status(200).json({ memos: listMemoResult })
-          return
+          return res.status(200).json({ memos: listMemoResult })
         }
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
-        break
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
       case 'pin':
         if (req.method == 'GET') {
           const allMemos = await MemoModel.find({ user: userId as any })
           const pinned: { [key: string]: any } = {}
           allMemos.forEach((memo) => (pinned[memo._id] = memo.pinned))
           console.log({ pinned })
-          res.status(200).json({ pin: pinned })
-          return
+          return res.status(200).json({ pin: pinned })
         }
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
-        return
-        break
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
       case 'category':
         if (req.method == 'POST') {
           const { name } = req.query
@@ -71,19 +66,16 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
               user: userId,
               name,
             })
-            res.status(200).json({ category: addCategoryResult })
-            return
+            return res.status(200).json({ category: addCategoryResult })
           } catch (e) {
             console.log(e)
-            res.status(409).json({
+            return res.status(409).json({
               alertText: '카테고리가 이미 존재하거나 DB에 오류가 생겼습니다!',
             })
-            return
           }
         }
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
-        return
-        break
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
+
       case 'categories':
         if (req.method == 'GET') {
           const count = req.query.count as string
@@ -93,20 +85,18 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
             })
               .sort({ name: 1 })
               .limit(parseInt(count))
-            res.status(200).json({ categories: findCategoriesResult })
-            return
+            return res.status(200).json({ categories: findCategoriesResult })
           } catch (e) {
             console.log(e)
-            res.status(409).json({
+            return res.status(409).json({
               alertText: '카테고리가 존재하지 않습니다!',
             })
-            return
           }
         }
-        res.status(501).json({ alertText: 'Unexpected request Method!' })
+        return res.status(501).json({ alertText: 'Unexpected request Method!' })
         break
       default:
-        res.status(501).json({ alertText: 'Param is not allowed!' })
+        return res.status(501).json({ alertText: 'Param is not allowed!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -115,7 +105,6 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
         .json({ alertText: err?.response?.statusText })
       return
     }
-    console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }
