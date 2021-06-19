@@ -1,5 +1,6 @@
-import { GPS, Weather } from './index'
-import { UserInfo } from './user'
+import { GPS } from 'src/types/index'
+import { WeatherInfo } from 'src/utils/weather'
+import { UserInfo } from 'src/types/user'
 
 export interface MemoInfo {
   _id: string
@@ -8,7 +9,7 @@ export interface MemoInfo {
   text: string
   user: UserInfo
   gps: GPS
-  weather: Weather
+  weather: WeatherInfo
   createdAt?: Date
   updatedAt?: Date
 }

@@ -2,12 +2,15 @@ import kaxios from '../interceptors'
 import { GPS } from '../types'
 
 // 기본값 (광화문)
-export const defaultGPS: GPS = {
+export const DEFAULT_GPS: GPS = {
   latitude: 37.575869,
   longitude: 126.976859,
 }
 
-export const getLocation = (geo: Geolocation, success: (pos: GeolocationPosition) => void) => {
+export const getLocation = (
+  geo: Geolocation,
+  success: (pos: GeolocationPosition) => void,
+) => {
   if (!geo) {
     return
   }
