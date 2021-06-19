@@ -104,6 +104,8 @@ const MenuLayout = () => {
       <Modal
         title="카테고리를 추가하시겠습니까?"
         visible={isModalVisible}
+        okText="확인"
+        cancelText="취소"
         onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose={true}>
