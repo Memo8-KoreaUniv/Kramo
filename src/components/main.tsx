@@ -29,13 +29,22 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { subtitles } from 'src/enum'
 import { categorySubTitleState } from 'src/state/category'
 import { subTitleState } from 'src/state/etc'
+import { categoriesState } from 'src/state/categories'
+import { meState } from 'src/state/me'
+import { GPS } from 'src/types'
+import { CategoryInfo } from 'src/types/category'
+import { MemoInfo } from 'src/types/memo'
+import { formatDate } from 'src/utils/date'
+import { DEFAULT_GPS, getLocation, getPlace } from 'src/utils/gps'
 import { sm, md, useWindowSize } from 'src/utils/size'
 import useMemos from 'src/utils/useMemos'
+import {
+  WeatherInfo,
+  getIconURL,
+  getNowWeatherByGeo,
+  EMPTY_WEATHER,
+} from 'src/utils/weather'
 
-import { categoriesState } from '../state/categories'
-import { meState } from '../state/me'
-import { CategoryInfo } from '../types/category'
-import { MemoInfo } from '../types/memo'
 import { Spinner } from './Spinner'
 
 export function Main({ categoryId }: { categoryId?: string | undefined }) {
@@ -94,7 +103,13 @@ function MemoView({
   sortMemos,
 }: {
   memos: MemoInfo[]
-  addMemo: (memoId: string, category: string, text: string) => void
+  addMemo: (
+    memoId: string,
+    category: string,
+    text: string,
+    gps: GPS,
+    weather: WeatherInfo,
+  ) => void
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
 }) {
@@ -152,20 +167,44 @@ function MemoTimeline() {
   else return <></>
 }
 
-function MemoDetail({ gps, weather, updatedAt }: any) {
+function MemoDetail({
+  gps,
+  weather,
+  updatedAt,
+  darkMode,
+}: {
+  gps: GPS
+  weather: WeatherInfo
+  updatedAt?: Date
+  darkMode: boolean
+}) {
+  const { latitude, longitude } = gps
+  const [place, setPlace] = useState<string>('알 수 없음')
+
+  useEffect(() => {
+    getPlace(latitude, longitude).then((loadedPlace) => setPlace(loadedPlace))
+  }, [])
+
   return (
     <span>
       <Row>
         <Col span={4} style={{ textAlign: 'center' }}>
-          {weather.icon}
+          {/* TODO : fallback 이미지 하나 넣어두고 쓰기 */}
+          <img width="30" src={getIconURL(weather.icon)} />
         </Col>
-        <Col span={20}>{updatedAt}</Col>
+        <Col span={20} style={darkMode ? { color: 'white' } : {}}>
+          {updatedAt
+            ? formatDate(new Date(updatedAt.toString()), new Date())
+            : '알 수 없음'}
+        </Col>
       </Row>
       <Row>
         <Col span={4} style={{ textAlign: 'center' }}>
-          <EnvironmentOutlined />
+          <EnvironmentOutlined style={darkMode ? { color: '#08c' } : {}} />
         </Col>
-        <Col span={20}>{gps.id}</Col>
+        <Col span={20} style={darkMode ? { color: 'white' } : {}}>
+          {`${place}`}
+        </Col>
       </Row>
     </span>
   )
@@ -174,36 +213,52 @@ function MemoDetail({ gps, weather, updatedAt }: any) {
 function AddCardButton({
   addMemo,
 }: {
-  addMemo: (memoId: string, category: string, text: string) => void
+  addMemo: (
+    memoId: string,
+    category: string,
+    text: string,
+    gps: GPS,
+    weather: WeatherInfo,
+  ) => void
 }) {
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [content, setContent] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
+  const [content, setContent] = useState<string>('')
+  const [categoryId, setCategoryId] = useState<string>('')
+  const [GPS, setGPS] = useState<GPS>(DEFAULT_GPS)
+  const [currentWeather, setCurrentWeather] =
+    useState<WeatherInfo>(EMPTY_WEATHER)
   const CategoryPairs: { [key: string]: string } = {}
   const [categories] = useRecoilState(categoriesState)
   const [me] = useRecoilState(meState)
-
+  const { TextArea } = Input
   const { Option } = Select
 
   const showModal = () => {
+    getLocation(navigator.geolocation, (pos: GeolocationPosition) => {
+      setGPS({
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      })
+    })
+    getNowWeatherByGeo(
+      GPS.latitude,
+      GPS.longitude,
+      process.env.NEXT_PUBLIC_WEATHER_API_KEY!,
+    ).then((res) => {
+      setCurrentWeather(res)
+    })
     setIsModalVisible(true)
   }
 
   const handleOk = () => {
-    addMemo(me!._id!, categoryId, content)
+    addMemo(me!._id!, categoryId, content, GPS, currentWeather)
     setIsModalVisible(false)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
-
-  const { TextArea } = Input
-
-  if (!me) {
-    return <></>
-  }
-  if (!me._id) {
+  if (!me || !me._id) {
     return <></>
   }
 
@@ -224,6 +279,9 @@ function AddCardButton({
       <Modal
         title="메모 추가"
         visible={isModalVisible}
+        centered={true}
+        okText="확인"
+        cancelText="취소"
         onOk={handleOk}
         onCancel={handleCancel}>
         <Select
@@ -247,6 +305,18 @@ function AddCardButton({
           allowClear={true}
           onChange={(e) => setContent(e.target.value)}
         />
+        <Row>
+          <Col span={4} style={{ textAlign: 'center' }}>
+            <img width="30" src={getIconURL(currentWeather.icon)} />
+          </Col>
+          <Col span={20}>{currentWeather.description}</Col>
+        </Row>
+        <Row>
+          <Col span={4} style={{ textAlign: 'center' }}>
+            <EnvironmentOutlined />
+          </Col>
+          <Col span={20}>{`${GPS.latitude},${GPS.longitude}`}</Col>
+        </Row>
       </Modal>
     </>
   )
@@ -282,7 +352,7 @@ function MemoCardItem({
       size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
-        <Link key={`Link_${memo._id}`} href={{ pathname: '/editor' }}>
+        <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
           <EditOutlined key="edit" />
         </Link>,
         <DeleteOutlined
@@ -318,6 +388,7 @@ function MemoCardItem({
               gps={memo.gps}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
+              darkMode={false}
             />
           </>
         }
@@ -342,6 +413,7 @@ function MemoCardItem({
             gps={memo.gps}
             weather={memo.weather}
             updatedAt={memo.updatedAt}
+            darkMode={true}
           />
         </Timeline>
         <Divider />
