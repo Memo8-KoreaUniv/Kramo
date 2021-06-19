@@ -1,18 +1,18 @@
 export const formatDate = (inputDate: Date, now: Date): string => {
-  const today =
+  const today: boolean =
     inputDate.getFullYear() === now.getFullYear() &&
     inputDate.getMonth() === now.getMonth() &&
     inputDate.getDate() === now.getDate()
-  const year =
+  const year: string =
     inputDate.getFullYear() === now.getFullYear()
       ? ''
       : `${inputDate.getFullYear()}년 `
 
-  const date = today
+  const date: string = today
     ? ''
     : `${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `
 
-  const time = today
+  const time: string = today
     ? compareTime(inputDate, now)
     : `${inputDate.getHours()}시 ${inputDate.getMinutes()}분`
   return `${year}${date}${time}`
