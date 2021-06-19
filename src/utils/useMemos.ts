@@ -73,6 +73,7 @@ export default function useMemos() {
     } catch (e) {
       console.error(e)
     }
+    loadMemos(userId)
     setLoading(false)
   }
 
