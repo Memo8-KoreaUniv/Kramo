@@ -1,16 +1,15 @@
-import { GPS, Weather } from './index';
-import { UserInfo } from './user';
+import { GPS } from 'src/types/index'
+import { UserInfo } from 'src/types/user'
+import { WeatherInfo } from 'src/utils/weather'
 
 export interface MemoInfo {
-    _id: string
-    category?: string
-    pinned: boolean
-    memo: any
-    text: string
-    user: UserInfo
-    gps: GPS
-    weather: Weather
-    createdAt?: Date
-    updatedAt?: Date
-  }
-  
+  _id: string
+  category?: string
+  memo: any
+  text: string
+  user: UserInfo
+  gps: GPS
+  weather: WeatherInfo
+  createdAt?: Date
+  updatedAt?: Date
+}

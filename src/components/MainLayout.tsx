@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 
 import { UserOutlined } from '@ant-design/icons'
-import { Layout, Menu, Row, Col, Dropdown, Button, Divider, Space } from 'antd'
+import { Layout, Menu, Row, Col, Dropdown, Button, Divider } from 'antd'
 import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRouter } from 'next/dist/client/router'
+import Link from 'next/link'
 import cookie from 'react-cookies'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import Link from 'next/link'
 
 import { categoriesState, loadCategories } from 'src/state/categories'
 
@@ -54,7 +54,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
         <Link href="/login">
           <a>로그인</a>
         </Link>
-     </Button>
+      </Button>
     )
   }
 
@@ -80,7 +80,10 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
         }
         placement="bottomRight"
         arrow>
-        <Button>{<UserOutlined />}{me?.nickname}</Button>
+        <Button>
+          {<UserOutlined />}
+          {me?.nickname}
+        </Button>
       </Dropdown>
     )
   }
@@ -102,9 +105,7 @@ const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
               <Col span={1}></Col>
               <Col>{MenuDrawer()}</Col>
               <Col span={10}></Col>
-              <Col>
-                { me?._id ? loggedInUserMenu() : loggedOutUserMenu() }
-              </Col>
+              <Col>{me?._id ? loggedInUserMenu() : loggedOutUserMenu()}</Col>
               <Col span={1}></Col>
             </Row>
           </Header>

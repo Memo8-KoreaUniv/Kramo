@@ -204,15 +204,15 @@ export const MEMOS = [MEM21, MEM22, MEM31, MEM32, MEM41, MEM42, MEM51, MEM52]
  */
 const DUMMY_GPS2: GPS = {
   id: '60c46939478ca023861a4a33',
-  latitude: 17.1,
-  longitude: 120,
+  latitude: 37.5908032,
+  longitude: 127.0255886,
 }
 
 const WEATHER2: Weather = {
   id: '60c46a8aac2a6c1c66ff8d06',
   main: '날씨맑음',
   description: '날씨맑음',
-  icon: 'b01',
+  icon: '01d',
 }
 
 export const HISTORY21_CREATEDAT = new Date('Sun May 23 2021 13:19:43 GMT+0900')
@@ -224,22 +224,7 @@ export const HISTORY21 = {
   user: USER2_ID,
   category: CATEGORY2_ID,
   memo: MEM21_ID,
-  text: 'history1',
-  weather: WEATHER2,
-  gps: DUMMY_GPS2,
-  createdAt: HISTORY21_CREATEDAT,
-}
-
-export const FALLBACK_HISTORY_ID = new Types.ObjectId(
-  '60c27eb8b2f0fb03024f13c9',
-)
-
-export const FALLBACK_HISTORY = {
-  _id: FALLBACK_HISTORY_ID,
-  user: USER2_ID,
-  category: CATEGORY2_ID,
-  memo: MEM21_ID,
-  text: '에러가 발생했습니다! 이전 페이지로 이동해주세요.',
+  text: '첫 번째 히스토리입니다.',
   weather: WEATHER2,
   gps: DUMMY_GPS2,
   createdAt: HISTORY21_CREATEDAT,
@@ -254,7 +239,7 @@ export const HISTORY22 = {
   user: USER2_ID,
   category: CATEGORY2_ID,
   memo: MEM21_ID,
-  text: 'history2',
+  text: '두 번째 히스토리입니다.',
   weather: WEATHER2,
   gps: DUMMY_GPS2,
   createdAt: HISTORY22_CREATEDAT,
@@ -269,7 +254,7 @@ export const HISTORY23 = {
   user: USER2_ID,
   category: CATEGORY2_ID,
   memo: MEM21_ID,
-  text: 'history3',
+  text: '세 번째 히스토리 입니다.',
   weather: WEATHER2,
   gps: DUMMY_GPS2,
   createdAt: HISTORY23_CREATEDAT,
@@ -284,7 +269,7 @@ export const HISTORY24 = {
   user: USER2_ID,
   category: CATEGORY2_ID,
   memo: MEM21_ID,
-  text: 'history4',
+  text: '네 번째 히스토리 입니다.',
   weather: WEATHER2,
   gps: DUMMY_GPS2,
   createdAt: HISTORY24_CREATEDAT,
@@ -301,15 +286,15 @@ export const HISTORIES2 = [HISTORY21, HISTORY22, HISTORY23, HISTORY24]
  */
 const DUMMY_GPS3: GPS = {
   id: '60c46b3bd6491dce10d1258c',
-  latitude: 30.1,
-  longitude: 130.0,
+  latitude: 37.539765,
+  longitude: 127.053323,
 }
 
 const WEATHER3: Weather = {
   id: '60c46b416e80e31523702778',
   main: '날씨맑음',
   description: '날씨맑음',
-  icon: 'b01',
+  icon: '01d',
 }
 
 export const HISTORY31_CREATEDAT = new Date('Sun May 23 2021 13:19:43 GMT+0900')
@@ -321,7 +306,7 @@ export const HISTORY31 = {
   user: USER3_ID,
   category: CATEGORY3_ID,
   memo: MEM31_ID,
-  text: 'history1',
+  text: '첫 번째 히스토리입니다.',
   weather: WEATHER3,
   gps: DUMMY_GPS3,
   createdAt: HISTORY31_CREATEDAT,
@@ -336,7 +321,7 @@ export const HISTORY32 = {
   user: USER3_ID,
   category: CATEGORY3_ID,
   memo: MEM31_ID,
-  text: 'history3',
+  text: '두 번째 히스토리 입니다.',
   weather: WEATHER3,
   gps: DUMMY_GPS3,
   createdAt: HISTORY32_CREATEDAT,
@@ -351,7 +336,7 @@ export const HISTORY33 = {
   user: USER3_ID,
   category: CATEGORY3_ID,
   memo: MEM31_ID,
-  text: 'history3',
+  text: '세 번째 히스토리 입니다.',
   weather: WEATHER3,
   gps: DUMMY_GPS3,
   createdAt: HISTORY33_CREATEDAT,
@@ -366,7 +351,7 @@ export const HISTORY34 = {
   user: USER3_ID,
   category: CATEGORY3_ID,
   memo: MEM31_ID,
-  text: 'history4',
+  text: '네 번째 히스토리 입니다.',
   weather: WEATHER3,
   gps: DUMMY_GPS3,
   createdAt: HISTORY34_CREATEDAT,
@@ -383,14 +368,15 @@ export const HISTORIES3 = [HISTORY31, HISTORY32, HISTORY33, HISTORY34]
  */
 const DUMMY_GPS4: GPS = {
   id: '60c46b6de66519a3fd6d66b5',
-  latitude: 37.5,
-  longitude: 127,
+  latitude: 37.5215764,
+  longitude: 127.0229765,
 }
+
 const WEATHER4: Weather = {
   id: '60c46b72788dacbc36764bdd',
   main: '날씨맑음',
   description: '날씨맑음',
-  icon: 'b01',
+  icon: '01d',
 }
 
 export const HISTORY41_CREATEDAT = new Date('Sun May 23 2021 13:19:43 GMT+0900')
@@ -402,7 +388,7 @@ export const HISTORY41 = {
   user: USER4_ID,
   category: CATEGORY4_ID,
   memo: MEM41_ID,
-  text: 'history1',
+  text: '첫 번째 히스토리입니다.',
   weather: WEATHER4,
   gps: DUMMY_GPS4,
   createdAt: HISTORY41_CREATEDAT,
@@ -417,7 +403,7 @@ export const HISTORY42 = {
   user: USER4_ID,
   category: CATEGORY4_ID,
   memo: MEM41_ID,
-  text: 'history2',
+  text: '두 번째 히스토리입니다.',
   weather: WEATHER4,
   gps: DUMMY_GPS4,
   createdAt: HISTORY42_CREATEDAT,
@@ -432,7 +418,7 @@ export const HISTORY43 = {
   user: USER4_ID,
   category: CATEGORY4_ID,
   memo: MEM41_ID,
-  text: 'history4',
+  text: '세 번째 히스토리 입니다.',
   weather: WEATHER4,
   gps: DUMMY_GPS4,
   createdAt: HISTORY43_CREATEDAT,
@@ -447,7 +433,7 @@ export const HISTORY44 = {
   user: USER4_ID,
   category: CATEGORY4_ID,
   memo: MEM41_ID,
-  text: 'history4',
+  text: '네 번째 히스토리 입니다.',
   weather: WEATHER4,
   gps: DUMMY_GPS4,
   createdAt: HISTORY44_CREATEDAT,
@@ -464,15 +450,15 @@ export const HISTORIES4 = [HISTORY41, HISTORY42, HISTORY43, HISTORY44]
  */
 const DUMMY_GPS5: GPS = {
   id: '60c46b8b98629ab0cff89c16',
-  latitude: 37.21,
-  longitude: 127.06,
+  latitude: 37.496421,
+  longitude: 126.957439,
 }
 
 const WEATHER5: Weather = {
   id: '60c46b90b49f8b93e25a099c',
   main: '날씨맑음',
   description: '날씨맑음',
-  icon: 'b01',
+  icon: '01d',
 }
 
 export const HISTORY51_CREATEDAT = new Date('Sun May 23 2021 13:19:43 GMT+0900')
@@ -484,7 +470,7 @@ export const HISTORY51 = {
   user: USER5_ID,
   category: CATEGORY5_ID,
   memo: MEM51_ID,
-  text: 'history1',
+  text: '첫 번째 히스토리입니다.',
   weather: WEATHER5,
   gps: DUMMY_GPS5,
   createdAt: HISTORY51_CREATEDAT,
@@ -499,7 +485,7 @@ export const HISTORY52 = {
   user: USER5_ID,
   category: CATEGORY5_ID,
   memo: MEM51_ID,
-  text: 'history3',
+  text: '두 번째 히스토리 입니다.',
   weather: WEATHER5,
   gps: DUMMY_GPS5,
   createdAt: HISTORY52_CREATEDAT,
@@ -514,7 +500,7 @@ export const HISTORY53 = {
   user: USER5_ID,
   category: CATEGORY5_ID,
   memo: MEM51_ID,
-  text: 'history3',
+  text: '세 번째 히스토리 입니다.',
   weather: WEATHER5,
   gps: DUMMY_GPS5,
   createdAt: HISTORY53_CREATEDAT,
@@ -529,7 +515,7 @@ export const HISTORY54 = {
   user: USER5_ID,
   category: CATEGORY5_ID,
   memo: MEM51_ID,
-  text: 'history4',
+  text: '네 번째 히스토리 입니다.',
   weather: WEATHER5,
   gps: DUMMY_GPS5,
   createdAt: HISTORY54_CREATEDAT,

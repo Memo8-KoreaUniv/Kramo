@@ -16,28 +16,26 @@ export default async function history(
         try {
           const { historyId } = req.query
           const history = await HistoryModel.findById(historyId)
-          res.status(200).json({ history })
+          return res.status(200).json({ history })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '유효하지 않은 히스토리입니다.',
           })
         }
-        break
       case 'DELETE':
         try {
           const { historyId } = req.query
           const prevHistory = await HistoryModel.findByIdAndDelete(historyId)
-          res.status(200).json({ prevHistory })
+          return res.status(200).json({ prevHistory })
         } catch (e) {
           console.log(e)
-          res.status(409).json({
+          return res.status(409).json({
             alertText: '유효하지 않은 히스토리입니다.',
           })
         }
-        break
       default:
-        res.status(501).json({ alertText: 'Unexpected req Method!' })
+        return res.status(501).json({ alertText: 'Unexpected req Method!' })
     }
   } catch (err) {
     if (err?.response?.status) {
@@ -47,6 +45,6 @@ export default async function history(
       return
     }
     console.log(err)
-    res.status(500).json({ alertText: 'Unexpected Server Error' })
+    return res.status(500).json({ alertText: 'Unexpected Server Error' })
   }
 }
