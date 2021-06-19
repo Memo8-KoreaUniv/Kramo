@@ -11,7 +11,7 @@ export default async function place(req: NextApiRequest, res: NextApiResponse) {
       method: 'get',
       headers: {
         'X-NCP-APIGW-API-KEY-ID': process.env.NEXT_PUBLIC_MAP_API_KEY,
-        'X-NCP-APIGW-API-KEY': process.env.MAP_API_SECRET,
+        'X-NCP-APIGW-API-KEY': process.env.NEXT_PUBLIC_MAP_API_SECRET,
       },
       params: {
         request: 'coordsToaddr',

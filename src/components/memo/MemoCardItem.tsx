@@ -53,8 +53,6 @@ function MemoCardItem({
     return memoPreviewTitle.trim()
   }, [memo, memo?.text])
 
-  console.log({ memoPreviewDetail })
-
   const showDrawer = () => {
     setVisible(true)
   }
