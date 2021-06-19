@@ -3,18 +3,31 @@ import React, { useState } from 'react'
 import { EnvironmentOutlined, PlusOutlined } from '@ant-design/icons'
 import { Card, Col, Modal, Row, Input, Select } from 'antd'
 import { useRecoilState } from 'recoil'
+import styled from 'styled-components'
 
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
 import { GPS } from 'src/types'
 import { CategoryInfo } from 'src/types/category'
 import { DEFAULT_GPS, getLocation } from 'src/utils/gps'
+import { sm } from 'src/utils/size'
 import {
   WeatherInfo,
   getIconURL,
   getNowWeatherByGeo,
   EMPTY_WEATHER,
 } from 'src/utils/weather'
+
+const FlexibleAddCard = styled(Card)`
+  width: 260px;
+  text-align: center;
+  vertical-align: middle;
+  opacity: 0.5;
+
+  @media (min-width: ${sm}px) {
+    width: 300px;
+  }
+`
 
 function AddCardButton({
   addMemo,
@@ -70,18 +83,12 @@ function AddCardButton({
 
   return (
     <>
-      <Card
+      <FlexibleAddCard
         key={`AddCardButton_Card`}
-        style={{
-          width: 300,
-          textAlign: 'center',
-          verticalAlign: 'middle',
-          opacity: 0.5,
-        }}
         size={'default'}
         onClick={showModal}>
         <PlusOutlined style={{ fontSize: '70px' }} />
-      </Card>
+      </FlexibleAddCard>
       <Modal
         title="메모 추가"
         visible={isModalVisible}
