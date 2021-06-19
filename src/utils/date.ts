@@ -19,10 +19,10 @@ export const formatDate = (inputDate: Date, now: Date): string => {
 }
 
 const compareTime = (a: Date, b: Date): string => {
-  const hoursCollapsed: number = b.getHours() - a.getHours()
-  const minutesCollapsed: number =
-    hoursCollapsed * 60 + b.getMinutes() - a.getMinutes()
-  return minutesCollapsed >= 60
-    ? `${hoursCollapsed}시간 전`
-    : `${minutesCollapsed}분 전`
+  const hoursElapsed: number = b.getHours() - a.getHours()
+  const minutesElapsed: number =
+    hoursElapsed * 60 + b.getMinutes() - a.getMinutes()
+  return minutesElapsed >= 60
+    ? `${hoursElapsed}시간 전`
+    : `${minutesElapsed}분 전`
 }
