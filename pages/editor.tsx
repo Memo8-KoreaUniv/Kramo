@@ -16,6 +16,7 @@ const Editor = ({ histories }: { histories: HistoryInfo[] }): JSX.Element => {
   const setHistories = useSetRecoilState(historiesState)
   const editorRef: LegacyRef<ToastUIEditor> = React.createRef()
 
+  console.log({ histories })
   useEffect(() => {
     setHistories(histories)
   }, [])
@@ -52,7 +53,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const loadMemo = async () => {
     console.log({ loadMemo_memoId: memoId })
     if (!memoId || typeof memoId === 'object') {
-      return
+      return [{ text: '에러가 발생했습니다! 이전 페이지로 돌아가주세요' }]
     }
     const historyInfo = await loadHistories(memoId)
     return historyInfo
@@ -62,7 +63,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
   return {
     props: {
-      memoId,
       histories,
     },
   }
