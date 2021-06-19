@@ -58,19 +58,3 @@ export const addCategories = async (userId: string, name: string) => {
     return false
   }
 }
-
-export const deleteCategories = async (categoryId: string) => {
-  try {
-    const res = await kaxios({
-      url: `/category/${categoryId}`,
-      method: 'delete',
-    })
-    return res.data
-  } catch (e) {
-    console.error(e)
-    if (e.response?.data?.alertText) {
-      return e.response?.data?.alertText
-    }
-    return false
-  }
-}

@@ -24,8 +24,11 @@ import {
   Select,
 } from 'antd'
 import Link from 'next/link'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
+import { subtitles } from 'src/enum'
+import { categorySubTitleState } from 'src/state/category'
+import { subTitleState } from 'src/state/etc'
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
 import { GPS } from 'src/types'
@@ -55,17 +58,22 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
     loading,
   } = useMemos()
   const [me] = useRecoilState(meState)
+  const setSubTitle = useSetRecoilState(subTitleState)
+  const categorySubTitle = useRecoilValue(categorySubTitleState)
 
   useEffect(() => {
     if (!me || !me._id) {
+      setSubTitle('')
       return
     }
     if (categoryId) {
       loadCategoryMemos(categoryId)
+      setSubTitle(categorySubTitle)
       return
     }
     loadMemos(me._id!)
-  }, [me, me?._id, categoryId])
+    setSubTitle(subtitles.main)
+  }, [me, me?._id, categoryId, categorySubTitle, categorySubTitleState])
 
   if (loading) {
     return <Spinner></Spinner>
