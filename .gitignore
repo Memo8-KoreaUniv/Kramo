@@ -10,5 +10,8 @@ dist
 # secure data
 .env*
 
+# OS X file data
+**/.DS_Store
+
 # 기타
 /TODO*

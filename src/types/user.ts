@@ -5,6 +5,5 @@ export interface UserInfo {
   nickname: string
   email: string
   mobile: string
-  updatedAt?: Date
   createdAt?: Date
 }
