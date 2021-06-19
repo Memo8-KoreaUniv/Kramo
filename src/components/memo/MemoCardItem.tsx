@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from 'react'
+import React, { memo, useState } from 'react'
 
 import {
   DeleteOutlined,
@@ -9,13 +9,12 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Avatar, Button, Card, Col, Divider, Drawer, Row, Timeline } from 'antd'
-import _ from 'lodash'
 import Link from 'next/link'
-import { parse } from 'node-html-parser'
 import styled from 'styled-components'
 
 import { MemoInfo } from 'src/types/memo'
 import { sm } from 'src/utils/size'
+import { useMemoPreview } from 'src/utils/useMemoPreview'
 
 import MemoDetail from './MemoDetail'
 
@@ -37,21 +36,10 @@ function MemoCardItem({
 }) {
   const { Meta } = Card
   const [visible, setVisible] = useState(false)
+  const { memoPreviewTitle, memoPreviewDetail } = useMemoPreview(memo.text)
 
-  const memoPreviewTitle = useMemo(() => {
-    const parsed = parse(memo.text.split('\n')[0])
-    return parsed.text
-  }, [memo, memo?.text])
-
-  const memoPreviewDetail = useMemo(() => {
-    const texts = _.filter(memo.text.split('\n'), (str) => {
-      return !!str
-    })
-    if (texts.length >= 2) {
-      return parse(memo.text).text
-    }
-    return memoPreviewTitle.trim()
-  }, [memo, memo?.text])
+  console.log({ memoPreviewTitle })
+  console.log({ memoPreviewDetail })
 
   const showDrawer = () => {
     setVisible(true)
@@ -67,7 +55,6 @@ function MemoCardItem({
 
   return (
     <FlexibleCard
-      // size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
         <FolderOpenOutlined key="open" onClick={showDrawer} />,
         <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
@@ -100,7 +87,6 @@ function MemoCardItem({
           <>
             {memoPreviewDetail}
             <br />
-            {memoPreviewDetail !== memoPreviewTitle ? '...' : ''}
             <Divider />
             <MemoDetail
               gps={memo.gps}

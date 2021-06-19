@@ -1,47 +1,37 @@
-import React, { useMemo } from 'react'
+import React, { useCallback } from 'react'
 
-import { Popover, Timeline } from 'antd'
-import { parse } from 'dotenv'
-import _ from 'lodash'
+import { Tooltip, Timeline, Typography, Button } from 'antd'
+import { useRecoilState } from 'recoil'
 
+import { historyIndexState } from 'src/state/history'
 import { HistoryInfo } from 'src/types/history'
 import { formatDate } from 'src/utils/date'
+import { useMemoPreview } from 'src/utils/useMemoPreview'
 
 const TimelinePopover = ({
   history,
   index,
-  historyIndex,
 }: {
   history: HistoryInfo
   index: number
-  historyIndex: number
 }) => {
-  const memoPreviewTitle = useMemo(() => {
-    const parsed = parse(history.text.split('\n')[0])
-    if (parsed.text) return parsed.text
-    return history.text.split('\n')[0]
-  }, [history, history?.text])
-
-  const memoPreviewDetail = useMemo(() => {
-    const texts = _.filter(history.text.split('\n'), (str) => {
-      return !!str
-    })
-    if (texts.length >= 2) {
-      return parse(history.text).text
-    }
-    return memoPreviewTitle ? memoPreviewTitle.trim() : '에러 발생'
-  }, [history, history?.text])
-
+  const [historyIndex, setHistoryIndex] = useRecoilState(historyIndexState)
+  const { memoPreviewTitle } = useMemoPreview(history.text)
   const color = index === historyIndex ? 'green' : 'blue'
+  const onClickTimeline = useCallback(() => {
+    setHistoryIndex(index)
+  }, [historyIndex])
+
   return (
-    <Popover
-      content={memoPreviewDetail}
-      title={memoPreviewTitle}
-      trigger="hover">
-      <Timeline.Item color={color}>
-        {formatDate(new Date(history.createdAt), new Date())}
+    <Tooltip title={memoPreviewTitle} color={'cyan'} key={'cyan'}>
+      <Timeline.Item color={color} style={{ cursor: 'pointer' }}>
+        <Button onClick={onClickTimeline}>
+          <Typography>
+            {formatDate(new Date(history.createdAt), new Date())}
+          </Typography>
+        </Button>
       </Timeline.Item>
-    </Popover>
+    </Tooltip>
   )
 }
 

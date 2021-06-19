@@ -5,8 +5,7 @@ import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 
 import TimelinePopover from 'src/components/memo/TimelinePopover'
-import { historyIndexState } from 'src/state/history'
-import { HistoryInfo } from 'src/types/history'
+import { historiesState } from 'src/state/history'
 import { FlexDiv } from 'style/div'
 
 const TimeLineContainer = styled.div`
@@ -14,12 +13,12 @@ const TimeLineContainer = styled.div`
   background-color: white;
 `
 
-const HistoryTimeline = ({ histories }: { histories: HistoryInfo[] }) => {
-  const historyIndex = useRecoilValue(historyIndexState)
+const HistoryTimeline = () => {
+  const histories = useRecoilValue(historiesState)
 
   return (
     <TimeLineContainer>
-      <FlexDiv>
+      <FlexDiv style={{ marginBottom: '5px' }}>
         <Typography.Title level={2}>Timeline</Typography.Title>
       </FlexDiv>
       <Timeline>
@@ -29,7 +28,6 @@ const HistoryTimeline = ({ histories }: { histories: HistoryInfo[] }) => {
               key={`Timeline_${history._id}`}
               history={history}
               index={index}
-              historyIndex={historyIndex}
             />
           )
         })}

@@ -57,7 +57,7 @@ export const addHistory = async (newHistory: AddHistoryProps) => {
       method: 'post',
       data: { ...newHistory },
     })
-    return res?.data.histories
+    return res?.data?.newMemo
   } catch (e) {
     console.error(e)
     if (e.response.data?.alertText) {

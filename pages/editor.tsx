@@ -1,11 +1,11 @@
-import React, { LegacyRef, useEffect } from 'react'
+import React, { LegacyRef, useEffect, useState } from 'react'
 
 import { Editor as ToastUIEditor } from '@toast-ui/react-editor'
 import { message } from 'antd'
 import { Button, Row, Col } from 'antd'
 import { NextPageContext } from 'next'
 import dynamic from 'next/dynamic'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 import HistoryTimeline from 'src/components/memo/HistoryTimeline'
 import {
@@ -16,19 +16,32 @@ import {
   AddHistoryProps,
 } from 'src/state/history'
 import { HistoryInfo } from 'src/types/history'
+import { FlexDiv } from 'style/div'
 
 const PostEditor = dynamic(() => import('src/components/ToastEditor'), {
   ssr: false,
 })
 
-const Editor = ({ histories }: { histories: HistoryInfo[] }): JSX.Element => {
+const Editor = ({
+  initialHistories,
+}: {
+  initialHistories: HistoryInfo[]
+}): JSX.Element => {
+  const [text, setText] = useState('')
   const [historyIndex, setHistoryIndex] = useRecoilState(historyIndexState)
-  const setHistories = useSetRecoilState(historiesState)
+  const [histories, setHistories] = useRecoilState(historiesState)
   const editorRef: LegacyRef<ToastUIEditor> = React.createRef()
 
   useEffect(() => {
-    setHistories(histories)
+    setHistories(initialHistories)
   }, [])
+
+  useEffect(() => {
+    const changedText =
+      histories.length !== 0 ? histories[historyIndex].text : '메모가 없습니다'
+    setText(changedText)
+    editorRef.current?.getInstance().setHtml(changedText)
+  }, [histories, historyIndex])
 
   const addMemo = async () => {
     const innerText = editorRef.current?.getInstance().getHtml()
@@ -40,34 +53,36 @@ const Editor = ({ histories }: { histories: HistoryInfo[] }): JSX.Element => {
     delete newHistory._id
     if (newHistory.createdAt) delete newHistory.createdAt
 
-    addHistory(newHistory)
+    const newMemo = await addHistory(newHistory)
+    if (newMemo) {
+      console.log({ newMemo })
+      setHistories([newMemo, ...histories])
+      setHistoryIndex(0)
+      return message.info('저장 성공!')
+    }
+    return message.error('저장이 실패하였습니다.')
   }
 
+  console.log({ histories })
   return (
     <>
-      <Row justify="end">
-        <Col span={4}>
-          <Button danger>취소</Button>
-        </Col>
-        <Col span={4}>
-          <Button type="primary" onClick={addMemo}>
-            저장
-          </Button>
+      <Row style={{ marginBottom: '0.5rem' }}>
+        <Col xs={24} md={17}></Col>
+        <Col xs={24} md={6}>
+          <FlexDiv direction="row" justify="flex-end">
+            <Button danger>취소</Button>
+            <Button type="primary" onClick={addMemo}>
+              저장
+            </Button>
+          </FlexDiv>
         </Col>
       </Row>
       <Row justify="space-around">
         <Col xs={24} md={17}>
-          <PostEditor
-            text={
-              histories.length !== 0
-                ? histories[historyIndex].text
-                : '메모가 없습니다'
-            }
-            editorRef={editorRef}
-          />
+          <PostEditor text={text} editorRef={editorRef} />
         </Col>
         <Col xs={24} md={6}>
-          <HistoryTimeline histories={histories} />
+          <HistoryTimeline />
         </Col>
       </Row>
     </>
@@ -88,11 +103,11 @@ export async function getServerSideProps(ctx: NextPageContext) {
     return historyInfo
   }
 
-  const histories = await loadMemo()
+  const initialHistories = await loadMemo()
 
   return {
     props: {
-      histories,
+      initialHistories,
     },
   }
 }
