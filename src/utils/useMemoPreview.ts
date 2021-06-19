@@ -30,7 +30,7 @@ export const useMemoPreview = (text: string) => {
     if (texts.length >= 2) {
       return parse(text).text
     }
-    return memoPreviewTitle ? memoPreviewTitle.trim() : '에러 발생'
+    return getMemoPreviewTitle() ? getMemoPreviewTitle().trim() : '에러 발생'
   }
 
   const memoPreviewDetail = cutTextByLength(
