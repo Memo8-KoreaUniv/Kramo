@@ -160,10 +160,12 @@ function MemoDetail({
   gps,
   weather,
   updatedAt,
+  darkMode,
 }: {
   gps: GPS
   weather: WeatherInfo
   updatedAt?: Date
+  darkMode: boolean
 }) {
   const { latitude, longitude } = gps
   const [place, setPlace] = useState<string>('알 수 없음')
@@ -178,7 +180,7 @@ function MemoDetail({
         <Col span={4} style={{ textAlign: 'center' }}>
           <img width="30" src={getIconURL(weather.icon)} />
         </Col>
-        <Col span={20}>
+        <Col span={20} style={darkMode ? {color: 'white'} : {}}>
           {updatedAt
             ? formatDate(new Date(updatedAt.toString()), new Date())
             : '알 수 없음'}
@@ -186,9 +188,11 @@ function MemoDetail({
       </Row>
       <Row>
         <Col span={4} style={{ textAlign: 'center' }}>
-          <EnvironmentOutlined />
+          {darkMode ? <EnvironmentOutlined style={{color: '#08c'}} /> : <EnvironmentOutlined />}
         </Col>
-        <Col span={20}>{`${place}`}</Col>
+        <Col span={20} style={darkMode ? {color: 'white'} : {}}>
+          {`${place}`}
+        </Col>
       </Row>
     </span>
   )
@@ -375,6 +379,7 @@ function MemoCardItem({
               gps={memo.gps}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
+              darkMode={false}
             />
           </>
         }
@@ -399,6 +404,7 @@ function MemoCardItem({
             gps={memo.gps}
             weather={memo.weather}
             updatedAt={memo.updatedAt}
+            darkMode={true}
           />
         </Timeline>
         <Divider />
