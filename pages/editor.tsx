@@ -4,6 +4,7 @@ import { Editor as ToastUIEditor } from '@toast-ui/react-editor'
 import { message } from 'antd'
 import { Button, Row, Col } from 'antd'
 import { NextPageContext } from 'next'
+import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import { useRecoilState } from 'recoil'
 
@@ -27,6 +28,7 @@ const Editor = ({
 }: {
   initialHistories: HistoryInfo[]
 }): JSX.Element => {
+  const router = useRouter()
   const [text, setText] = useState('')
   const [historyIndex, setHistoryIndex] = useRecoilState(historyIndexState)
   const [histories, setHistories] = useRecoilState(historiesState)
@@ -55,7 +57,6 @@ const Editor = ({
 
     const newMemo = await addHistory(newHistory)
     if (newMemo) {
-      console.log({ newMemo })
       setHistories([newMemo, ...histories])
       setHistoryIndex(0)
       return message.info('저장 성공!')
@@ -63,14 +64,19 @@ const Editor = ({
     return message.error('저장이 실패하였습니다.')
   }
 
-  console.log({ histories })
+  const onClickCancel = () => {
+    router.back()
+  }
+
   return (
     <>
       <Row style={{ marginBottom: '0.5rem' }}>
         <Col xs={24} md={17}></Col>
         <Col xs={24} md={6}>
           <FlexDiv direction="row" justify="flex-end">
-            <Button danger>취소</Button>
+            <Button danger onClick={onClickCancel}>
+              취소
+            </Button>
             <Button type="primary" onClick={addMemo}>
               저장
             </Button>
