@@ -14,9 +14,9 @@
     <br/>
     Both the WYSIWYG editor and the Markdown editor are supported.
     <br/>
-    No Signup is needed if you have a <a href="https://www.naver.com">NAVER</a> account! Try it now.
+    No Signup is needed if you have a <a href="https://www.naver.com">NAVER</a> account.
     <br/>
-    <a href="#" target="_blank">Go!</a>
+    <a href="#" target="_blank">Try it now!</a>
   </div>
 <br>
 
@@ -57,7 +57,7 @@ _Project URL (TBD)_
 
 ### Installation
 
-1. Please make sure you meet Prerequisites.
+1. Please make sure you meet the prerequisites.
 2. Clone the repo
    ```sh
    $ git clone https://github.com/Memo8-KoreaUniv/kramo.git
@@ -75,9 +75,7 @@ _Project URL (TBD)_
 ## Documentation
 
 [Documentation](https://github.com/Memo8-KoreaUniv/kramo/wiki)
-[API Docs](#)(TBD)
-
-- [Documents (under construction)](https://github.com/Memo8-KoreaUniv/kramo/blob/dev/pages/api/api.yaml)
+[API Docs](https://kramo-api-doc.vercel.app)
 
 ## Running Tests
 
@@ -219,7 +217,8 @@ module.exports = {
 ### ETC
 
 - Weather API by [openweathermap](https://openweathermap.org/API)
-- API Doc by [Swagger](http://swagger.io/) (TBD)
+- Reverse Geocoding API by [NAVER Cloud](https://guide.ncloud-docs.com/docs/naveropenapiv3-maps-reverse-geocoding-reverse-geocoding)
+- API Docs by [Swagger](http://swagger.io/)
 - [JWT](https://jwt.io/) Authentication
 - Global-State management
 
