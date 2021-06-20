@@ -33,19 +33,15 @@ function MemoCardItem({
   const [visible, setVisible] = useState(false)
 
   useEffect(()=>{
-    if (currentMemo !== memo._id) {
-      setVisible(false)
-    }
+    currentMemo !== memo.memo._id ? setVisible(false) : setVisible(true)
   }, [currentMemo])
 
   const showDrawer = () => {
-    setCurrentMemo(memo._id)
-    setVisible(true)
+    setCurrentMemo(memo.memo._id)
   }
 
   const onClose = () => {
     setCurrentMemo('')
-    setVisible(false)
   }
 
   const togglePinned = () => {

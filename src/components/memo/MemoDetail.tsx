@@ -17,7 +17,7 @@ const MemoDetail = ({
   gps: GPS
   weather: WeatherInfo
   updatedAt?: Date
-  darkMode: boolean
+  darkMode?: boolean
 }) => {
   const { latitude, longitude } = gps
   const [place, setPlace] = useState<string>('알 수 없음')
