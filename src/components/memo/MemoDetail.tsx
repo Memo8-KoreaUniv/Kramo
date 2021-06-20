@@ -17,7 +17,7 @@ const MemoDetail = ({
   place: string
   weather: WeatherInfo
   updatedAt?: Date
-  darkMode: boolean
+  darkMode?: boolean
 }) => {
   return (
     <span>
