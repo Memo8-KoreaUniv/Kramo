@@ -13,7 +13,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 import { MemoInfo } from 'src/types/memo'
-import { sm } from 'src/utils/size'
+import { sm, useWindowSize } from 'src/utils/size'
 import { useMemoPreview } from 'src/utils/useMemoPreview'
 
 import MemoDetail from './MemoDetail'
@@ -116,14 +116,7 @@ function MemoCardItem({
           updatedAt={memo.updatedAt}
         />
         <Divider />
-          <MemoDetail
-            gps={memo.gps}
-            weather={memo.weather}
-            updatedAt={memo.updatedAt}
-            darkMode={true}
-          />
-        <Divider />
-        <span key={`span_1`}>
+        <span key={`span_1`} style={{"fontSize": "1.5em"}}>
           {memoPreviewDetail}
           <br />
         </span>
@@ -132,7 +125,9 @@ function MemoCardItem({
   )
 }
 
-export default memo(
-  MemoCardItem,
-  (prevProps, nextProps) => prevProps.memo === nextProps.memo,
-)
+// export default memo(
+//   MemoCardItem,
+//   (prevProps, nextProps) => prevProps.memo === nextProps.memo,
+// )
+
+export default MemoCardItem
