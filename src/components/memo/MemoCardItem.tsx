@@ -44,6 +44,7 @@ function MemoCardItem({
   }
 
   const onClose = () => {
+    setCurrentMemo('')
     setVisible(false)
   }
 
