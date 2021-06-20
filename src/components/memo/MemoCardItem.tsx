@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 
 import {
   DeleteOutlined,
@@ -10,11 +10,20 @@ import {
 } from '@ant-design/icons'
 import { Avatar, Button, Card, Col, Divider, Drawer, Row } from 'antd'
 import Link from 'next/link'
+import styled from 'styled-components'
 
 import { MemoInfo } from 'src/types/memo'
-import { sm, useWindowSize } from 'src/utils/size'
+import { sm } from 'src/utils/size'
+import { useMemoPreview } from 'src/utils/useMemoPreview'
 
 import MemoDetail from './MemoDetail'
+
+const FlexibleCard = styled(Card)`
+  width: 260px;
+  @media (min-width: ${sm}px) {
+    width: 300px;
+  }
+`
 
 function MemoCardItem({
   memo,
@@ -31,6 +40,7 @@ function MemoCardItem({
 }) {
   const { Meta } = Card
   const [visible, setVisible] = useState(false)
+  const { memoPreviewTitle, memoPreviewDetail } = useMemoPreview(memo.text)
 
   useEffect(()=>{
     currentMemo !== memo.memo._id ? setVisible(false) : setVisible(true)
@@ -49,9 +59,7 @@ function MemoCardItem({
   }
 
   return (
-    <Card
-      style={{ width: useWindowSize()[0] > sm ? 300 : 280 }}
-      size={useWindowSize()[0] > sm ? 'default' : 'small'}
+    <FlexibleCard
       actions={[
         <EyeOutlined key="open" onClick={() => {visible ? onClose() : showDrawer()}} />,
         <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
@@ -67,7 +75,7 @@ function MemoCardItem({
         title={
           <>
             <Row>
-              <Col span={20}>{memo.text.split('\n')[0]}</Col>
+              <Col span={20}>{memoPreviewTitle}</Col>
               <Col span={4}>
                 <Button
                   shape="circle"
@@ -82,9 +90,8 @@ function MemoCardItem({
         }
         description={
           <>
-            {memo.text.split('\n')[0]}
+            {memoPreviewDetail}
             <br />
-            ...
             <Divider />
             <MemoDetail
               gps={memo.gps}
@@ -95,7 +102,7 @@ function MemoCardItem({
         }
       />
       <Drawer
-        title={memo.text.split('\n')[0]}
+        title={memoPreviewTitle}
         placement="right"
         closable={true}
         onClose={onClose}
@@ -109,15 +116,23 @@ function MemoCardItem({
           updatedAt={memo.updatedAt}
         />
         <Divider />
-        {memo.text.split('\n').map((line: string) => {
-          return (
-            <div dangerouslySetInnerHTML={ {__html: line + "<br/>"}}>
-            </div>
-          )
-        })}
+          <MemoDetail
+            gps={memo.gps}
+            weather={memo.weather}
+            updatedAt={memo.updatedAt}
+            darkMode={true}
+          />
+        <Divider />
+        <span key={`span_1`}>
+          {memoPreviewDetail}
+          <br />
+        </span>
       </Drawer>
-    </Card>
+    </FlexibleCard>
   )
 }
 
-export default MemoCardItem
+export default memo(
+  MemoCardItem,
+  (prevProps, nextProps) => prevProps.memo === nextProps.memo,
+)

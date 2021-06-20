@@ -16,7 +16,6 @@ const { Sider } = Layout
 const MenuSider = () => {
   const [collapsed, setCollapsed] = useRecoilState(menuCollapsedState)
   const onCollapse = (collapsed: boolean) => {
-    console.log(collapsed)
     setCollapsed(collapsed)
   }
 
