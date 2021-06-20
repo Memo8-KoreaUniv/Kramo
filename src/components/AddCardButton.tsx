@@ -120,7 +120,14 @@ function AddCardButton({
         />
         <Row>
           <Col span={4} style={{ textAlign: 'center' }}>
-            <img width="30" src={getIconURL(currentWeather.icon)} />
+            <img
+              width="30"
+              src={getIconURL(currentWeather.icon)}
+              alt="❓"
+              onError={(e: any) => {
+                e.target.src = '/question.png'
+              }}
+            />
           </Col>
           <Col span={20}>{currentWeather.description}</Col>
         </Row>

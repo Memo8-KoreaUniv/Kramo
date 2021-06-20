@@ -31,7 +31,14 @@ const MemoDetail = ({
       <Row>
         <Col span={4} style={{ textAlign: 'center' }}>
           {/* TODO : fallback 이미지 하나 넣어두고 쓰기 */}
-          <img width="30" src={getIconURL(weather.icon)} />
+          <img
+            width="30"
+            src={getIconURL(weather.icon)}
+            alt="❓"
+            onError={(e: any) => {
+              e.target.src = '/question.png'
+            }}
+          />
         </Col>
         <Col span={20} style={darkMode ? { color: 'white' } : {}}>
           {updatedAt
