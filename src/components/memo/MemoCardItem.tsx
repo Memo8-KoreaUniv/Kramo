@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   DeleteOutlined,
@@ -8,7 +8,7 @@ import {
   PushpinOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Avatar, Button, Card, Col, Divider, Drawer, Row, Timeline } from 'antd'
+import { Avatar, Button, Card, Col, Divider, Drawer, Row } from 'antd'
 import Link from 'next/link'
 
 import { MemoInfo } from 'src/types/memo'
@@ -20,15 +20,26 @@ function MemoCardItem({
   memo,
   deleteMemo,
   sortMemos,
+  currentMemo,
+  setCurrentMemo,
 }: {
   memo: MemoInfo
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
+  currentMemo: string
+  setCurrentMemo: (update: string) => void
 }) {
   const { Meta } = Card
   const [visible, setVisible] = useState(false)
 
+  useEffect(()=>{
+    if (currentMemo !== memo._id) {
+      setVisible(false)
+    }
+  }, [currentMemo])
+
   const showDrawer = () => {
+    setCurrentMemo(memo._id)
     setVisible(true)
   }
 
@@ -82,6 +93,7 @@ function MemoCardItem({
               gps={memo.gps}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
+              darkMode={false}
             />
           </>
         }
@@ -99,6 +111,7 @@ function MemoCardItem({
           gps={memo.gps}
           weather={memo.weather}
           updatedAt={memo.updatedAt}
+          darkMode={false}
         />
         <Divider />
         {memo.text.split('\n').map((line: string) => {

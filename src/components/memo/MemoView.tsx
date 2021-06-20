@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Col, Row } from 'antd'
 
@@ -26,6 +26,9 @@ const MemoView = ({
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
 }) => {
+
+  const [currentMemo, setCurrentMemo] = useState<string>('')
+
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
@@ -43,6 +46,8 @@ const MemoView = ({
                     memo={memo}
                     deleteMemo={deleteMemo}
                     sortMemos={sortMemos}
+                    currentMemo={currentMemo}
+                    setCurrentMemo={setCurrentMemo}
                   />
                 </Col>
               )
