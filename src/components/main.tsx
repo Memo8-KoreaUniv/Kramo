@@ -49,12 +49,16 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
       className="site-layout-background"
       style={{ padding: 24, textAlign: 'left' }}>
       <Row>
-        <MemoView
-          memos={memos}
-          addMemo={addMemo}
-          deleteMemo={deleteMemo}
-          sortMemos={sortMemos}
-        />
+        {me ? (
+          <MemoView
+            memos={memos}
+            addMemo={addMemo}
+            deleteMemo={deleteMemo}
+            sortMemos={sortMemos}
+          />
+        ) : (
+          <></>
+        )}
       </Row>
     </div>
   )
