@@ -19,7 +19,6 @@ const MemoDetail = ({
   updatedAt?: Date
   darkMode: boolean
 }) => {
-
   return (
     <span>
       <Row>

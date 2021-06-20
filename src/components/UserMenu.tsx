@@ -19,7 +19,7 @@ const UserMenu = () => {
   const [categories, setCategories] = useRecoilState(categoriesState)
   const router = useRouter()
   const windowSize = useWindowSize()[0]
-  const { setMemos } = useMemos()
+  const { memos, setMemos } = useMemos()
   const onClickLogout = useCallback(() => {
     cookie.remove(process.env.NEXT_PUBLIC_JWT_TOKEN_NAME!)
     setMe(null)
@@ -28,7 +28,7 @@ const UserMenu = () => {
     alert('로그아웃 성공!')
     router.push('/')
     return
-  }, [me, categories, router])
+  }, [me, memos, categories, router])
 
   return me ? (
     <Dropdown
