@@ -90,7 +90,6 @@ function MemoCardItem({
               gps={memo.gps}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
-              darkMode={false}
             />
           </>
         }
@@ -102,13 +101,12 @@ function MemoCardItem({
         onClose={onClose}
         visible={visible}
         width={useWindowSize()[0] > sm ? 512 : 256}
-        mask={false}
+        mask={useWindowSize()[0] > sm ? false : true}
         destroyOnClose={true}>
         <MemoDetail
           gps={memo.gps}
           weather={memo.weather}
           updatedAt={memo.updatedAt}
-          darkMode={false}
         />
         <Divider />
         {memo.text.split('\n').map((line: string) => {
