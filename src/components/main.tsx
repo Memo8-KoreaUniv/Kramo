@@ -9,7 +9,6 @@ import { subTitleState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import useMemos from 'src/utils/useMemos'
 
-import MemoTimeline from './memo/MemoTimeline'
 import MemoView from './memo/MemoView'
 import { Spinner } from './Spinner'
 

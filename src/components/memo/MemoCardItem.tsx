@@ -113,10 +113,8 @@ function MemoCardItem({
         <Divider />
         {memo.text.split('\n').map((line: string) => {
           return (
-            <span key={`span_1_${line}`}>
-              {line}
-              <br />
-            </span>
+            <div dangerouslySetInnerHTML={ {__html: line + "<br/>"}}>
+            </div>
           )
         })}
       </Drawer>
