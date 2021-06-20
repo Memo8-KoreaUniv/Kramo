@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PlusOutlined } from '@ant-design/icons'
+import { FormOutlined } from '@ant-design/icons'
 import { Card } from 'antd'
 import Link from 'next/link'
 
@@ -17,7 +17,7 @@ function AddMemoButton() {
         }}
         size={'default'}>
         <Link href={`/editor?`}>
-          <PlusOutlined style={{ fontSize: '50px' }} />
+          <FormOutlined style={{ fontSize: '50px' }} />
         </Link>
       </Card>
     </>
