@@ -7,6 +7,7 @@ import { MemoInfo } from 'src/types/memo'
 import { WeatherInfo } from 'src/utils/weather'
 
 import AddCardButton from '../AddCardButton'
+import AddMemoButton from '../AddMemoButton'
 import MemoCardItem from './MemoCardItem'
 
 const MemoView = ({
@@ -30,6 +31,10 @@ const MemoView = ({
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
+          <Col key={`ColAddCardButton`}>
+            <AddCardButton addMemo={addMemo} />
+            <AddMemoButton />
+          </Col>
           {memos
             .sort(
               (a: MemoInfo, b: MemoInfo) =>
@@ -47,9 +52,6 @@ const MemoView = ({
                 </Col>
               )
             })}
-          <Col key={`ColAddCardButton`}>
-            <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
-          </Col>
         </Row>
       </div>
     </Col>
