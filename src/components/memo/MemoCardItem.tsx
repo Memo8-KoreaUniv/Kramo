@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import {
   DeleteOutlined,
   EditOutlined,
-  FolderOpenOutlined,
+  EyeOutlined,
   PushpinFilled,
   PushpinOutlined,
   UserOutlined,
@@ -53,7 +53,7 @@ function MemoCardItem({
       style={{ width: useWindowSize()[0] > sm ? 300 : 280 }}
       size={useWindowSize()[0] > sm ? 'default' : 'small'}
       actions={[
-        <FolderOpenOutlined key="open" onClick={() => {visible ? onClose() : showDrawer()}} />,
+        <EyeOutlined key="open" onClick={() => {visible ? onClose() : showDrawer()}} />,
         <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
           <EditOutlined key="edit" />
         </Link>,
