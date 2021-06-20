@@ -7,6 +7,7 @@ import { MemoInfo } from 'src/types/memo'
 import { WeatherInfo } from 'src/utils/weather'
 
 import AddCardButton from '../AddCardButton'
+import AddMemoButton from '../AddMemoButton'
 import MemoCardItem from './MemoCardItem'
 
 const MemoView = ({
@@ -49,6 +50,7 @@ const MemoView = ({
             })}
           <Col key={`ColAddCardButton`}>
             <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
+            <AddMemoButton key={`AddMemoButton`} />
           </Col>
         </Row>
       </div>
