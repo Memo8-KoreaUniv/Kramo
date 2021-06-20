@@ -56,7 +56,6 @@ export function Main({ categoryId }: { categoryId?: string | undefined }) {
           deleteMemo={deleteMemo}
           sortMemos={sortMemos}
         />
-        <MemoTimeline />
       </Row>
     </div>
   )

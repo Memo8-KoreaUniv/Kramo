@@ -82,7 +82,6 @@ function MemoCardItem({
               gps={memo.gps}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
-              darkMode={false}
             />
           </>
         }
@@ -92,24 +91,15 @@ function MemoCardItem({
         placement="right"
         closable={true}
         onClose={onClose}
-        visible={visible}>
-        <Timeline>
-          {/*memo.infos.map((info: info) => {
-            return (
-              <div key={`timeline_upper_${info}`}>
-                <Timeline.Item color="blue">
-                  <MemoInfo info={info} />
-                </Timeline.Item>
-              </div>
-            )
-          })*/}
-          <MemoDetail
-            gps={memo.gps}
-            weather={memo.weather}
-            updatedAt={memo.updatedAt}
-            darkMode={true}
-          />
-        </Timeline>
+        visible={visible}
+        width={useWindowSize()[0] > sm ? 512 : 256}
+        mask={false}
+        destroyOnClose={true}>
+        <MemoDetail
+          gps={memo.gps}
+          weather={memo.weather}
+          updatedAt={memo.updatedAt}
+        />
         <Divider />
         {memo.text.split('\n').map((line: string) => {
           return (
