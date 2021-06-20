@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 
 import {
   DeleteOutlined,
@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import { MemoInfo } from 'src/types/memo'
 import { sm } from 'src/utils/size'
 import { useMemoPreview } from 'src/utils/useMemoPreview'
+import { getPlace } from 'src/utils/gps'
 
 import MemoDetail from './MemoDetail'
 
@@ -49,6 +50,13 @@ function MemoCardItem({
   const togglePinned = () => {
     sortMemos(memo.memo._id)
   }
+
+  const { latitude, longitude } = memo.gps
+  const [place, setPlace] = useState<string>('알 수 없음')
+
+  useEffect(() => {
+    getPlace(latitude, longitude).then((loadedPlace) => setPlace(loadedPlace))
+  }, [])
 
   return (
     <FlexibleCard
@@ -86,7 +94,7 @@ function MemoCardItem({
             <br />
             <Divider />
             <MemoDetail
-              gps={memo.gps}
+              place={place}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
               darkMode={false}
@@ -102,7 +110,7 @@ function MemoCardItem({
         visible={visible}>
         <Timeline>
           <MemoDetail
-            gps={memo.gps}
+            place={place}
             weather={memo.weather}
             updatedAt={memo.updatedAt}
             darkMode={true}
