@@ -41,11 +41,6 @@ const UserMenu = () => {
           <Menu.Item onClick={onClickLogout}>
             <a>로그아웃</a>
           </Menu.Item>
-          <Menu.Item>
-            <Link href="/metest">
-              <a>내정보 로드 테스트</a>
-            </Link>
-          </Menu.Item>
         </Menu>
       }
       placement="bottomRight"
