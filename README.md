@@ -18,7 +18,7 @@
     <br/>
     <a href="#" target="_blank">Go!</a>
   </div>
-<br> 
+<br>
 
 <p align="center">
   <a href="#about-the-project"> About The Project</a> •

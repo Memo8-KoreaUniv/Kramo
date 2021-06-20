@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useCallback } from 'react'
 
 import {
   PlusCircleOutlined,
@@ -10,13 +11,14 @@ import {
 import { Divider, Input, Menu, message, Typography } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import Link from 'next/link'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import {
   addCategories,
   categoriesState,
   categoryAddAvailState,
 } from 'src/state/categories'
+import { categoryState } from 'src/state/category'
 import { menuCollapsedState } from 'src/state/etc'
 import { meState } from 'src/state/me'
 import { CategoryInfo } from 'src/types/category'
@@ -58,17 +60,18 @@ const CategoryTitleLabel = ({
 const MenuLayout = () => {
   const me = useRecoilValue(meState)
   const [categories, setCategories] = useRecoilState(categoriesState)
+  const setCategory = useSetRecoilState(categoryState)
   const menuCollapsed = useRecoilValue(menuCollapsedState)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [categoryValue, setCategoryValue] = useState('')
   const categoryAddAvail = useRecoilValue(categoryAddAvailState)
 
-  console.log(menuCollapsed)
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [categoryValue, setCategoryValue] = useState('')
 
-  const handleOk = async () => {
+  const showModal = useCallback(() => {
+    setIsModalVisible(true)
+  }, [isModalVisible])
+
+  const handleOk = useCallback(async () => {
     setIsModalVisible(false)
     if (!me || !me._id) {
       return message.error('로그인이 필요합니다!')
@@ -82,11 +85,20 @@ const MenuLayout = () => {
     }
     setCategories([newCategory, ...categories])
     message.info('카테고리 추가 성공!')
-  }
+  }, [categories, isModalVisible, me, me?._id, categoryAddAvail, categoryValue])
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsModalVisible(false)
-  }
+  }, [isModalVisible])
+
+  const onClickCategory = useCallback(
+    (category: CategoryInfo) => () => {
+      setCategory(category)
+      setCategoryValue(category.name)
+    },
+    [categories],
+  )
+
   return (
     <>
       <Modal
@@ -101,7 +113,6 @@ const MenuLayout = () => {
             setCategoryValue(e.target.value)
           }}
           placeholder="카테고리명"
-          autoFocus={true}
         />
       </Modal>
       <Divider style={{ color: MENU_LABEL_COLOR }} />
@@ -110,8 +121,13 @@ const MenuLayout = () => {
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
         {categories.map((category: CategoryInfo) => {
           return (
-            <Menu.Item key={`menu_${category._id}`} icon={<FolderFilled />}>
-              {category.name}
+            <Menu.Item
+              key={`menu_${category._id}`}
+              icon={<FolderFilled />}
+              onClick={onClickCategory(category)}>
+              <Link href={`/?categoryId=${category._id}`}>
+                <a>{category.name}</a>
+              </Link>
             </Menu.Item>
           )
         })}

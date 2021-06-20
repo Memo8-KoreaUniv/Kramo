@@ -1,4 +1,4 @@
-import { UserInfo } from './user'
+import { UserInfo } from 'src/types/user'
 
 export interface CategoryInfo {
   _id: string
