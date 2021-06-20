@@ -13,7 +13,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 import { MemoInfo } from 'src/types/memo'
-import { sm } from 'src/utils/size'
+import { sm, useWindowSize } from 'src/utils/size'
 import { useMemoPreview } from 'src/utils/useMemoPreview'
 
 import MemoDetail from './MemoDetail'
