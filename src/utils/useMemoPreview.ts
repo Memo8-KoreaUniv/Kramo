@@ -43,5 +43,3 @@ export const useMemoPreview = (text: string) => {
     memoPreviewDetail,
   }
 }
-
-console.log(parse('test'))

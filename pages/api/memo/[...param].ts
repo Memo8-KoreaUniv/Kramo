@@ -18,7 +18,6 @@ import { connectToDatabase } from 'src/utils/mongo'
 export default async function memo(req: NextApiRequest, res: NextApiResponse) {
   const { param } = req.query
   const memoId = param[0]
-  console.log({ param })
   try {
     await connectToDatabase()
     switch (param[1]) {
@@ -32,7 +31,6 @@ export default async function memo(req: NextApiRequest, res: NextApiResponse) {
               },
               { new: true },
             )
-            console.log({ newMemo })
             return res.status(200).json({ newMemo })
           } catch (e) {
             return res

@@ -19,7 +19,6 @@ describe('Create and find CATEGORY', () => {
 
   test('Find category', async () => {
     const category = await CategoryModel.findOne(CATEGORY1 as any)
-    // console.log(category?.populate())
     console.log(category)
     const user: PopulatedUser = category?.user!
     expect(user._id).toStrictEqual(USER1_ID)
@@ -31,7 +30,7 @@ describe('Create and find CATEGORY', () => {
     expect(new Date().getTime() > category!.createdAt.getTime()).toBe(true)
   })
 
-  afterAll(async (done)  => {
+  afterAll(async (done) => {
     // await CategoryModel.deleteOne(CATEGORY1 as any)
     done()
   })

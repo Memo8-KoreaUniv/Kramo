@@ -38,9 +38,6 @@ function MemoCardItem({
   const [visible, setVisible] = useState(false)
   const { memoPreviewTitle, memoPreviewDetail } = useMemoPreview(memo.text)
 
-  console.log({ memoPreviewTitle })
-  console.log({ memoPreviewDetail })
-
   const showDrawer = () => {
     setVisible(true)
   }

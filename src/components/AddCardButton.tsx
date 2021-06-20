@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
 import { EnvironmentOutlined, PlusOutlined } from '@ant-design/icons'
-import { Card, Col, Modal, Row, Input, Select } from 'antd'
+import { Image, Card, Col, Modal, Row, Input, Select } from 'antd'
 import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
+import { BASE64_FALLBACK_IMAGE } from 'src/enum'
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
 import { GPS } from 'src/types'
@@ -120,13 +121,9 @@ function AddCardButton({
         />
         <Row>
           <Col span={4} style={{ textAlign: 'center' }}>
-            <img
-              width="30"
+            <Image
               src={getIconURL(currentWeather.icon)}
-              alt="❓"
-              onError={(e: any) => {
-                e.target.src = '/question.png'
-              }}
+              fallback={BASE64_FALLBACK_IMAGE}
             />
           </Col>
           <Col span={20}>{currentWeather.description}</Col>

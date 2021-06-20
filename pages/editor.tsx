@@ -101,7 +101,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const { memoId } = ctx.query
 
   const loadMemo = async () => {
-    console.log({ loadMemo_memoId: memoId })
     if (!memoId || typeof memoId === 'object') {
       return [{ text: '에러가 발생했습니다! 이전 페이지로 돌아가주세요' }]
     }
