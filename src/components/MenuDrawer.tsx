@@ -26,7 +26,8 @@ const MenuDrawer = () => {
         <Button type="primary" onClick={showDrawer} size="small">
           <MenuOutlined />
         </Button>
-        <Drawer
+        <Drawer 
+          className="menudrawer"
           placement="left"
           closable={false}
           onClose={onClose}

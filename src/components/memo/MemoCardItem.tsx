@@ -1,19 +1,19 @@
-import React, { memo, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   DeleteOutlined,
   EditOutlined,
-  FolderOpenOutlined,
+  EyeOutlined,
   PushpinFilled,
   PushpinOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Avatar, Button, Card, Col, Divider, Drawer, Row, Timeline } from 'antd'
+import { Avatar, Button, Card, Col, Divider, Drawer, Row } from 'antd'
 import Link from 'next/link'
 import styled from 'styled-components'
 
 import { MemoInfo } from 'src/types/memo'
-import { sm } from 'src/utils/size'
+import { sm, useWindowSize } from 'src/utils/size'
 import { useMemoPreview } from 'src/utils/useMemoPreview'
 
 import MemoDetail from './MemoDetail'
@@ -29,21 +29,29 @@ function MemoCardItem({
   memo,
   deleteMemo,
   sortMemos,
+  currentMemo,
+  setCurrentMemo,
 }: {
   memo: MemoInfo
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
+  currentMemo: string
+  setCurrentMemo: (update: string) => void
 }) {
   const { Meta } = Card
   const [visible, setVisible] = useState(false)
   const { memoPreviewTitle, memoPreviewDetail } = useMemoPreview(memo.text)
 
+  useEffect(()=>{
+    currentMemo !== memo.memo._id ? setVisible(false) : setVisible(true)
+  }, [currentMemo])
+
   const showDrawer = () => {
-    setVisible(true)
+    setCurrentMemo(memo.memo._id)
   }
 
   const onClose = () => {
-    setVisible(false)
+    setCurrentMemo('')
   }
 
   const togglePinned = () => {
@@ -53,7 +61,7 @@ function MemoCardItem({
   return (
     <FlexibleCard
       actions={[
-        <FolderOpenOutlined key="open" onClick={showDrawer} />,
+        <EyeOutlined key="open" onClick={() => {visible ? onClose() : showDrawer()}} />,
         <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
           <EditOutlined key="edit" />
         </Link>,
@@ -89,7 +97,6 @@ function MemoCardItem({
               gps={memo.gps}
               weather={memo.weather}
               updatedAt={memo.updatedAt}
-              darkMode={false}
             />
           </>
         }
@@ -99,17 +106,17 @@ function MemoCardItem({
         placement="right"
         closable={true}
         onClose={onClose}
-        visible={visible}>
-        <Timeline>
-          <MemoDetail
-            gps={memo.gps}
-            weather={memo.weather}
-            updatedAt={memo.updatedAt}
-            darkMode={true}
-          />
-        </Timeline>
+        visible={visible}
+        width={useWindowSize()[0] > sm ? 512 : 256}
+        mask={useWindowSize()[0] > sm ? false : true}
+        destroyOnClose={true}>
+        <MemoDetail
+          gps={memo.gps}
+          weather={memo.weather}
+          updatedAt={memo.updatedAt}
+        />
         <Divider />
-        <span key={`span_1`}>
+        <span key={`span_1`} style={{"fontSize": "1.5em"}}>
           {memoPreviewDetail}
           <br />
         </span>
@@ -118,7 +125,9 @@ function MemoCardItem({
   )
 }
 
-export default memo(
-  MemoCardItem,
-  (prevProps, nextProps) => prevProps.memo === nextProps.memo,
-)
+// export default memo(
+//   MemoCardItem,
+//   (prevProps, nextProps) => prevProps.memo === nextProps.memo,
+// )
+
+export default MemoCardItem
