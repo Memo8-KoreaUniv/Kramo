@@ -24,11 +24,7 @@ const Nowweather = () => {
     navigator.geolocation.getCurrentPosition(function (position) {
       const lat = position.coords.latitude
       const lon = position.coords.longitude
-      getNowWeatherByGeo(
-        lat,
-        lon,
-        process.env.NEXT_PUBLIC_WEATHER_API_KEY!,
-      ).then((res) => {
+      getNowWeatherByGeo(lat, lon).then((res) => {
         setWeatherInfo(res)
         setIcon(res.icon)
       })

@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import kaxios from 'src/interceptors'
+
 /**
  * 날씨 관련
  * 예시 : https://openweathermap.org/weather-conditions
@@ -56,19 +58,19 @@ export const getNowWeatherByCity = async (
 export const getNowWeatherByGeo = async (
   lat: number,
   lon: number,
-  apiKey: string,
 ): Promise<WeatherInfo> => {
   // fallback
   let weather = FALLBACK_WEATHER
   try {
-    const res = await axios.get(WEATHER_API_BASE_URL, {
+    const res = await kaxios({
+      url: '/weather',
+      method: 'get',
       params: {
         lat,
         lon,
-        appid: apiKey,
       },
     })
-    weather = res.data.weather[0]
+    weather = res.data.weather
   } catch (e) {
     console.error(e)
   }

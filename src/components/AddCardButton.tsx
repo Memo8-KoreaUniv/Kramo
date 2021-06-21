@@ -66,11 +66,7 @@ function AddCardButton({
         longitude: pos.coords.longitude,
       })
     })
-    getNowWeatherByGeo(
-      GPS.latitude,
-      GPS.longitude,
-      process.env.NEXT_PUBLIC_WEATHER_API_KEY!,
-    ).then((res) => {
+    getNowWeatherByGeo(GPS.latitude, GPS.longitude).then((res) => {
       setCurrentWeather(res)
     })
     setIsModalVisible(true)
