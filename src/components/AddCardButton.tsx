@@ -107,7 +107,7 @@ function AddCardButton({
           key={`AddCardButton_Select`}
           style={{ width: '100%', marginBottom: '5px' }}
           onChange={(value: string) => setCategoryId(CategoryPairs[value])}>
-          {categories.map((category: CategoryInfo) => {
+          {(categories as any).map((category: CategoryInfo) => {
             CategoryPairs[category.name] = category._id
             return (
               <Option

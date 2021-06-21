@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import TimelinePopover from 'src/components/memo/TimelinePopover'
 import { historiesState } from 'src/state/history'
+import { HistoryInfo } from 'src/types/history'
 import { FlexDiv } from 'style/div'
 
 const TimeLineContainer = styled.div`
@@ -22,7 +23,7 @@ const HistoryTimeline = () => {
         <Typography.Title level={2}>Timeline</Typography.Title>
       </FlexDiv>
       <Timeline>
-        {histories.map((history, index) => {
+        {(histories as any).map((history: HistoryInfo, index: number) => {
           return (
             <TimelinePopover
               key={`Timeline_${history._id}`}

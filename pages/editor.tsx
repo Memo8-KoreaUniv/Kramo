@@ -187,7 +187,7 @@ const Editor = ({
             value={value}
             disabled={!firstCreation}
             onChange={onChangeSelector}>
-            {categories.map((cate: CategoryInfo) => {
+            {(categories as any).map((cate: CategoryInfo) => {
               categoryPairs[cate.name] = cate._id
               return (
                 <Option key={`CategorySelector_${cate._id}`} value={cate.name}>

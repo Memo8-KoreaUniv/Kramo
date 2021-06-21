@@ -27,7 +27,7 @@ const TimelinePopover = ({
       <Timeline.Item color={color} style={{ cursor: 'pointer' }}>
         <Button onClick={onClickTimeline}>
           <Typography>
-            {formatDate(new Date(history.createdAt), new Date())}
+            {formatDate(new Date(history.createdAt!), new Date())}
           </Typography>
         </Button>
       </Timeline.Item>

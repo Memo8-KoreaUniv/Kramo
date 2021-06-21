@@ -44,7 +44,7 @@ function MemoCardItem({
   const [visible, setVisible] = useState(false)
   const { memoPreviewTitle, memoPreviewDetail } = useMemoPreview(memo.text)
 
-  useEffect(()=>{
+  useEffect(() => {
     currentMemo !== memo.memo._id ? setVisible(false) : setVisible(true)
   }, [currentMemo])
 
@@ -70,7 +70,12 @@ function MemoCardItem({
   return (
     <FlexibleCard
       actions={[
-        <EyeOutlined key="open" onClick={() => {visible ? onClose() : showDrawer()}} />,
+        <EyeOutlined
+          key="open"
+          onClick={() => {
+            visible ? onClose() : showDrawer()
+          }}
+        />,
         <Link key={`Link_${memo._id}`} href={`/editor?memoId=${memo.memo._id}`}>
           <EditOutlined key="edit" />
         </Link>,
@@ -125,7 +130,7 @@ function MemoCardItem({
           updatedAt={memo.updatedAt}
         />
         <Divider />
-        <span key={`span_1`} style={{"fontSize": "1.5em"}}>
+        <span key={`span_1`} style={{ fontSize: '1.5em' }}>
           {parse(memo.text)}
           <br />
         </span>

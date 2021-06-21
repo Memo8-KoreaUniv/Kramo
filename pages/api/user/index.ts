@@ -71,7 +71,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
           {
             expiresIn: 31556926, // 1 year in seconds
           },
-          (err, token) => {
+          (_err, token) => {
             setCookie(res, TOKEN_NAME, token, {
               path: '/',
               sameSite: true,

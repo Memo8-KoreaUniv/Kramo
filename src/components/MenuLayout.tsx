@@ -121,7 +121,7 @@ const MenuLayout = () => {
       <CategoryTitleLabel collapsed={menuCollapsed} me={me} />
       <br />
       <Menu style={{ zIndex: 5 }} mode="inline" theme="dark">
-        {categories.map((category: CategoryInfo) => {
+        {(categories as any).map((category: CategoryInfo) => {
           return (
             <Menu.Item
               key={`menu_${category._id}`}
