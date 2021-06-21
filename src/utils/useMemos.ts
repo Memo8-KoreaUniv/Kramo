@@ -65,16 +65,19 @@ export default function useMemos() {
       gps,
     }
     try {
-      await kaxios({
+      const res = await kaxios({
         url: `/memo`,
         method: 'post',
         data: body,
       })
+      loadMemos(userId)
+      setLoading(false)
+      return res.data
     } catch (e) {
       console.error(e)
+      loadMemos(userId)
+      setLoading(false)
     }
-    loadMemos(userId)
-    setLoading(false)
   }
 
   const deleteMemo = async (memoId: string) => {

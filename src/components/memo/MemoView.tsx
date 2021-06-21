@@ -31,6 +31,10 @@ const MemoView = ({
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
+          <Col key={`ColAddCardButton`}>
+            <AddCardButton addMemo={addMemo} />
+            <AddMemoButton />
+          </Col>
           {memos
             .sort(
               (a: MemoInfo, b: MemoInfo) =>
@@ -48,10 +52,6 @@ const MemoView = ({
                 </Col>
               )
             })}
-          <Col key={`ColAddCardButton`}>
-            <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
-            <AddMemoButton key={`AddMemoButton`} />
-          </Col>
         </Row>
       </div>
     </Col>

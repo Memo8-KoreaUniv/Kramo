@@ -36,7 +36,6 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
         if (!process.env.JWT_SECRET) {
           throw Error('No JWT_SECRET!')
         }
-        console.log(updatedUser.toJSON())
         jwt.sign(
           updatedUser.toJSON(),
           process.env.JWT_SECRET,
@@ -44,8 +43,6 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
             expiresIn: 31556926, // 1 year in seconds
           },
           (err, token) => {
-            console.log(`token => ${token}`)
-            console.log(`err => ${err}`)
             setCookie(res, TOKEN_NAME, token, {
               path: '/',
               sameSite: true,

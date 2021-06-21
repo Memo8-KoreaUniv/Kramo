@@ -36,7 +36,6 @@ const Login = () => {
       loginButton: { color: 'green', type: 3, height: 50 },
       callbackHandle: true,
     })
-    console.log(login)
 
     login.init()
   }

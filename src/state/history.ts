@@ -1,7 +1,27 @@
 import { atom, selector } from 'recoil'
 
 import kaxios from 'src/interceptors'
+import { GPS, Weather } from 'src/types'
+import { CategoryInfo } from 'src/types/category'
 import { HistoryInfo } from 'src/types/history'
+import { MemoInfo } from 'src/types/memo'
+import { UserInfo } from 'src/types/user'
+
+export interface AddHistoryProps {
+  _id?: string
+  user: UserInfo
+  category: CategoryInfo
+  memo: MemoInfo
+  text: string
+  createdAt?: Date
+  weather: Weather
+  gps: GPS
+}
+
+export const historyIndexState = atom<number>({
+  key: 'historyIndex',
+  default: 0,
+})
 
 export const historiesState = atom<HistoryInfo[] | []>({
   key: 'histories',
@@ -29,16 +49,15 @@ export const loadHistories = async (memoId: string) => {
   }
 }
 
-export const addHistories = async (newHistory:HistoryInfo) => {
-
+export const addHistory = async (newHistory: AddHistoryProps) => {
   try {
     const memoId = newHistory.memo._id
     const res = await kaxios({
       url: `/memo/${memoId}`,
       method: 'post',
-      data:{...newHistory},
+      data: { ...newHistory },
     })
-    return res?.data.histories
+    return res?.data?.newMemo
   } catch (e) {
     console.error(e)
     if (e.response.data?.alertText) {

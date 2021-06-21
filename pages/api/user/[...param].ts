@@ -54,7 +54,6 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
           const allMemos = await MemoModel.find({ user: userId as any })
           const pinned: { [key: string]: any } = {}
           allMemos.forEach((memo) => (pinned[memo._id] = memo.pinned))
-          console.log({ pinned })
           return res.status(200).json({ pin: pinned })
         }
         return res.status(501).json({ alertText: 'Unexpected request Method!' })
