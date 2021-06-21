@@ -16,7 +16,7 @@ import { MemoInfo } from 'src/types/memo'
 import { sm, useWindowSize } from 'src/utils/size'
 import { useMemoPreview } from 'src/utils/useMemoPreview'
 import { getPlace } from 'src/utils/gps'
-
+import parse from 'html-react-parser'
 import MemoDetail from './MemoDetail'
 
 const FlexibleCard = styled(Card)`
@@ -125,7 +125,7 @@ function MemoCardItem({
         />
         <Divider />
         <span key={`span_1`} style={{"fontSize": "1.5em"}}>
-          {memoPreviewDetail}
+          {parse(memo.text)}
           <br />
         </span>
       </Drawer>
