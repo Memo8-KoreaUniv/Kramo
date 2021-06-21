@@ -5,7 +5,11 @@ import 'normalize.css'
 import 'antd/dist/antd.css'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { categoriesState, loadCategories } from 'src/state/categories'
+import {
+  categoriesState,
+  isCategoryLoadingTriedState,
+  loadCategories,
+} from 'src/state/categories'
 
 import { loadMe, meState } from '../state/me'
 import Header from './Header'
@@ -16,12 +20,14 @@ const { Footer, Content } = Layout
 const MainLayout = ({ children }: { children: JSX.Element }): JSX.Element => {
   const [me, setMe] = useRecoilState(meState)
   const setCategories = useSetRecoilState(categoriesState)
+  const setTry = useSetRecoilState(isCategoryLoadingTriedState)
 
   const loadMyInfo = async () => {
     const meInfo = await loadMe()
     setMe(meInfo)
     if (meInfo && meInfo._id) {
       const categoryInfo = await loadCategories(meInfo._id)
+      setTry(true)
       if (categoryInfo) {
         // 성공했을 시
         setCategories(categoryInfo)

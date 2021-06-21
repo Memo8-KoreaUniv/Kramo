@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Col, Row } from 'antd'
 
@@ -7,6 +7,7 @@ import { MemoInfo } from 'src/types/memo'
 import { WeatherInfo } from 'src/utils/weather'
 
 import AddCardButton from '../AddCardButton'
+import AddMemoButton from '../AddMemoButton'
 import MemoCardItem from './MemoCardItem'
 
 const MemoView = ({
@@ -26,10 +27,17 @@ const MemoView = ({
   deleteMemo: (memoId: string) => void
   sortMemos: (memoId: string) => void
 }) => {
+
+  const [currentMemo, setCurrentMemo] = useState<string>('')
+
   return (
     <Col span={18}>
       <div className="site-card-wrapper">
         <Row gutter={[30, 30]}>
+          <Col key={`ColAddCardButton`}>
+            <AddCardButton addMemo={addMemo} />
+            <AddMemoButton />
+          </Col>
           {memos
             .sort(
               (a: MemoInfo, b: MemoInfo) =>
@@ -43,13 +51,12 @@ const MemoView = ({
                     memo={memo}
                     deleteMemo={deleteMemo}
                     sortMemos={sortMemos}
+                    currentMemo={currentMemo}
+                    setCurrentMemo={setCurrentMemo}
                   />
                 </Col>
               )
             })}
-          <Col key={`ColAddCardButton`}>
-            <AddCardButton key={`AddCardButton`} addMemo={addMemo} />
-          </Col>
         </Row>
       </div>
     </Col>

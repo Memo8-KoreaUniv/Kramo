@@ -2,6 +2,7 @@ import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 
 import { subTitleState } from 'src/state/etc'
+import { sm } from 'src/utils/size'
 import { FlexDiv } from 'style/div'
 
 const SubTitleDiv = styled(FlexDiv)`
@@ -14,7 +15,7 @@ const SubTitleH = styled.h1`
   overflow: auto;
   white-space: nowrap;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${sm}px) {
     font-weight: 600;
     font-size: 30px;
     line-height: 1.35;
