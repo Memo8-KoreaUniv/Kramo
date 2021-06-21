@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import { HistoryModel } from '../model'
 import { PopulatedUser } from '../model/user'
 import { connectToDatabase } from '../utils/mongo'
-import { HISTORIES2, HISTORIES3, HISTORIES4, HISTORIES5 } from '../dummy/dummy'
+import { HISTORIES2, HISTORIES3, HISTORIES4, HISTORIES5 } from './dummy'
 
 const AllHISTORIES = [HISTORIES2, HISTORIES3, HISTORIES4, HISTORIES5]
 jest.setTimeout(30000)

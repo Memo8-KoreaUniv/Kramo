@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 import { CategoryModel } from '../model'
 import { PopulatedUser } from '../model/user'
-import { CATEGORYS } from '../dummy/dummy'
+import { CATEGORYS } from './dummy'
 import { connectToDatabase } from '../utils/mongo'
 
 jest.setTimeout(30000)
