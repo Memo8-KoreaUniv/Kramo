@@ -14,19 +14,20 @@ describe('make dummy category and test', () => {
     await connectToDatabase(process.env.MONGODB_URI).catch((e) =>
       console.log(e),
     )
-    for (const category of CATEGORYS) {
-      await CategoryModel.deleteOne({ _id: category._id })
-    }
+    await Promise.all(CATEGORYS.map((category) => {
+      return CategoryModel.deleteOne({ _id: category._id })
+    }))
   })
 
   test('Create Category', async () => {
-    for (const category of CATEGORYS) {
-      await CategoryModel.create(category)
-    }
+    await Promise.all(CATEGORYS.map((category) => {
+        return CategoryModel.create(category)
+    }))
   })
 
   test('Find Category', async () => {
-    for (const category of CATEGORYS) {
+    await Promise.all(CATEGORYS.map( async (category)=>{
+      console.log(category)
       const _category = await CategoryModel.findOne({_id:category._id})
       console.log(`Category = ${_category}`)
       if (!_category) {
@@ -34,19 +35,19 @@ describe('make dummy category and test', () => {
       }
       const user: PopulatedUser = _category.user!
       expect(user?._id).toStrictEqual(category.user._id)
-    }
+     }))
   })
 
+    
   test('Check Category createdAt', async () => {
-    for (const category of CATEGORYS) {
+    await Promise.all(CATEGORYS.map( async (category)=>{
       const _category = await CategoryModel.findOne({_id:category._id})
       expect(_category).not.toBeUndefined()
       expect(new Date().getTime() > _category!.createdAt.getTime()).toBe(true)
-    }
+    }))
   })
 
   afterAll(async (done) => {
-    // await HistoryModel.deleteOne(query)
     done()
   })
 })

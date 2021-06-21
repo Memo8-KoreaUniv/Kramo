@@ -2,7 +2,7 @@ import { CategoryInfo } from 'src/types/category'
 import { MemoInfo } from 'src/types/memo'
 import { UserInfo } from 'src/types/user'
 
-import { GPS, Weather } from './index'
+import { GPS, Weather } from './index';
 
 export interface HistoryInfo {
   _id?: string
@@ -10,7 +10,7 @@ export interface HistoryInfo {
   category: CategoryInfo
   memo: MemoInfo
   text: string
-  createdAt: Date
+  createdAt?: Date
   weather: Weather
   gps: GPS
 }

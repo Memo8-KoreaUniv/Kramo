@@ -16,23 +16,25 @@ describe('make History dummy', () => {
     await connectToDatabase(process.env.MONGODB_URI).catch((e) =>
       console.log(e),
     )
-    for (const histories of AllHISTORIES) {
-      for (const history of histories) {
-        await HistoryModel.deleteOne({ _id: history._id })
-      }
-    }
+
+    await Promise.all(AllHISTORIES.map(async (histories) => {
+      await Promise.all(histories.map((history) => {
+        return HistoryModel.deleteOne({ _id: history._id })
+      }))
+    }))
   })
 
   test('Create History', async () => {
-    for (const histories of AllHISTORIES) {
-      for (const history of histories) {
-        await HistoryModel.create(history)
-      }
-    }
+    await Promise.all(AllHISTORIES.map(async (histories) => {
+      await Promise.all(histories.map((history) => {
+        return HistoryModel.create(history)
+      }))
+    }))
+
   })
   test('Find History', async () => {
-    for (const histories of AllHISTORIES) {
-      for (const history of histories) {
+    await Promise.all(AllHISTORIES.map(async (histories) => {
+      await Promise.all(histories.map(async (history) => {
         const _history = await HistoryModel.findOne({ _id: history._id })
         console.log(`History = ${_history}`)
         if (!_history) {
@@ -40,22 +42,21 @@ describe('make History dummy', () => {
         }
         const user: PopulatedUser = _history.user!
         expect(user?._id).toStrictEqual(history.user._id)
-      }
-    }
+      }))
+    }))
   })
 
   test('Check History createdAt', async () => {
-    for (const histories of AllHISTORIES) {
-      for (const history of histories) {
+    await Promise.all(AllHISTORIES.map(async (histories) => {
+      await Promise.all(histories.map(async (history) => {
         const _history = await HistoryModel.findOne({ _id: history._id })
         expect(_history).not.toBeUndefined()
         expect(new Date().getTime() > _history!.createdAt.getTime()).toBe(true)
-      }
-    }
+      }))
+    }))
   })
 
   afterAll(async (done) => {
-    // await HistoryModel.deleteOne(query)
     done()
   })
 })
