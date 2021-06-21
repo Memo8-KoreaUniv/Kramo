@@ -27,7 +27,7 @@ const FlexibleAddCard = styled.div`
   vertical-align: middle;
   opacity: 0.5;
   cursor: pointer;
-  background-color: #ffed99;
+  background-color: #a2dbfa;
   border: 0px solid #686d76;
 
   @media (min-width: ${sm}px) {
