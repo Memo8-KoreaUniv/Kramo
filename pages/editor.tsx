@@ -121,47 +121,45 @@ const Editor = ({
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
       }
-      getNowWeatherByGeo(
-        GPS.latitude,
-        GPS.longitude,
-        process.env.NEXT_PUBLIC_WEATHER_API_KEY!,
-      ).then(async (currentWeather) => {
-        const newHistory: AddHistoryProps = {
-          ...histories[0],
-          gps: GPS,
-          text: innerText,
-          weather: currentWeather,
-        }
-        delete newHistory._id
-        if (newHistory.createdAt) delete newHistory.createdAt
-        let newMemo
-        if (firstCreation) {
-          newMemo = await addMemo(
-            me!._id,
-            selectedCategoryId,
-            innerText,
-            GPS,
-            currentWeather,
-          )
-          setLoading(false)
-          setHistories([newMemo])
-          setHistoryIndex(0)
-          router.push(`/editor?memoId=${newMemo.memo._id}`, undefined, {
-            shallow: false,
-          })
-        } else {
-          newMemo = await addHistory(newHistory)
-          setLoading(false)
-          if (newMemo) {
-            setHistories([newMemo, ...histories])
+      getNowWeatherByGeo(GPS.latitude, GPS.longitude).then(
+        async (currentWeather) => {
+          const newHistory: AddHistoryProps = {
+            ...histories[0],
+            gps: GPS,
+            text: innerText,
+            weather: currentWeather,
+          }
+          delete newHistory._id
+          if (newHistory.createdAt) delete newHistory.createdAt
+          let newMemo
+          if (firstCreation) {
+            newMemo = await addMemo(
+              me!._id,
+              selectedCategoryId,
+              innerText,
+              GPS,
+              currentWeather,
+            )
+            setLoading(false)
+            setHistories([newMemo])
             setHistoryIndex(0)
-            message.info('저장 성공!')
+            router.push(`/editor?memoId=${newMemo.memo._id}`, undefined, {
+              shallow: false,
+            })
+          } else {
+            newMemo = await addHistory(newHistory)
+            setLoading(false)
+            if (newMemo) {
+              setHistories([newMemo, ...histories])
+              setHistoryIndex(0)
+              message.info('저장 성공!')
+              return
+            }
+            message.error('저장이 실패하였습니다.')
             return
           }
-          message.error('저장이 실패하였습니다.')
-          return
-        }
-      })
+        },
+      )
     })
   }
 
