@@ -3,51 +3,43 @@ import { Types } from 'mongoose'
 import { GPS } from 'src/types'
 import { Weather } from 'src/types'
 
-export const USER2_EMAIL = 'vwjdtjdwnsv@naver.com'
-export const USER2_PASSWORD = 'password'
+export const USER2_EMAIL = 'test2@naver.com'
 export const USER2_CREATEDAT = new Date('2021-05-22T13:01:45+09:00')
 export const USER2_ID = new Types.ObjectId('60b613257d8ac9f01d2410c7')
 export const USER2 = {
   _id: USER2_ID,
   email: USER2_EMAIL,
-  nickname: '1234',
-  password: USER2_PASSWORD,
+  nickname: 'test2',
   createdAt: USER2_CREATEDAT,
 }
 
-export const USER3_EMAIL = 'firifafa@naver.com'
-export const USER3_PASSWORD = 'password'
+export const USER3_EMAIL = 'test3@naver.com'
 export const USER3_CREATEDAT = new Date('2021-05-22T13:01:45+09:00')
 export const USER3_ID = new Types.ObjectId('60b6125547e31cad34281e05')
 export const USER3 = {
   _id: USER3_ID,
   email: USER3_EMAIL,
-  nickname: '감자튀김',
-  password: USER3_PASSWORD,
+  nickname: 'test3',
   createdAt: USER3_CREATEDAT,
 }
 
-export const USER4_EMAIL = 'namwindows@naver.com'
-export const USER4_PASSWORD = 'password'
+export const USER4_EMAIL = 'test4@naver.com'
 export const USER4_CREATEDAT = new Date('2021-05-22T13:01:45+09:00')
 export const USER4_ID = new Types.ObjectId('60b60da3707ef33bc3d79a49')
 export const USER4 = {
   _id: USER4_ID,
   email: USER4_EMAIL,
-  nickname: '팡균',
-  password: USER4_PASSWORD,
+  nickname: 'test4',
   createdAt: USER4_CREATEDAT,
 }
 
-export const USER5_EMAIL = 'ddrrpg@naver.com'
-export const USER5_PASSWORD = 'password'
+export const USER5_EMAIL = 'test5@naver.com'
 export const USER5_CREATEDAT = new Date('2021-05-22T13:01:45+09:00')
 export const USER5_ID = new Types.ObjectId('60b28b7b7038264918d3b42d')
 export const USER5 = {
   _id: USER5_ID,
   email: USER5_EMAIL,
-  nickname: '서상',
-  password: USER5_PASSWORD,
+  nickname: 'test5',
   createdAt: USER5_CREATEDAT,
 }
 
