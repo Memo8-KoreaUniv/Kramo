@@ -523,8 +523,8 @@ export const HISTORY54 = {
 
 const TEMPT_GPS: GPS = {
   id: '60c46b8b98629ab0cff89c16',
-  latitude: 37.3591784,
-  longitude: 127.1026432,
+  latitude: 37.3591785,
+  longitude: 127.1026436,
 }
 const TEMPT_WEATHER: Weather = {
   id: '60c46b90b49f8b93e25a099c',

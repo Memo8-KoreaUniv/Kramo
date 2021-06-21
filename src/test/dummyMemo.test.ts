@@ -34,10 +34,10 @@ describe('make dummy memo and test', () => {
   test('Find Memo', async () => {
     await Promise.all(MEMOS.map(async (memo) => {
       const _memo = await MemoModel.findOne({_id:memo._id})
-      console.log(`memo = ${_memo}`)
       if (!_memo) {
         return fail()
       }
+      console.log(`memo = ${_memo._id} is in DB`)
       const user: PopulatedUser = _memo.user!
       expect(user?._id).toStrictEqual(memo.user._id)
     }))

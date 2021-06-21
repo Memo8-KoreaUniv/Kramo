@@ -36,10 +36,10 @@ describe('make History dummy', () => {
     await Promise.all(AllHISTORIES.map(async (histories) => {
       await Promise.all(histories.map(async (history) => {
         const _history = await HistoryModel.findOne({ _id: history._id })
-        console.log(`History = ${_history}`)
         if (!_history) {
           return fail()
         }
+        console.log(`History = ${_history._id} is in DB`)
         const user: PopulatedUser = _history.user!
         expect(user?._id).toStrictEqual(history.user._id)
       }))

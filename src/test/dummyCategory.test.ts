@@ -27,17 +27,15 @@ describe('make dummy category and test', () => {
 
   test('Find Category', async () => {
     await Promise.all(CATEGORYS.map( async (category)=>{
-      console.log(category)
       const _category = await CategoryModel.findOne({_id:category._id})
-      console.log(`Category = ${_category}`)
       if (!_category) {
         return fail()
       }
+      console.log(`Category = ${_category._id} is in DB`)
       const user: PopulatedUser = _category.user!
       expect(user?._id).toStrictEqual(category.user._id)
      }))
   })
-
     
   test('Check Category createdAt', async () => {
     await Promise.all(CATEGORYS.map( async (category)=>{
