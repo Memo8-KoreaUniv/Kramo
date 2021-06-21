@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import HistoryTimeline from 'src/components/memo/HistoryTimeline'
+import { Spinner } from 'src/components/Spinner'
 import {
   categoriesState,
   isCategoryLoadingTriedState,
@@ -47,6 +48,7 @@ const Editor = ({
   firstCreation: boolean
 }): JSX.Element => {
   const [text, setText] = useState('')
+  const [loading, setLoading] = useState<boolean>(false)
   const [value, setValue] = useState('기존 카테고리가 유지됩니다.')
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
   const me = useRecoilValue(meState)
@@ -111,7 +113,7 @@ const Editor = ({
     if (!innerText) {
       return message.error('아무것도 입력되지 않았습니다!')
     }
-
+    setLoading(true)
     getLocation(navigator.geolocation, (pos: GeolocationPosition) => {
       const GPS = {
         latitude: pos.coords.latitude,
@@ -139,6 +141,7 @@ const Editor = ({
             GPS,
             currentWeather,
           )
+          setLoading(false)
           setHistories([newMemo])
           setHistoryIndex(0)
           router.push(`/editor?memoId=${newMemo.memo._id}`, undefined, {
@@ -146,12 +149,15 @@ const Editor = ({
           })
         } else {
           newMemo = await addHistory(newHistory)
+          setLoading(false)
           if (newMemo) {
             setHistories([newMemo, ...histories])
             setHistoryIndex(0)
-            return message.info('저장 성공!')
+            message.info('저장 성공!')
+            return
           }
-          return message.error('저장이 실패하였습니다.')
+          message.error('저장이 실패하였습니다.')
+          return
         }
       })
     })
@@ -191,12 +197,22 @@ const Editor = ({
         </Col>
         <Col xs={12} md={6}>
           <FlexDiv direction="row" justify="flex-end">
-            <Button danger onClick={onClickCancel}>
-              취소
+            <Button
+              type="primary"
+              danger
+              onClick={onClickCancel}
+              style={{ marginRight: '3px' }}>
+              뒤로 가기
             </Button>
-            <Button type="primary" onClick={onClickSave}>
-              저장
-            </Button>
+            {loading ? (
+              <Button type="primary">
+                <Spinner />
+              </Button>
+            ) : (
+              <Button type="primary" onClick={onClickSave}>
+                저장
+              </Button>
+            )}
           </FlexDiv>
         </Col>
       </Row>
