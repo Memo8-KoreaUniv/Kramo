@@ -240,7 +240,7 @@ module.exports = {
 
 panggyun
 
-- E-mail : [firifafa@naver.com](mailto:firifafa@naver.com)
+- E-mail : [namwindows@naver.com](mailto:namwindows@naver.com)
 
 vwjdtjdwnsv
 
