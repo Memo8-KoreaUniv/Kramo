@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { EnvironmentOutlined, PlusOutlined } from '@ant-design/icons'
-import { Image, Card, Col, Modal, Row, Input, Select } from 'antd'
+import { Image, Col, Modal, Row, Input, Select, Typography } from 'antd'
 import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
@@ -18,15 +18,21 @@ import {
   getNowWeatherByGeo,
   EMPTY_WEATHER,
 } from 'src/utils/weather'
+import { FlexDiv } from 'style/div'
 
-const FlexibleAddCard = styled(Card)`
+const FlexibleAddCard = styled.div`
   width: 260px;
+  height: 104px;
   text-align: center;
   vertical-align: middle;
   opacity: 0.5;
+  cursor: pointer;
+  background-color: #a2dbfa;
+  border: 0px solid #686d76;
 
   @media (min-width: ${sm}px) {
     width: 300px;
+    height: 120px;
   }
 `
 
@@ -84,11 +90,10 @@ function AddCardButton({
 
   return (
     <>
-      <FlexibleAddCard
-        key={`AddCardButton_Card`}
-        size={'default'}
-        onClick={showModal}>
-        <PlusOutlined style={{ fontSize: '70px' }} />
+      <FlexibleAddCard onClick={showModal}>
+        <FlexDiv height="100%">
+          <PlusOutlined style={{ fontSize: '70px' }} />
+        </FlexDiv>
       </FlexibleAddCard>
       <Modal
         title="메모 추가"
@@ -100,7 +105,7 @@ function AddCardButton({
         onCancel={handleCancel}>
         <Select
           key={`AddCardButton_Select`}
-          style={{ width: 120 }}
+          style={{ width: '100%', marginBottom: '5px' }}
           onChange={(value: string) => setCategoryId(CategoryPairs[value])}>
           {categories.map((category: CategoryInfo) => {
             CategoryPairs[category.name] = category._id
@@ -126,13 +131,21 @@ function AddCardButton({
               fallback={BASE64_FALLBACK_IMAGE}
             />
           </Col>
-          <Col span={20}>{currentWeather.description}</Col>
+          <Col span={20}>
+            <FlexDiv height="100%" justify="flex-start">
+              <Typography>
+                {currentWeather.description.toUpperCase()}
+              </Typography>
+            </FlexDiv>
+          </Col>
         </Row>
         <Row>
           <Col span={4} style={{ textAlign: 'center' }}>
             <EnvironmentOutlined />
           </Col>
-          <Col span={20}>{`${GPS.latitude},${GPS.longitude}`}</Col>
+          <Col span={20}>
+            <Typography>{`${GPS.latitude},${GPS.longitude}`}</Typography>
+          </Col>
         </Row>
       </Modal>
     </>

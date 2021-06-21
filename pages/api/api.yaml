@@ -1,8 +1,9 @@
 swagger: '2.0'
 info:
-  description: 'Kramo 의 API 문서입니다. NextJS 를 기반으로 돌아가고, 작성 중에 있습니다.'
+  description: 'Kramo 의 API 문서입니다.'
   version: '1.0.0'
   title: 'Kramo'
+  termsOfService: 'https://github.com/Memo8-KoreaUniv/kramo/wiki/'
   contact:
     email: 'ddrrpg@naver.com'
   license:
@@ -21,19 +22,9 @@ tags:
     description: '메모 도메인'
   - name: 'history'
     description: '히스토리 도메인'
-    # externalDocs:
-    #   description: 'Github'
-    #   url: 'https://github.com/Memo8-KoreaUniv/kramo'
 schemes:
   - 'https'
 securityDefinitions:
-  # petstore_auth:
-  #   type: 'oauth2'
-  #   authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
-  #   flow: 'implicit'
-  #   scopes:
-  #     write:pets: 'modify pets in your account'
-  #     read:pets: 'read your pets'
   ormakkc:
     type: apiKey
     name: Cookie

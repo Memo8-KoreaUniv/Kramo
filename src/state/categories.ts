@@ -18,6 +18,11 @@ export const isCategoryLoadedState = selector<boolean>({
   },
 })
 
+export const isCategoryLoadingTriedState = atom<boolean>({
+  key: 'isCategoryLoadingTried',
+  default: false,
+})
+
 export const categoryAddAvailState = selector<boolean>({
   key: 'categoryAddAvail',
   get: ({ get }) => {
