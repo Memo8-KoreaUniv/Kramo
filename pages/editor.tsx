@@ -177,7 +177,7 @@ const Editor = ({
 
   return (
     <>
-      <Row style={{ marginBottom: '0.5rem' }}>
+      <Row style={{ marginBottom: '0.5rem' }} justify="space-around">
         <Col xs={12} md={17}>
           <Select
             style={{ width: '100%' }}

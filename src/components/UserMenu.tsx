@@ -8,7 +8,7 @@ import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import cookie from 'react-cookies'
 import { useRecoilState } from 'recoil'
-
+import useMemos from 'src/utils/useMemos'
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
 import { useWindowSize, sm } from 'src/utils/size'
@@ -19,15 +19,16 @@ const UserMenu = () => {
   const [categories, setCategories] = useRecoilState(categoriesState)
   const router = useRouter()
   const windowSize = useWindowSize()[0]
-
+  const { memos, setMemos } = useMemos()
   const onClickLogout = useCallback(() => {
     cookie.remove(process.env.NEXT_PUBLIC_JWT_TOKEN_NAME!)
     setMe(null)
+    setMemos([])
     setCategories([])
     alert('로그아웃 성공!')
     router.push('/')
     return
-  }, [me, categories, router])
+  }, [me, memos, categories, router])
 
   return me ? (
     <Dropdown

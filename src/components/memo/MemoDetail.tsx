@@ -1,33 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import { EnvironmentOutlined } from '@ant-design/icons'
 import { Col, Row, Image } from 'antd'
 
 import { BASE64_FALLBACK_IMAGE } from 'src/enum'
-import { GPS } from 'src/types'
 import { formatDate } from 'src/utils/date'
-import { getPlace } from 'src/utils/gps'
 import { WeatherInfo, getIconURL } from 'src/utils/weather'
 import { FlexDiv } from 'style/div'
 
 const MemoDetail = ({
-  gps,
+  place,
   weather,
   updatedAt,
   darkMode,
 }: {
-  gps: GPS
+  place: string
   weather: WeatherInfo
   updatedAt?: Date
-  darkMode: boolean
+  darkMode?: boolean
 }) => {
-  const { latitude, longitude } = gps
-  const [place, setPlace] = useState<string>('알 수 없음')
-
-  useEffect(() => {
-    getPlace(latitude, longitude).then((loadedPlace) => setPlace(loadedPlace))
-  }, [])
-
   return (
     <span>
       <Row>

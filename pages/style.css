@@ -24,17 +24,15 @@ h6 {
   margin: 0;
 }
 
-.ant-drawer-header {
-  background-color: #001529;
-  border-radius: 0;
-}
-
-.ant-drawer-title {
-  color: #fff;
-}
-
-.ant-drawer-body {
-  background-color: #001529;
-  color: #fff;
-  height: calc(100vh - 55px);
-}
+.menudrawer .ant-drawer-header {
+      background-color: #001529;
+      border-radius: 0;
+  }
+.menudrawer .ant-drawer-title {
+    color: #fff;
+  } 
+.menudrawer .ant-drawer-body {
+    background-color: #001529;
+    color: #fff;
+    height: calc(100vh - 55px);
+  }
