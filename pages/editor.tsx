@@ -66,7 +66,9 @@ const Editor = ({
 
   useEffect(() => {
     if (firstCreation) {
-      setHistories([INITIAL_HISTORY])
+      setHistories([
+        { ...INITIAL_HISTORY, createdAt: new Date().toUTCString() },
+      ])
       return
     }
     setHistories(initialHistories)
