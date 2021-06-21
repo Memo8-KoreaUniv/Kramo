@@ -240,7 +240,11 @@ module.exports = {
 
 panggyun
 
+- E-mail : [firifafa@naver.com](mailto:firifafa@naver.com)
+
 vwjdtjdwnsv
+
+- E-mail : [vwjdtjdwnsv@naver.com](mailto:vwjdtjdwnsv@naver.com)
 
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg
 [license-url]: #license
