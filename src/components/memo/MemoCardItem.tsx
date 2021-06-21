@@ -9,14 +9,15 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Avatar, Button, Card, Col, Divider, Drawer, Row } from 'antd'
+import parse from 'html-react-parser'
 import Link from 'next/link'
 import styled from 'styled-components'
 
 import { MemoInfo } from 'src/types/memo'
+import { getPlace } from 'src/utils/gps'
 import { sm, useWindowSize } from 'src/utils/size'
 import { useMemoPreview } from 'src/utils/useMemoPreview'
-import { getPlace } from 'src/utils/gps'
-import parse from 'html-react-parser'
+
 import MemoDetail from './MemoDetail'
 
 const FlexibleCard = styled(Card)`

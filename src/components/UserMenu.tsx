@@ -8,10 +8,11 @@ import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import cookie from 'react-cookies'
 import { useRecoilState } from 'recoil'
-import useMemos from 'src/utils/useMemos'
+
 import { categoriesState } from 'src/state/categories'
 import { meState } from 'src/state/me'
 import { useWindowSize, sm } from 'src/utils/size'
+import useMemos from 'src/utils/useMemos'
 import { FlexDiv } from 'style/div'
 
 const UserMenu = () => {
